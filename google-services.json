@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "596441248559",
+    "firebase_url": "https://firenbasetest.firebaseio.com",
+    "project_id": "firenbasetest",
+    "storage_bucket": "firenbasetest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:596441248559:android:1f4a388789e6457d",
+        "android_client_info": {
+          "package_name": "twb.brianlu.com.firebasetest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "596441248559-svl810v1aajo8c8cn6pej5nihi6paa2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIl4J2JnDRgEFCSDu8X2QSJldMEYS2Pn4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "596441248559-svl810v1aajo8c8cn6pej5nihi6paa2e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
