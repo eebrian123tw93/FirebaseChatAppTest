@@ -3,8 +3,10 @@ package twb.brianlu.com.firebasetest;
 import java.util.Date;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ChatMessage {
 
   private String messageText;
