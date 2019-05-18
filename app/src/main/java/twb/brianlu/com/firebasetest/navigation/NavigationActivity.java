@@ -102,7 +102,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
 
     @Override
     public void onLogout() {
-
+        finish();
     }
 
     @Override

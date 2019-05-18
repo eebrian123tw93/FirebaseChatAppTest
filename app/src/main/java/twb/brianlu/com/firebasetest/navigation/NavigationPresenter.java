@@ -11,16 +11,16 @@ public class NavigationPresenter extends BasePresenter implements BasePresenter.
     }
     @Override
     public void onLogin() {
-
+        view.onLogin();
     }
 
     @Override
     public void onLogout() {
-
+        view.onLogout();
     }
 
     @Override
     public void toLoginPage() {
-
+        view.toLoginPage();
     }
 }

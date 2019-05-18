@@ -1,5 +1,6 @@
 package twb.brianlu.com.firebasetest.core;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -13,17 +14,17 @@ import twb.brianlu.com.firebasetest.model.User;
 
 public class BasePresenter {
     protected static User user;
-    static UserListener userListener;
-
+    protected static UserListener userListener;
+    protected Context context;
     public BasePresenter() {
+        this.context = BaseApplication.getContext();
+    }
+
+    protected void saveUser(User user) {
 
     }
 
-    void saveUser(User user) {
-
-    }
-
-    void readUser() {
+    protected void readUser() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if(firebaseUser==null){
             user=null;
@@ -55,6 +56,7 @@ public class BasePresenter {
     public boolean isLogin() {
 
         return user != null;
+//        return true;
     }
 
     public interface UserListener {

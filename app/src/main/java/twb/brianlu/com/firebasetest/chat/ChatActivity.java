@@ -1,206 +1,132 @@
 package twb.brianlu.com.firebasetest.chat;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import twb.brianlu.com.firebasetest.R;
+import twb.brianlu.com.firebasetest.chat.adapter.ChatMessageRVAdapter;
 import twb.brianlu.com.firebasetest.model.ChatMessage;
 import twb.brianlu.com.firebasetest.model.User;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements ChatView,View.OnClickListener {
 
-    private static int SIGN_IN_REQUEST_CODE=1000;
+    private static int SIGN_IN_REQUEST_CODE = 1000;
     private FirebaseListAdapter<ChatMessage> adapter;
     private User user;
+    private ImageView sendImageView;
+    private ChatPresenter chatPresenter;
+    private RecyclerView messageRecyclerView;
+    private TwinklingRefreshLayout refreshLayout;
+    private EditText input;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_chat);
 
 
-        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
-            // Start sign in/sign up activity
-            startActivityForResult(
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .build(),
-                    SIGN_IN_REQUEST_CODE
-            );
-        } else {
-//            User user=new User();
+        sendImageView=findViewById(R.id.send_imaeView);
+        sendImageView.setOnClickListener(this);
+        input=findViewById(R.id.message_editText);
+        messageRecyclerView=findViewById(R.id.messages_recyclerView);
 
-            // User is already signed in. Therefore, display
-            // a welcome Toast
-            FirebaseDatabase.getInstance()
-                    .getReference("users/"+FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    user=dataSnapshot.getValue(User.class);
-                    if(user==null){
-                        user=new User();
-                        user.setDisplayName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-                        user.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        user.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-//                        user.setRooms(new ArrayList<String>());
-                        ArrayList<String>arrayList=new ArrayList<>();
-                        arrayList.add("jdshladf");
-                        arrayList.add("dfhasl");
-                        user.setRooms(arrayList);
-                        FirebaseDatabase.getInstance()
-                                .getReference("users/"+user.getUid()).setValue(user);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-            Toast.makeText(this,
-                    "Welcome " + FirebaseAuth.getInstance()
-                            .getCurrentUser()
-                            .getDisplayName(),
-                    Toast.LENGTH_LONG)
-                    .show();
-
-            // Load chat room contents
-            displayChatMessages();
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        messageRecyclerView.setLayoutManager(layoutManager);
+        chatPresenter=new ChatPresenter(this);
 
 
-            FloatingActionButton fab = findViewById(R.id.fab);
+        refreshLayout = findViewById(R.id.refreshLayout);
+        refreshLayout.setEnableLoadmore(false);
+//        refreshLayout.setAutoLoadMore(true);
+        refreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
 
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    EditText input = findViewById(R.id.input);
+            @Override
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+                super.onRefresh(refreshLayout);
 
-                    // Read the input field and push a new instance
-                    // of ChatMessage to the Firebase database
-                    FirebaseDatabase.getInstance()
-                            .getReference("rooms/"+"roomId")
-                            .push()
-                            .setValue(new ChatMessage(input.getText().toString(),
-                                    FirebaseAuth.getInstance()
-                                            .getCurrentUser()
-                                            .getDisplayName())
-                            );
-
-                    // Clear the input
-                    input.setText("");
-                }
-            });
-
-
-            ListView listOfMessages =findViewById(R.id.list_of_messages);
-
-            adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
-                    R.layout.message, FirebaseDatabase.getInstance().getReference("rooms/"+"roomId")) {
-                @Override
-                protected void populateView(View v, ChatMessage model, int position) {
-                    // Get references to the views of message.xml
-
-                    TextView messageText = (TextView)v.findViewById(R.id.message_text);
-                    TextView messageUser = (TextView)v.findViewById(R.id.message_user);
-                    TextView messageTime = (TextView)v.findViewById(R.id.message_time);
-
-                    // Set their text
-                    messageText.setText(model.getMessageText());
-                    messageUser.setText(model.getMessageUser());
-
-                    // Format the date before showing it
-                    messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
-                            model.getMessageTime()));
-                }
-            };
-
-            listOfMessages.setAdapter(adapter);
-
-
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == SIGN_IN_REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
-                User user=new User();
-                user.setDisplayName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-                user.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                user.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-                user.setRooms(new ArrayList<String>());
-                FirebaseDatabase.getInstance()
-                        .getReference("users/"+user.getUid()).setValue(user);
-
-                Toast.makeText(this,
-                        "Successfully signed in. Welcome!",
-                        Toast.LENGTH_LONG)
-                        .show();
-                displayChatMessages();
-            } else {
-                Toast.makeText(this,
-                        "We couldn't sign you in. Please try again later.",
-                        Toast.LENGTH_LONG)
-                        .show();
-
-                // Close the app
-                finish();
             }
-        }
+
+            @Override
+            public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+                super.onLoadMore(refreshLayout);
+
+            }
+        });
+
+
+//        ListView listOfMessages = findViewById(R.id.list_of_messages);
+
+//        adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
+//                R.layout.item_message, FirebaseDatabase.getInstance().getReference("rooms/" + "roomId")) {
+//            @Override
+//            protected void populateView(View v, ChatMessage model, int position) {
+//                // Get references to the views of item_messagessage.xml
+//
+//                TextView messageText = (TextView) v.findViewById(R.id.message_text);
+//                TextView messageUser = (TextView) v.findViewById(R.id.message_user);
+//                TextView messageTime = (TextView) v.findViewById(R.id.message_time);
+//
+//                // Set their text
+//                messageText.setText(model.getMessageText());
+//                messageUser.setText(model.getMessageUser());
+//
+//                // Format the date before showing it
+//                messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
+//                        model.getMessageTime()));
+//            }
+//        };
+
+//        listOfMessages.setAdapter(adapter);
+//        messageRecyclerView.setAdapter(adapter);
 
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+    public void onSendMessageSuccess() {
+        input.setText("");
     }
 
-    private void displayChatMessages() {
+    @Override
+    public void onSetAdapter(RecyclerView.Adapter adapter) {
+        messageRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onScrollToPosition(int position) {
+        messageRecyclerView.scrollToPosition(position);
+    }
+
+    @Override
+    public void onSetMessage(String message, int type) {
 
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.menu_sign_out) {
-            AuthUI.getInstance().signOut(this)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(ChatActivity.this,
-                                    "You have been signed out.",
-                                    Toast.LENGTH_LONG)
-                                    .show();
-
-                            // Close activity
-                            finish();
-                        }
-                    });
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.send_imaeView:
+                chatPresenter.sendMessage(input.getText().toString());
+                break;
         }
-        return true;
+
     }
 }
