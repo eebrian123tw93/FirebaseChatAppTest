@@ -16,6 +16,7 @@ public class BasePresenter {
     protected static User user;
     protected static UserListener userListener;
     protected Context context;
+    private Object lock;
     public BasePresenter() {
         this.context = BaseApplication.getContext();
     }
@@ -55,7 +56,7 @@ public class BasePresenter {
 
     public boolean isLogin() {
 
-        return user != null;
+        return FirebaseAuth.getInstance().getCurrentUser() != null;
 //        return true;
     }
 

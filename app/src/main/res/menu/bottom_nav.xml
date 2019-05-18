@@ -7,7 +7,7 @@
         android:icon="@drawable/chat"/>
 
     <item android:id="@+id/pair" android:title="@string/pair"
-        android:icon="@drawable/make_friends"/>
+        android:icon="@drawable/make_friends" />
 
 
     <item android:id="@+id/profile" android:title="@string/profile"

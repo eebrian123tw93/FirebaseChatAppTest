@@ -34,7 +34,7 @@ public class ChatPresenter extends BasePresenter {
         //debug
         room=new Room();
         room.setRoomId("roomId");
-        readUser();
+//        readUser();
         ///////////
 
         view.onSetAdapter(chatMessageRVAdapter);

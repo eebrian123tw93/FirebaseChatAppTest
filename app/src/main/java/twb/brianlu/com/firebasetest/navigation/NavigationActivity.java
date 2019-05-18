@@ -1,5 +1,6 @@
 package twb.brianlu.com.firebasetest.navigation;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import twb.brianlu.com.firebasetest.R;
+import twb.brianlu.com.firebasetest.chat.ChatActivity;
 import twb.brianlu.com.firebasetest.login.LoginFragment;
 import twb.brianlu.com.firebasetest.pair.PairFragment;
 import twb.brianlu.com.firebasetest.profile.ProfileFragment;
@@ -35,21 +37,24 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+        fragmentHashMap = new HashMap<>();
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
 
-        fragmentHashMap = new HashMap<>();
 
-        focusFragment = new PairFragment();
-        fragmentHashMap.put(R.id.pair, focusFragment);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragmentHashMap.get(R.id.pair)).commit();
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(bottomNavigationView.getMenu().getItem(0).getTitle());
-        }
+
+
+//        focusFragment = new PairFragment();
+//        fragmentHashMap.put(R.id.pair, focusFragment);
+//        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragmentHashMap.get(R.id.pair)).commit();
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setTitle(bottomNavigationView.getMenu().getItem(1).getTitle());
+//        }
+
 
         navigationPresenter = new NavigationPresenter(this);
-
+        bottomNavigationView.setSelectedItemId(R.id.pair);
     }
 
     @Override
@@ -85,6 +90,10 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     }
 
     public void showFragment(Fragment fragment) {
+        if(focusFragment==null){
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragment).commit();
+            return;
+        }
         if (!fragment.isAdded()) {
             getSupportFragmentManager().beginTransaction().hide(focusFragment).add(R.id.frame_layout, fragment).commitAllowingStateLoss();
         } else {
