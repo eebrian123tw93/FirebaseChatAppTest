@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">FireBaseTest</string>
+    <string name="profile">簡介</string>
+    <string name="chat">聊天</string>
+    <string name="pair">配對</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

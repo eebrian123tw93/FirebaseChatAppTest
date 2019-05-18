@@ -37,6 +37,8 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.8'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
+
+    implementation 'com.github.Shashank02051997:FancyToast-Android:0.1.3'
 //
 }
 
