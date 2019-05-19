@@ -10,6 +10,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
+
+
 import twb.brianlu.com.firebasetest.core.BasePresenter;
 
 public class RegisterPresenter extends BasePresenter {
@@ -27,6 +29,11 @@ public class RegisterPresenter extends BasePresenter {
         }
         if (password.isEmpty()) {
             view.onSetMessage("Password can not be empty", FancyToast.ERROR);
+            view.onRegisterResult(false);
+            return;
+        }
+        if( !isValidEmailAddress(email)){
+            view.onSetMessage("Email is not valid", FancyToast.ERROR);
             view.onRegisterResult(false);
             return;
         }
@@ -68,6 +75,13 @@ public class RegisterPresenter extends BasePresenter {
 
     public void setProgressBarVisibility(int visibility) {
         view.onSetProgressBarVisibility(visibility);
+    }
+
+    public boolean isValidEmailAddress(String email) {
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
     }
 
 }
