@@ -19,7 +19,7 @@ public class ChatMessageRVPresenter extends BasePresenter {
         ChatMessage chatMessage = chatMessages.get(position);
         viewHolder.onSetUsername(chatMessage.getMessageUser());
         viewHolder.onSetMessage(chatMessage.getMessageText());
-        viewHolder.onSetMessageTime(String.valueOf(DateFormat.format("dd-MM-yyyy (HH:mm:ss)", chatMessage.getMessageTime())));
+        viewHolder.onSetMessageTime(String.valueOf(DateFormat.format("MM/dd(HH:mm)", chatMessage.getMessageTime())));
 
     }
 
