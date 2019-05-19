@@ -39,24 +39,24 @@ public class ChatPresenter extends BasePresenter {
     }
 
     public void loadMessages() {
-        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<ChatMessage> chatMessages = new ArrayList<>();
-//                ChatMessage[] chatMessages=dataSnapshot.getValue(ChatMessage[].class);
-                for (DataSnapshot shot : dataSnapshot.getChildren()) {
-                    ChatMessage chatMessage = shot.getValue(ChatMessage.class);
-                    chatMessages.add(chatMessage);
-                }
-                chatMessageRVAdapter.addMessages(chatMessages);
-                view.onScrollToPosition(chatMessageRVAdapter.getItemCount() - 1);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                List<ChatMessage> chatMessages = new ArrayList<>();
+////                ChatMessage[] chatMessages=dataSnapshot.getValue(ChatMessage[].class);
+//                for (DataSnapshot shot : dataSnapshot.getChildren()) {
+//                    ChatMessage chatMessage = shot.getValue(ChatMessage.class);
+//                    chatMessages.add(chatMessage);
+//                }
+//                chatMessageRVAdapter.addMessages(chatMessages);
+//                view.onScrollToPosition(chatMessageRVAdapter.getItemCount() - 1);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
         FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -80,8 +80,8 @@ public class ChatPresenter extends BasePresenter {
 
 
     public void sendMessage(String message) {
-        if (isLogin()) {
-            ChatMessage chatMessage = new ChatMessage(message, user.getDisplayName());
+        if (isLogin() && !message.isEmpty()) {
+            ChatMessage chatMessage = new ChatMessage(message, user.getDisplayName(),user.getUid());
             FirebaseDatabase.getInstance()
                     .getReference("rooms")
                     .child(room.getRoomId())

@@ -1,5 +1,6 @@
 package twb.brianlu.com.firebasetest.navigation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import twb.brianlu.com.firebasetest.R;
+import twb.brianlu.com.firebasetest.chat.ChatActivity;
 import twb.brianlu.com.firebasetest.login.LoginFragment;
 import twb.brianlu.com.firebasetest.pair.PairFragment;
 import twb.brianlu.com.firebasetest.profile.ProfileFragment;
@@ -44,7 +46,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
 //        if (getSupportActionBar() != null) {
 //            getSupportActionBar().setTitle(bottomNavigationView.getMenu().getItem(1).getTitle());
 //        }
-
+            startActivity(new Intent(this, ChatActivity.class));
 
         navigationPresenter = new NavigationPresenter(this);
         bottomNavigationView.setSelectedItemId(R.id.pair);

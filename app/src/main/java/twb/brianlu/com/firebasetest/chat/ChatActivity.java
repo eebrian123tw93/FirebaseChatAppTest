@@ -66,7 +66,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
 //        ListView listOfMessages = findViewById(R.id.list_of_messages);
 
 //        adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
-//                R.layout.item_message, FirebaseDatabase.getInstance().getReference("rooms/" + "roomId")) {
+//                R.layout.item_self_message, FirebaseDatabase.getInstance().getReference("rooms/" + "roomId")) {
 //            @Override
 //            protected void populateView(View v, ChatMessage model, int position) {
 //                // Get references to the views of item_messagessage.xml

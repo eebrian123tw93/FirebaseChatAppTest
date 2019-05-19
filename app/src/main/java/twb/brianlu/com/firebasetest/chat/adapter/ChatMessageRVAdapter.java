@@ -24,12 +24,37 @@ public class ChatMessageRVAdapter extends RecyclerView.Adapter<ChatMessageRVAdap
         this.presenter = new ChatMessageRVPresenter();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (presenter.isSelf(position)) {
+            return SELF_VIEW;
+        } else {
+            return OPPOSITE_VIEW;
+        }
+    }
+
+    private static final int SELF_VIEW = 0;
+    private static final int OPPOSITE_VIEW = 1;
+
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.item_message, viewGroup, false);
-        return new ViewHolder(v);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
+        View v = null;
+        switch (position) {
+            case SELF_VIEW:
+                v = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.item_self_message, viewGroup, false);
+                return new ViewHolder(v);
+            case OPPOSITE_VIEW:
+                v = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.item_opposite_message, viewGroup, false);
+                return new ViewHolder(v);
+            default:
+                v = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.item_self_message, viewGroup, false);
+                return new ViewHolder(v);
+
+        }
     }
 
     @Override

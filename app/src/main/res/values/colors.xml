@@ -3,4 +3,11 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+
+    <color name="botPrimary">#7180AC</color>
+    <color name="botSecondary">#3BA85B</color>
+    <color name="responseColor">#011936</color>
+    <color name="inputColor">#F4FFFD</color>
+    <color name="fabIconColor">#FFF</color>
 </resources>

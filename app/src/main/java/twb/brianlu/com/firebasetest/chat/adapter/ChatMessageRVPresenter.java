@@ -5,9 +5,10 @@ import android.text.format.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import twb.brianlu.com.firebasetest.core.BasePresenter;
 import twb.brianlu.com.firebasetest.model.ChatMessage;
 
-public class ChatMessageRVPresenter {
+public class ChatMessageRVPresenter extends BasePresenter {
     private List<ChatMessage> chatMessages;
 
     public ChatMessageRVPresenter() {
@@ -29,6 +30,11 @@ public class ChatMessageRVPresenter {
     public void addMessages(List<ChatMessage> messages) {
         this.chatMessages.addAll(messages);
 
+    }
+
+    public boolean isSelf(int position){
+        ChatMessage chatMessage=this.chatMessages.get(position);
+        return chatMessage.getUserUid().equals(user.getUid());
     }
 
     public void clear() {
