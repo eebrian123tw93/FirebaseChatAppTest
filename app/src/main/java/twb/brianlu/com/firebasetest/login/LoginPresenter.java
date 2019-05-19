@@ -41,6 +41,7 @@ public class LoginPresenter extends BasePresenter {
                     saveUser(user);
                     view.onLoginResult(true);
                     view.onSetMessage("Login Success", FancyToast.SUCCESS);
+                    LoginPresenter.this.readUser();
                 }else {
                     view.onLoginResult(false);
                     view.onSetMessage("Login Failed", FancyToast.ERROR);
