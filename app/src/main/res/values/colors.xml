@@ -6,8 +6,10 @@
 
 
     <color name="botPrimary">#7180AC</color>
-    <color name="botSecondary">#3BA85B</color>
+    <color name="botSecondary">#71BDE9</color>
     <color name="responseColor">#011936</color>
     <color name="inputColor">#F4FFFD</color>
     <color name="fabIconColor">#FFF</color>
+
+    <color name="black">#000000</color>
 </resources>
