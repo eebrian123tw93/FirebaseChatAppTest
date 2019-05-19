@@ -1,9 +1,11 @@
 package twb.brianlu.com.firebasetest.chat;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -57,18 +59,28 @@ public class ChatPresenter extends BasePresenter {
 //
 //            }
 //        });
-
-        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<ChatMessage> chatMessages = new ArrayList<>();
-//                ChatMessage[] chatMessages=dataSnapshot.getValue(ChatMessage[].class);
-                for (DataSnapshot shot : dataSnapshot.getChildren()) {
-                    ChatMessage chatMessage = shot.getValue(ChatMessage.class);
-                    chatMessages.add(chatMessage);
-                }
-                chatMessageRVAdapter.addMessages(chatMessages);
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                System.out.println(s);
+                ChatMessage chatMessage=dataSnapshot.getValue(ChatMessage.class);
+                chatMessageRVAdapter.addMessage(chatMessage);
                 view.onScrollToPosition(chatMessageRVAdapter.getItemCount() - 1);
+                System.out.println(chatMessage.getUserUid());
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
             }
 
             @Override
@@ -76,6 +88,25 @@ public class ChatPresenter extends BasePresenter {
 
             }
         });
+
+//        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                List<ChatMessage> chatMessages = new ArrayList<>();
+////                ChatMessage[] chatMessages=dataSnapshot.getValue(ChatMessage[].class);
+//                for (DataSnapshot shot : dataSnapshot.getChildren()) {
+//                    ChatMessage chatMessage = shot.getValue(ChatMessage.class);
+//                    chatMessages.add(chatMessage);
+//                }
+//                chatMessageRVAdapter.addMessages(chatMessages);
+//                view.onScrollToPosition(chatMessageRVAdapter.getItemCount() - 1);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
 

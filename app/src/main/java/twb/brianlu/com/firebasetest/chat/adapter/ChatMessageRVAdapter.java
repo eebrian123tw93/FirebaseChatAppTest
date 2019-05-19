@@ -72,6 +72,11 @@ public class ChatMessageRVAdapter extends RecyclerView.Adapter<ChatMessageRVAdap
         notifyDataSetChanged();
     }
 
+    public void addMessage(ChatMessage chatMessage) {
+        presenter.addMessage(chatMessage);
+        notifyDataSetChanged();
+    }
+
     public void clear() {
         presenter.clear();
         notifyDataSetChanged();
