@@ -48,34 +48,45 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/username_editText"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/email"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/email"
-                        android:inputType="textPersonName"
-                        android:textSize="20sp"
-                        tools:layout_editor_absoluteX="136dp"
-                        tools:layout_editor_absoluteY="93dp" />
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:id="@+id/username_editText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/email"
+                            android:inputType="textPersonName"
+                            android:textSize="20sp"
+                            tools:layout_editor_absoluteX="136dp"
+                            tools:layout_editor_absoluteY="93dp" />
+                    </android.support.design.widget.TextInputLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/password_editText"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/password"
-                        android:inputType="textPassword"
-                        android:textSize="20sp"
-                        tools:layout_editor_absoluteX="134dp"
-                        tools:layout_editor_absoluteY="157dp" />
+                        app:passwordToggleEnabled="true">
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/password_editText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/password"
+                            android:inputType="textPassword"
+                            android:textSize="20sp"
+                            tools:layout_editor_absoluteX="134dp"
+                            tools:layout_editor_absoluteY="157dp" />
+                    </android.support.design.widget.TextInputLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
