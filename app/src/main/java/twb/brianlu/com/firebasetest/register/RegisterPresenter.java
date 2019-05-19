@@ -32,6 +32,12 @@ public class RegisterPresenter extends BasePresenter {
             view.onRegisterResult(false);
             return;
         }
+        if (password.length()<6) {
+            view.onSetMessage("Password need 6 digits", FancyToast.ERROR);
+            view.onRegisterResult(false);
+            return;
+        }
+
         if( !isValidEmailAddress(email)){
             view.onSetMessage("Email is not valid", FancyToast.ERROR);
             view.onRegisterResult(false);

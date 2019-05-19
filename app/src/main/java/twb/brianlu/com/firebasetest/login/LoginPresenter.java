@@ -30,11 +30,18 @@ public class LoginPresenter extends BasePresenter {
             return;
         }
 
+        if (password.length()<6) {
+            view.onSetMessage("Password need 6 digits", FancyToast.ERROR);
+            view.onLoginResult(false);
+            return;
+        }
+
         if(!isValidEmailAddress(email)){
             view.onSetMessage("Email is not valid", FancyToast.ERROR);
             view.onLoginResult(false);
             return;
         }
+
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
