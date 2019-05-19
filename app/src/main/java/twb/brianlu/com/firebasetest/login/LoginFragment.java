@@ -19,6 +19,7 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 
 import twb.brianlu.com.firebasetest.R;
 import twb.brianlu.com.firebasetest.navigation.NavigationActivity;
+import twb.brianlu.com.firebasetest.register.RegisterActivity;
 
 public class LoginFragment extends Fragment implements LoginView,View.OnClickListener{
 
@@ -90,7 +91,7 @@ public class LoginFragment extends Fragment implements LoginView,View.OnClickLis
 
     @Override
     public void onRegister() {
-//        getContext().startActivity(new Intent(getContext(), RegisterActivity.class));
+        getContext().startActivity(new Intent(getContext(), RegisterActivity.class));
     }
 
     @Override
