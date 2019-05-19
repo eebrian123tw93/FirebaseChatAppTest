@@ -60,7 +60,7 @@ public class BasePresenter {
     }
 
 
-    public boolean isLogin() {
+    public static boolean isLogin() {
 
         return FirebaseAuth.getInstance().getCurrentUser() != null;
 //        return true;

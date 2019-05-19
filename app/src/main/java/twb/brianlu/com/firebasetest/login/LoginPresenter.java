@@ -51,10 +51,9 @@ public class LoginPresenter extends BasePresenter {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    saveUser(user);
                     view.onLoginResult(true);
                     view.onSetMessage("Login Success", FancyToast.SUCCESS);
-                    LoginPresenter.this.readUser();
+                    BasePresenter.readUser();
                 } else {
                     view.onLoginResult(false);
                     view.onSetMessage("Login Failed", FancyToast.ERROR);
