@@ -10,5 +10,5 @@ public class User {
     private String email;
     private String displayName;
     private List<String> rooms;
-
+    private String token;
 }

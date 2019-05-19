@@ -81,6 +81,8 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
     @Override
     public void onCheckUserLogin(boolean isLogin) {
         if (isLogin) {
+            presenter.getToken();
+//            presenter
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this);
             Intent intent = new Intent(SplashActivity.this, NavigationActivity.class);
 
