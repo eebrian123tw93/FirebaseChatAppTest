@@ -6,10 +6,9 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.app.ActivityOptions;
-import android.app.NativeActivity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import twb.brianlu.com.firebasetest.R;
@@ -28,7 +27,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
         setContentView(R.layout.activity_splash);
 
         splashIcon = findViewById(R.id.splashIcon);
-        presenter=new SplashPresenter(this);
+        presenter = new SplashPresenter(this);
         animate();
     }
 
@@ -81,7 +80,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
 
     @Override
     public void onCheckUserLogin(boolean isLogin) {
-        if(isLogin){
+        if (isLogin) {
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this);
             Intent intent = new Intent(SplashActivity.this, NavigationActivity.class);
 
@@ -93,7 +92,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
             }
             startActivity(intent, options.toBundle());
             finish();
-        }else {
+        } else {
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this);
             Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
 

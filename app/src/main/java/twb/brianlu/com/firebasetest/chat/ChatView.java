@@ -6,6 +6,8 @@ import twb.brianlu.com.firebasetest.core.BaseView;
 
 public interface ChatView extends BaseView {
     void onSendMessageSuccess();
+
     void onSetAdapter(RecyclerView.Adapter adapter);
+
     void onScrollToPosition(int position);
 }

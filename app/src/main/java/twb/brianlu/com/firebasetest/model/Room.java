@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public class Room {
     private String roomId;
-    private List<ChatMessage>chatMessages;
+    private List<ChatMessage> chatMessages;
 }

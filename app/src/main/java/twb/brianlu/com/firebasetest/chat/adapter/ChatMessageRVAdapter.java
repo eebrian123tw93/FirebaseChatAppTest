@@ -16,45 +16,13 @@ import twb.brianlu.com.firebasetest.model.ChatMessage;
 public class ChatMessageRVAdapter extends RecyclerView.Adapter<ChatMessageRVAdapter.ViewHolder> {
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements ChatMessageVHView {
-
-        private TextView messageTextView;
-        private TextView usernameTextView;
-        private TextView timeTextView;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            messageTextView = itemView.findViewById(R.id.message_text);
-            usernameTextView = itemView.findViewById(R.id.message_user);
-            timeTextView = itemView.findViewById(R.id.message_time);
-        }
-
-        @Override
-        public void onSetMessage(String message) {
-            messageTextView.setText(message);
-        }
-
-        @Override
-        public void onSetUsername(String username) {
-            usernameTextView.setText(username);
-        }
-
-        @Override
-        public void onSetMessageTime(String messageTime) {
-            timeTextView.setText(messageTime);
-        }
-    }
-
-
     private Context context;
-
     private ChatMessageRVPresenter presenter;
 
     public ChatMessageRVAdapter(Context context) {
         this.context = context;
         this.presenter = new ChatMessageRVPresenter();
     }
-
 
     @NonNull
     @Override
@@ -82,6 +50,35 @@ public class ChatMessageRVAdapter extends RecyclerView.Adapter<ChatMessageRVAdap
     public void clear() {
         presenter.clear();
         notifyDataSetChanged();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements ChatMessageVHView {
+
+        private TextView messageTextView;
+        private TextView usernameTextView;
+        private TextView timeTextView;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            messageTextView = itemView.findViewById(R.id.message_text);
+            usernameTextView = itemView.findViewById(R.id.message_user);
+            timeTextView = itemView.findViewById(R.id.message_time);
+        }
+
+        @Override
+        public void onSetMessage(String message) {
+            messageTextView.setText(message);
+        }
+
+        @Override
+        public void onSetUsername(String username) {
+            usernameTextView.setText(username);
+        }
+
+        @Override
+        public void onSetMessageTime(String messageTime) {
+            timeTextView.setText(messageTime);
+        }
     }
 
 }

@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -19,10 +18,10 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 
 import twb.brianlu.com.firebasetest.R;
 
-public class RegisterFragment extends Fragment implements RegisterView,View.OnClickListener{
+public class RegisterFragment extends Fragment implements RegisterView, View.OnClickListener {
     private RegisterPresenter presenter;
 
-//    private EditText usernameEditText;
+    //    private EditText usernameEditText;
     private EditText passwordEditText;
     private EditText emailEditText;
     private ProgressBar progressBar;
@@ -31,6 +30,7 @@ public class RegisterFragment extends Fragment implements RegisterView,View.OnCl
     private Button clearButton;
 
     private TextView messageTextView;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
 
@@ -39,8 +39,6 @@ public class RegisterFragment extends Fragment implements RegisterView,View.OnCl
 //            getSupportActionBar().setDisplayShowHomeEnabled(true);
 //            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        }
-
-
 
 
 //        usernameEditText = view.findViewById(R.id.username_editText);
@@ -79,7 +77,7 @@ public class RegisterFragment extends Fragment implements RegisterView,View.OnCl
         registerButton.setEnabled(true);
         clearButton.setEnabled(true);
         if (result) {
-           getActivity().finish();
+            getActivity().finish();
         }
     }
 

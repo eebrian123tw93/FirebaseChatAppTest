@@ -17,6 +17,7 @@ public class BasePresenter {
     protected static UserListener userListener;
     protected Context context;
     private Object lock;
+
     public BasePresenter() {
         this.context = BaseApplication.getContext();
     }
@@ -27,15 +28,15 @@ public class BasePresenter {
 
     protected void readUser() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(firebaseUser==null){
-            user=null;
-        }else {
+        if (firebaseUser == null) {
+            user = null;
+        } else {
             FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    user=dataSnapshot.getValue(User.class);
-                    if(user==null){
-                        user=new User();
+                    user = dataSnapshot.getValue(User.class);
+                    if (user == null) {
+                        user = new User();
                         user.setDisplayName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                         user.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         user.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());

@@ -1,11 +1,10 @@
 package twb.brianlu.com.firebasetest.navigation;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.shashank.sony.fancytoastlib.FancyToast;
@@ -14,15 +13,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import twb.brianlu.com.firebasetest.R;
-import twb.brianlu.com.firebasetest.chat.ChatActivity;
 import twb.brianlu.com.firebasetest.login.LoginFragment;
 import twb.brianlu.com.firebasetest.pair.PairFragment;
 import twb.brianlu.com.firebasetest.profile.ProfileFragment;
 import twb.brianlu.com.firebasetest.rooms.RoomsFragment;
 
-import static java.security.AccessController.getContext;
-
-public class NavigationActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,NavigationView {
+public class NavigationActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView {
 
 
     private BottomNavigationView bottomNavigationView;
@@ -40,9 +36,6 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         fragmentHashMap = new HashMap<>();
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-
-
-
 
 
 //        focusFragment = new PairFragment();
@@ -90,7 +83,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     }
 
     public void showFragment(Fragment fragment) {
-        if(focusFragment==null){
+        if (focusFragment == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragment).commit();
             return;
         }
@@ -106,7 +99,6 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     public void onLogin() {
 
     }
-
 
 
     @Override

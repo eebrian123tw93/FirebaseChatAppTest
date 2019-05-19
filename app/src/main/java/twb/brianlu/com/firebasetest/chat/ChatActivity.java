@@ -1,32 +1,22 @@
 package twb.brianlu.com.firebasetest.chat;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.FirebaseDatabase;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import twb.brianlu.com.firebasetest.R;
-import twb.brianlu.com.firebasetest.chat.adapter.ChatMessageRVAdapter;
 import twb.brianlu.com.firebasetest.model.ChatMessage;
 import twb.brianlu.com.firebasetest.model.User;
 
-public class ChatActivity extends AppCompatActivity implements ChatView,View.OnClickListener {
+public class ChatActivity extends AppCompatActivity implements ChatView, View.OnClickListener {
 
     private static int SIGN_IN_REQUEST_CODE = 1000;
     private FirebaseListAdapter<ChatMessage> adapter;
@@ -43,15 +33,15 @@ public class ChatActivity extends AppCompatActivity implements ChatView,View.OnC
         setContentView(R.layout.activity_chat);
 
 
-        sendImageView=findViewById(R.id.send_imaeView);
+        sendImageView = findViewById(R.id.send_imaeView);
         sendImageView.setOnClickListener(this);
-        input=findViewById(R.id.message_editText);
-        messageRecyclerView=findViewById(R.id.messages_recyclerView);
+        input = findViewById(R.id.message_editText);
+        messageRecyclerView = findViewById(R.id.messages_recyclerView);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         messageRecyclerView.setLayoutManager(layoutManager);
-        chatPresenter=new ChatPresenter(this);
+        chatPresenter = new ChatPresenter(this);
 
 
         refreshLayout = findViewById(R.id.refreshLayout);
@@ -122,7 +112,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView,View.OnC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.send_imaeView:
                 chatPresenter.sendMessage(input.getText().toString());
                 break;

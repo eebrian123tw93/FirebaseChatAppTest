@@ -19,24 +19,24 @@ public class LoginPresenter extends BasePresenter {
     }
 
     public void login(String email, String password) {
-        if(email.isEmpty()){
+        if (email.isEmpty()) {
             view.onSetMessage("Email cant not be empty", FancyToast.ERROR);
             view.onLoginResult(false);
             return;
         }
-        if(password.isEmpty()){
+        if (password.isEmpty()) {
             view.onSetMessage("Password cant not be empty", FancyToast.ERROR);
             view.onLoginResult(false);
             return;
         }
 
-        if (password.length()<6) {
+        if (password.length() < 6) {
             view.onSetMessage("Password need 6 digits", FancyToast.ERROR);
             view.onLoginResult(false);
             return;
         }
 
-        if(!isValidEmailAddress(email)){
+        if (!isValidEmailAddress(email)) {
             view.onSetMessage("Email is not valid", FancyToast.ERROR);
             view.onLoginResult(false);
             return;
@@ -55,7 +55,7 @@ public class LoginPresenter extends BasePresenter {
                     view.onLoginResult(true);
                     view.onSetMessage("Login Success", FancyToast.SUCCESS);
                     LoginPresenter.this.readUser();
-                }else {
+                } else {
                     view.onLoginResult(false);
                     view.onSetMessage("Login Failed", FancyToast.ERROR);
                 }

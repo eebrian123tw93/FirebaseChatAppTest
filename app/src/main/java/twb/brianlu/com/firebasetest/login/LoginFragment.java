@@ -21,7 +21,7 @@ import twb.brianlu.com.firebasetest.R;
 import twb.brianlu.com.firebasetest.navigation.NavigationActivity;
 import twb.brianlu.com.firebasetest.register.RegisterActivity;
 
-public class LoginFragment extends Fragment implements LoginView,View.OnClickListener{
+public class LoginFragment extends Fragment implements LoginView, View.OnClickListener {
 
     private EditText usernameEditText;
     private EditText passwordEditText;
@@ -74,7 +74,7 @@ public class LoginFragment extends Fragment implements LoginView,View.OnClickLis
         if (result) {
             startActivity(new Intent(getContext(), NavigationActivity.class));
             getActivity().finish();
-        }else {
+        } else {
 
         }
     }

@@ -3,14 +3,11 @@ package twb.brianlu.com.firebasetest.register;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.shashank.sony.fancytoastlib.FancyToast;
-
-
 
 import twb.brianlu.com.firebasetest.core.BasePresenter;
 
@@ -32,13 +29,13 @@ public class RegisterPresenter extends BasePresenter {
             view.onRegisterResult(false);
             return;
         }
-        if (password.length()<6) {
+        if (password.length() < 6) {
             view.onSetMessage("Password need 6 digits", FancyToast.ERROR);
             view.onRegisterResult(false);
             return;
         }
 
-        if( !isValidEmailAddress(email)){
+        if (!isValidEmailAddress(email)) {
             view.onSetMessage("Email is not valid", FancyToast.ERROR);
             view.onRegisterResult(false);
             return;
