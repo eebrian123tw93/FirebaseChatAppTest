@@ -22,8 +22,11 @@ public class RoomsPresenter extends BasePresenter {
     public RoomsPresenter(RoomsView view) {
         this.view = view;
         roomsRVAdapter = new RoomsRVAdapter(BaseApplication.getContext());
-        view.onSetRoomsAdapter(roomsRVAdapter);
         loadRooms();
+    }
+
+    public void setRoomsRVAdapter() {
+        view.onSetRoomsAdapter(roomsRVAdapter);
     }
 
     public void loadRooms() {

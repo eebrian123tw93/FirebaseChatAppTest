@@ -7,19 +7,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 import twb.brianlu.com.firebasetest.R;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
-import twb.brianlu.com.firebasetest.fbDataService.FirebaseDataService;
 import twb.brianlu.com.firebasetest.login.LoginFragment;
 import twb.brianlu.com.firebasetest.pair.PairFragment;
+import twb.brianlu.com.firebasetest.pair.PairFragment2;
 import twb.brianlu.com.firebasetest.profile.ProfileFragment;
 import twb.brianlu.com.firebasetest.rooms.RoomsFragment;
 
@@ -88,11 +85,10 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     }
 
     public void showFragment(Fragment fragment) {
+        if(focusFragment==fragment)return;
         if (focusFragment == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragment).commit();
-            return;
-        }
-        if (!fragment.isAdded()) {
+        } else if (!fragment.isAdded()) {
             getSupportFragmentManager().beginTransaction().hide(focusFragment).add(R.id.frame_layout, fragment).commitAllowingStateLoss();
         } else {
             getSupportFragmentManager().beginTransaction().hide(focusFragment).show(fragment).commitAllowingStateLoss();

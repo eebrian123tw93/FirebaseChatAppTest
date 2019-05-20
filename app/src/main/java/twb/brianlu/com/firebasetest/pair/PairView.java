@@ -8,4 +8,9 @@ public interface PairView extends BaseView {
     void onSetProgressBarImage(int image);
 
     void onSetProgressBarProgress(double value);
+
+    void onRippleStart();
+
+    void onRippleStop();
+
 }

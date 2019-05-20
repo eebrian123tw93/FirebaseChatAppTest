@@ -1,21 +1,29 @@
 package twb.brianlu.com.firebasetest.pair;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.skyfishjy.library.RippleBackground;
+
 import ch.halcyon.squareprogressbar.SquareProgressBar;
+import mx.com.pegasus.RippleCircleButton;
 import twb.brianlu.com.firebasetest.R;
 
 
-public class PairFragment extends Fragment implements PairView {
-     SquareProgressBar squareProgressBar;
+public class PairFragment extends Fragment implements PairView, View.OnTouchListener, View.OnLongClickListener {
+    SquareProgressBar squareProgressBar;
+    private PairPresenter presenter;
+    private RippleBackground rippleBackground;
+
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
@@ -23,64 +31,17 @@ public class PairFragment extends Fragment implements PairView {
 
         View view = inflater.inflate(R.layout.fragment_pair, container, false);
         squareProgressBar = view.findViewById(R.id.sprogressbar);
+        squareProgressBar.setOnTouchListener(this);
         squareProgressBar.setImage(R.drawable.make_friends);
-        squareProgressBar.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {//当前状态
-                    case MotionEvent.ACTION_DOWN:
-                        squareProgressBar.setImage(R.drawable.make_friends_color);
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        squareProgressBar.setImage(R.drawable.make_friends);
-                        break;
-                    default:
-                        break;
-                }
-                return true;
 
-            }
-        });
+        presenter = new PairPresenter(this);
+        presenter.setProgressBarProgress(false);
+
+        rippleBackground = view.findViewById(R.id.content);
+        rippleBackground.setVisibility(View.INVISIBLE);
 
 
-//        squareProgressBar.setProgress(50);
-        squareProgressBar.animate().start();
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                for (int i = 0; true; i++) {
-                    if (i % 102 == 0) {
-                        i = 0;
-                    }
-                    squareProgressBar.setProgress(i);
-                    try {
-                        Thread.sleep(20);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                for (int i = 0; true; i++) {
-                    if (i % 3 == 1) squareProgressBar.setImage(R.drawable.make_friends);
-                    else if (i % 3 == 2) squareProgressBar.setImage(R.drawable.make_friends_half);
-                    else squareProgressBar.setImage(R.drawable.make_friends_color);
-                    try {
-                        Thread.sleep(700);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-        squareProgressBar.setRoundedCorners(true);
+
         return view;
     }
 
@@ -97,7 +58,20 @@ public class PairFragment extends Fragment implements PairView {
 
     @Override
     public void onSetProgressBarVisibility(boolean visible) {
-        
+        squareProgressBar.setRoundedCorners(visible);
+    }
+
+    @Override
+    public void onRippleStart() {
+        rippleBackground.startRippleAnimation();
+
+    }
+
+    @Override
+    public void onRippleStop() {
+        rippleBackground.stopRippleAnimation();
+        rippleBackground.clearAnimation();
+
     }
 
     @Override
@@ -105,4 +79,34 @@ public class PairFragment extends Fragment implements PairView {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (v.getId()) {
+            case R.id.sprogressbar:
+                switch (event.getAction()) {//当前状态
+                    case MotionEvent.ACTION_DOWN:
+                        presenter.setProgressBarImage(R.drawable.make_friends_color);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        presenter.setProgressBarImage(R.drawable.make_friends);
+                        presenter.pair();
+
+
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+//        presenter.unPair();
+        return true;
+    }
 }

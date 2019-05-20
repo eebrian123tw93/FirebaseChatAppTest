@@ -29,6 +29,7 @@ public class RoomsFragment extends Fragment implements RoomsView {
 
 
         presenter = new RoomsPresenter(this);
+        presenter.setRoomsRVAdapter();
 
 
         return v;

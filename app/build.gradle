@@ -64,6 +64,14 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 
     implementation 'ch.halcyon:squareprogressbar:1.6.4'
+    implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
+
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.mikhaellopez:circularimageview:3.0.2'
+
+    implementation 'mx.com.pegasus:ripple-circle-button:1.1.8'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
