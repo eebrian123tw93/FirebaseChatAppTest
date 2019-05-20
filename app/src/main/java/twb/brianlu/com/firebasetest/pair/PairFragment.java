@@ -33,11 +33,13 @@ public class PairFragment extends Fragment implements PairView, View.OnTouchList
         squareProgressBar = view.findViewById(R.id.sprogressbar);
         squareProgressBar.setOnTouchListener(this);
         squareProgressBar.setImage(R.drawable.make_friends);
+        squareProgressBar.setWidth(5);
 
         presenter = new PairPresenter(this);
         presenter.setProgressBarProgress(false);
 
         rippleBackground = view.findViewById(R.id.content);
+
 //        rippleBackground.setVisibility(View.INVISIBLE);
 
 
