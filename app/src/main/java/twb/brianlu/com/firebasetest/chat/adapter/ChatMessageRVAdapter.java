@@ -16,6 +16,8 @@ import twb.brianlu.com.firebasetest.model.ChatMessage;
 public class ChatMessageRVAdapter extends RecyclerView.Adapter<ChatMessageRVAdapter.ViewHolder> {
 
 
+    private static final int SELF_VIEW = 0;
+    private static final int OPPOSITE_VIEW = 1;
     private Context context;
     private ChatMessageRVPresenter presenter;
 
@@ -32,9 +34,6 @@ public class ChatMessageRVAdapter extends RecyclerView.Adapter<ChatMessageRVAdap
             return OPPOSITE_VIEW;
         }
     }
-
-    private static final int SELF_VIEW = 0;
-    private static final int OPPOSITE_VIEW = 1;
 
     @NonNull
     @Override

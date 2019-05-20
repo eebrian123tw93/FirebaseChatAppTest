@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.util.Pair;
-import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -30,20 +28,19 @@ public class FirebaseService extends FirebaseMessagingService {
     private static final String TAG = "FirebaseService";
 
 
-
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 //        super.onMessageReceived(remoteMessage);
-        Map<String,String>datas=remoteMessage.getData();
-        String title="";
-        String body="";
-        for(Map.Entry<String, String> entry:datas.entrySet()){
-            Log.i(TAG, "key " + entry.getKey()+" value "+entry.getValue());
-            if(entry.getKey().equals("title")){
-                title=entry.getValue();
+        Map<String, String> datas = remoteMessage.getData();
+        String title = "";
+        String body = "";
+        for (Map.Entry<String, String> entry : datas.entrySet()) {
+            Log.i(TAG, "key " + entry.getKey() + " value " + entry.getValue());
+            if (entry.getKey().equals("title")) {
+                title = entry.getValue();
             }
-            if(entry.getKey().equals("body")){
-                body=entry.getValue();
+            if (entry.getKey().equals("body")) {
+                body = entry.getValue();
             }
         }
 
@@ -54,7 +51,7 @@ public class FirebaseService extends FirebaseMessagingService {
         if (!isAppOnForeground(BaseApplication.getContext())) {
             if (BasePresenter.isLogin()) {
                 notification(title, body);
-                System.out.println(title+body);
+                System.out.println(title + body);
             }
         }
     }
@@ -99,7 +96,7 @@ public class FirebaseService extends FirebaseMessagingService {
 //                        + dailyDataModel.getHoursPhoneUse()
 //                        + getString(R.string.hour_string));
 
-        int notificationId = new Random().nextInt(1000)+1000;
+        int notificationId = new Random().nextInt(1000) + 1000;
         String channelId = "daily_data_channel_id";
 
         Intent notificationIntent = new Intent(this, ChatActivity.class);

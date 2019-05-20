@@ -70,22 +70,23 @@ public class BasePresenter {
 //        return true;
     }
 
+    public static void saveToken(String token) {
+        SharedPreferences preferences = BaseApplication.getContext().getSharedPreferences("AUTHENTICATION_FILE_NAME", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Authentication_token", token);
+        editor.apply();
+    }
+
+    public static String readToken() {
+        SharedPreferences prfs = BaseApplication.getContext().getSharedPreferences("AUTHENTICATION_FILE_NAME", Context.MODE_PRIVATE);
+        return prfs.getString("Authentication_token", "");
+    }
+
     public interface UserListener {
         void onLogin();
 
         void onLogout();
 
         void toLoginPage();
-    }
-
-    public static void saveToken(String token){
-        SharedPreferences preferences = BaseApplication.getContext().getSharedPreferences("AUTHENTICATION_FILE_NAME", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("Authentication_token",token);
-        editor.apply();
-    }
-    public static String readToken(){
-        SharedPreferences prfs = BaseApplication.getContext().getSharedPreferences("AUTHENTICATION_FILE_NAME", Context.MODE_PRIVATE);
-        return prfs.getString("Authentication_token", "");
     }
 }

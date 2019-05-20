@@ -11,7 +11,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import twb.brianlu.com.firebasetest.R;
-import twb.brianlu.com.firebasetest.model.ChatMessage;
 
 public class TagsRVAdapter extends RecyclerView.Adapter<TagsRVAdapter.ViewHolder> {
 
