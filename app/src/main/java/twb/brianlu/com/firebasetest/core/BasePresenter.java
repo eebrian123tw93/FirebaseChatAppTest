@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import twb.brianlu.com.firebasetest.model.User;
 
@@ -51,6 +52,18 @@ public class BasePresenter {
                     user.setRooms(new ArrayList<String>());
                     user.getRooms().add("P8hxIBZunNfIfef6zGaqW8A8BLY2_YKd2m0doQShEGzIOFf96YauRmFu1");
                     user.setToken(readToken());
+                    List<String> tags = new ArrayList<>();
+                    tags.add("旅遊");
+                    tags.add("健行");
+                    tags.add("露營");
+                    tags.add("極限運動");
+                    tags.add("游泳");
+                    tags.add("衝浪");
+                    tags.add("浮潛");
+                    tags.add("潛水");
+                    tags.add("生存遊戲");
+                    tags.add("射擊");
+                    user.setTags(tags);
                     saveUser(user);
                 }
 

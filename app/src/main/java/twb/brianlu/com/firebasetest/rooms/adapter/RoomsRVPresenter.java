@@ -12,7 +12,10 @@ import java.util.List;
 
 import twb.brianlu.com.firebasetest.chat.ChatActivity;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
+
+import twb.brianlu.com.firebasetest.fbDataService.FirebaseDataService;
 import twb.brianlu.com.firebasetest.model.Room;
+import twb.brianlu.com.firebasetest.service.FirebaseService;
 
 public class RoomsRVPresenter extends BasePresenter {
     List<Room> rooms;
@@ -49,8 +52,7 @@ public class RoomsRVPresenter extends BasePresenter {
     }
 
     public void deleteRoom(Room room) {
-        FirebaseDatabase.getInstance().getReference("users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("rooms").child(room.getRoomKey()).removeValue();
+        FirebaseDataService.deleteRoom(FirebaseAuth.getInstance().getCurrentUser().getUid(),room.getRoomId());
     }
 
     public int getItemCount() {

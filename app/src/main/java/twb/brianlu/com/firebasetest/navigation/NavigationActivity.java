@@ -7,13 +7,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import twb.brianlu.com.firebasetest.R;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
+import twb.brianlu.com.firebasetest.fbDataService.FirebaseDataService;
 import twb.brianlu.com.firebasetest.login.LoginFragment;
 import twb.brianlu.com.firebasetest.pair.PairFragment;
 import twb.brianlu.com.firebasetest.profile.ProfileFragment;

@@ -116,8 +116,13 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
     }
 
     @Override
-    public void onScrollToPosition(int position) {
+    public void onScrollMessagesToPosition(int position) {
         messageRecyclerView.scrollToPosition(position);
+    }
+
+    @Override
+    public void onScrollTagsToPosition(int position) {
+        tagsRecyclerView.scrollToPosition(position);
     }
 
     @Override

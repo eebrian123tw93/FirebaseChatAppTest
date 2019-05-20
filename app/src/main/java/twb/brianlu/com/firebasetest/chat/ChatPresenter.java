@@ -71,7 +71,6 @@ public class ChatPresenter extends BasePresenter {
         FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("tags").child(room.getOppositeUid())
                 .setValue(room.getOppositeTags());
 
-//        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("tags").child(room.getOppositeUid()).push().setValue(room.getOppositeTags().get(0));
     }
 
     public void loadTags() {
@@ -83,6 +82,7 @@ public class ChatPresenter extends BasePresenter {
                 System.out.println(dataSnapshot.getValue());
                 System.out.println(s);
                 tagsRVAdapter.addTag(value);
+                view.onScrollTagsToPosition(tagsRVAdapter.getItemCount()-1);
             }
 
             @Override
@@ -114,7 +114,7 @@ public class ChatPresenter extends BasePresenter {
                 System.out.println(s);
                 ChatMessage chatMessage = dataSnapshot.getValue(ChatMessage.class);
                 chatMessageRVAdapter.addMessage(chatMessage);
-                view.onScrollToPosition(chatMessageRVAdapter.getItemCount() - 1);
+                view.onScrollMessagesToPosition(chatMessageRVAdapter.getItemCount() - 1);
                 System.out.println(chatMessage.getUserUid());
             }
 
