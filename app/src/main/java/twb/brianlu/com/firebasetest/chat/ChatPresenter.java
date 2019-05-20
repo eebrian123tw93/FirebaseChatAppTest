@@ -34,9 +34,17 @@ public class ChatPresenter extends BasePresenter {
         tagsRVAdapter=new TagsRVAdapter(context);
         //debug
         room = new Room();
-        room.setRoomId("roomId");
-        room.setSelfUId(user.getUid());
-        room.setOppositeUid("oppositeUId");
+        room.setRoomId("P8hxIBZunNfIfef6zGaqW8A8BLY2_YKd2m0doQShEGzIOFf96YauRmFu1");
+        String [] ids=room.getRoomId().split("_");
+        for (String uid :ids) {
+            if(uid.equals(user.getUid())){
+                room.setSelfUId(uid);
+            }else {
+                room.setOppositeUid(uid);
+            }
+        }
+//        room.setSelfUId("P8hxIBZunNfIfef6zGaqW8A8BLY2");
+//        room.setOppositeUid("YKd2m0doQShEGzIOFf96YauRmFu1");
         room.setOppositeTags(new ArrayList<String>());
        room.getOppositeTags().add("旅遊");
         room.getOppositeTags().add("健行");
