@@ -38,7 +38,7 @@ public class PairFragment extends Fragment implements PairView, View.OnTouchList
         presenter.setProgressBarProgress(false);
 
         rippleBackground = view.findViewById(R.id.content);
-        rippleBackground.setVisibility(View.INVISIBLE);
+//        rippleBackground.setVisibility(View.INVISIBLE);
 
 
 
