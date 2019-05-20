@@ -42,6 +42,7 @@ public class RoomsRVPresenter extends BasePresenter {
         viewHolder.onSetLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                deleteRoom(room);
                 removeRoom(room);
                 dataChanged.onDataChanged();
                 return false;
@@ -50,18 +51,9 @@ public class RoomsRVPresenter extends BasePresenter {
 
     }
 
-    public void deleteRoom(){
-        FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid()).child("rooms").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    public void deleteRoom(Room room){
+        FirebaseDatabase.getInstance().getReference("users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("rooms").child(room.getRoomKey()).removeValue();
     }
 
     public  int getItemCount(){

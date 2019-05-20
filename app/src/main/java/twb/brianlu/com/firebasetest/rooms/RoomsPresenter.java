@@ -24,17 +24,28 @@ public class RoomsPresenter extends BasePresenter {
 
         roomsRVAdapter = new RoomsRVAdapter(BaseApplication.getContext());
         view.onSetRoomsAdapter(roomsRVAdapter);
+//        Room room=new Room();
+//        room.setRoomId("P8hxIBZunNfIfef6zGaqW");
+//        addRoom(room);
         loadRooms();
     }
 
+//    public void addRoom(Room room) {
+//        FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//                .child("rooms").push().setValue(room.getRoomId());
+////        FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+////                .child("rooms")
+//    }
+
     public void loadRooms() {
-        FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid()).child("rooms").addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("rooms").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 System.out.println(dataSnapshot.getValue());
                 System.out.println(s);
 
                 Room room = new Room();
+                room.setRoomKey(dataSnapshot.getKey());
                 room.setRoomId(dataSnapshot.getValue().toString());
 
                 String[] ids = room.getRoomId().split("_");
