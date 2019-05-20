@@ -24,6 +24,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
     private ImageView sendImageView;
     private ChatPresenter chatPresenter;
     private RecyclerView messageRecyclerView;
+    private RecyclerView tagsRecyclerView;
     private TwinklingRefreshLayout refreshLayout;
     private EditText input;
 
@@ -38,14 +39,23 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
         input = findViewById(R.id.message_editText);
         messageRecyclerView = findViewById(R.id.messages_recyclerView);
 
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         messageRecyclerView.setLayoutManager(layoutManager);
-        chatPresenter = new ChatPresenter(this);
+
+
+        tagsRecyclerView=findViewById(R.id.tags_recyclerView);
+        LinearLayoutManager tagsLinearLayoutManager=new LinearLayoutManager(getApplicationContext());
+        tagsLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        tagsRecyclerView.setLayoutManager(tagsLinearLayoutManager);
+
+
+        chatPresenter = new ChatPresenter(this,getIntent().getStringExtra("roomId"));
 
 
         refreshLayout = findViewById(R.id.refreshLayout);
         refreshLayout.setEnableLoadmore(false);
+        refreshLayout.setEnableRefresh(false);
 //        refreshLayout.setAutoLoadMore(true);
         refreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
 
@@ -96,8 +106,13 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
     }
 
     @Override
-    public void onSetAdapter(RecyclerView.Adapter adapter) {
+    public void onSetMessagesAdapter(RecyclerView.Adapter adapter) {
         messageRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onSetTagsAdapter(RecyclerView.Adapter adapter) {
+        tagsRecyclerView.setAdapter(adapter);
     }
 
     @Override

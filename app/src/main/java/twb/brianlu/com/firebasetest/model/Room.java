@@ -7,5 +7,8 @@ import lombok.Data;
 @Data
 public class Room {
     private String roomId;
-    private List<ChatMessage> chatMessages;
+    private String selfUId;
+    private String oppositeUid;
+    private List<String>oppositeTags;
+    private String roomKey;
 }

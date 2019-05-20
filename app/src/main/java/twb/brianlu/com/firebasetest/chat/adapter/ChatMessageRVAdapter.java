@@ -72,6 +72,11 @@ public class ChatMessageRVAdapter extends RecyclerView.Adapter<ChatMessageRVAdap
         notifyDataSetChanged();
     }
 
+    public void addMessage(ChatMessage chatMessage) {
+        presenter.addMessage(chatMessage);
+        notifyDataSetChanged();
+    }
+
     public void clear() {
         presenter.clear();
         notifyDataSetChanged();
@@ -85,7 +90,7 @@ public class ChatMessageRVAdapter extends RecyclerView.Adapter<ChatMessageRVAdap
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            messageTextView = itemView.findViewById(R.id.message_text);
+            messageTextView = itemView.findViewById(R.id.message_textView);
             usernameTextView = itemView.findViewById(R.id.message_user);
             timeTextView = itemView.findViewById(R.id.message_time);
         }

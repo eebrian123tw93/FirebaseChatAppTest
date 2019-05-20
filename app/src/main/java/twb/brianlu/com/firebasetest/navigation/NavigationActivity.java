@@ -46,7 +46,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
 //        if (getSupportActionBar() != null) {
 //            getSupportActionBar().setTitle(bottomNavigationView.getMenu().getItem(1).getTitle());
 //        }
-            startActivity(new Intent(this, ChatActivity.class));
+//            startActivity(new Intent(this, ChatActivity.class));
 
         navigationPresenter = new NavigationPresenter(this);
         bottomNavigationView.setSelectedItemId(R.id.pair);

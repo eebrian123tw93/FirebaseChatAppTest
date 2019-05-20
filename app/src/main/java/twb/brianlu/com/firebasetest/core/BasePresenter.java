@@ -11,6 +11,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 import twb.brianlu.com.firebasetest.model.User;
 
 public class BasePresenter {
@@ -46,6 +48,8 @@ public class BasePresenter {
                         user.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
                     }
+                    user.setRooms(new ArrayList<String>());
+                    user.getRooms().add("P8hxIBZunNfIfef6zGaqW8A8BLY2_YKd2m0doQShEGzIOFf96YauRmFu1");
                     user.setToken(readToken());
                     saveUser(user);
                 }
