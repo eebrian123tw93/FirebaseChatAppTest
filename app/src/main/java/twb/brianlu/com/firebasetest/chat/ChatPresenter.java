@@ -9,12 +9,11 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import twb.brianlu.com.firebasetest.chat.adapter.ChatMessageRVAdapter;
+import twb.brianlu.com.firebasetest.chat.adapter.TagsRVAdapter;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
 import twb.brianlu.com.firebasetest.model.ChatMessage;
 import twb.brianlu.com.firebasetest.model.Room;
@@ -27,39 +26,79 @@ public class ChatPresenter extends BasePresenter {
 
     private ChatMessageRVAdapter chatMessageRVAdapter;
 
+    private TagsRVAdapter tagsRVAdapter;
+
     public ChatPresenter(ChatView view) {
         this.view = view;
         chatMessageRVAdapter = new ChatMessageRVAdapter(context);
+        tagsRVAdapter=new TagsRVAdapter(context);
         //debug
         room = new Room();
         room.setRoomId("roomId");
+        room.setSelfUId(user.getUid());
+        room.setOppositeUid("oppositeUId");
+        room.setOppositeTags(new ArrayList<String>());
+       room.getOppositeTags().add("旅遊");
+        room.getOppositeTags().add("健行");
+        room.getOppositeTags().add("露營");
+        room.getOppositeTags().add("極限運動");
+        room.getOppositeTags().add("游泳");
+        room.getOppositeTags().add("衝浪");
+        room.getOppositeTags().add("浮潛");
+        room.getOppositeTags().add("潛水");
+        room.getOppositeTags().add("生存遊戲");
+        room.getOppositeTags().add("射擊");
+
+        addTags();
 //        readUser();
         ///////////
 
-        view.onSetAdapter(chatMessageRVAdapter);
+        view.onSetMessagesAdapter(chatMessageRVAdapter);
+        view.onSetTagsAdapter(tagsRVAdapter);
         loadMessages();
+        loadTags();
+    }
+    public void addTags(){
+        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("tags").child(room.getOppositeUid())
+                .setValue(room.getOppositeTags());
+
+//        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("tags").child(room.getOppositeUid()).push().setValue(room.getOppositeTags().get(0));
+    }
+    public void loadTags(){
+        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("tags").child(room.getOppositeUid()).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                System.out.println(s);
+                String value=dataSnapshot.getValue().toString();
+                System.out.println(dataSnapshot.getValue());
+                System.out.println(s);
+                tagsRVAdapter.addTag(value);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void loadMessages() {
-//        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                List<ChatMessage> chatMessages = new ArrayList<>();
-////                ChatMessage[] chatMessages=dataSnapshot.getValue(ChatMessage[].class);
-//                for (DataSnapshot shot : dataSnapshot.getChildren()) {
-//                    ChatMessage chatMessage = shot.getValue(ChatMessage.class);
-//                    chatMessages.add(chatMessage);
-//                }
-//                chatMessageRVAdapter.addMessages(chatMessages);
-//                view.onScrollToPosition(chatMessageRVAdapter.getItemCount() - 1);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("messages").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 System.out.println(s);
@@ -89,24 +128,6 @@ public class ChatPresenter extends BasePresenter {
             }
         });
 
-//        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                List<ChatMessage> chatMessages = new ArrayList<>();
-////                ChatMessage[] chatMessages=dataSnapshot.getValue(ChatMessage[].class);
-//                for (DataSnapshot shot : dataSnapshot.getChildren()) {
-//                    ChatMessage chatMessage = shot.getValue(ChatMessage.class);
-//                    chatMessages.add(chatMessage);
-//                }
-//                chatMessageRVAdapter.addMessages(chatMessages);
-//                view.onScrollToPosition(chatMessageRVAdapter.getItemCount() - 1);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
 
@@ -116,6 +137,7 @@ public class ChatPresenter extends BasePresenter {
             FirebaseDatabase.getInstance()
                     .getReference("rooms")
                     .child(room.getRoomId())
+                    .child("messages")
                     .push()
                     .setValue(chatMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override

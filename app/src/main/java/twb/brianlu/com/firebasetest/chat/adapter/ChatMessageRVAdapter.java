@@ -90,7 +90,7 @@ public class ChatMessageRVAdapter extends RecyclerView.Adapter<ChatMessageRVAdap
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            messageTextView = itemView.findViewById(R.id.message_text);
+            messageTextView = itemView.findViewById(R.id.message_textView);
             usernameTextView = itemView.findViewById(R.id.message_user);
             timeTextView = itemView.findViewById(R.id.message_time);
         }
