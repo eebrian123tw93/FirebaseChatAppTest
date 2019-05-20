@@ -10,4 +10,5 @@ public class Room {
     private String selfUId;
     private String oppositeUid;
     private List<String>oppositeTags;
+
 }

@@ -28,13 +28,13 @@ public class ChatPresenter extends BasePresenter {
 
     private TagsRVAdapter tagsRVAdapter;
 
-    public ChatPresenter(ChatView view) {
+    public ChatPresenter(ChatView view,String roomId) {
         this.view = view;
         chatMessageRVAdapter = new ChatMessageRVAdapter(context);
         tagsRVAdapter=new TagsRVAdapter(context);
         //debug
         room = new Room();
-        room.setRoomId("P8hxIBZunNfIfef6zGaqW8A8BLY2_YKd2m0doQShEGzIOFf96YauRmFu1");
+        room.setRoomId(roomId);
         String [] ids=room.getRoomId().split("_");
         for (String uid :ids) {
             if(uid.equals(user.getUid())){

@@ -50,7 +50,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
         tagsRecyclerView.setLayoutManager(tagsLinearLayoutManager);
 
 
-        chatPresenter = new ChatPresenter(this);
+        chatPresenter = new ChatPresenter(this,getIntent().getStringExtra("roomId"));
 
 
         refreshLayout = findViewById(R.id.refreshLayout);
