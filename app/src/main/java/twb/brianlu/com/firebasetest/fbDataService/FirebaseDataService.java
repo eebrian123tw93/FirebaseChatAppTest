@@ -8,6 +8,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Observer;
 
@@ -75,6 +76,11 @@ public class FirebaseDataService {
         });
     }
 
+    public static void addTag(final String uid, final List<String> tags) {
+        FirebaseDatabase.getInstance().getReference("users").child(uid)
+                .child("tags").setValue(tags);
+    }
+
     public static void deleteTag(final String uid, final String tag) {
         FirebaseDatabase.getInstance().getReference("users").child(uid)
                 .child("tags").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -117,7 +123,7 @@ public class FirebaseDataService {
         });
     }
 
-    public static void getUserToken(String uid, final Observer<String>observer){
+    public static void getUserToken(String uid, final Observer<String> observer) {
         FirebaseDatabase.getInstance().getReference("users").child(uid).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

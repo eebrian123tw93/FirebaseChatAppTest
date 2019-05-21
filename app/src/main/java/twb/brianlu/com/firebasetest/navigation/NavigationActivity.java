@@ -1,5 +1,6 @@
 package twb.brianlu.com.firebasetest.navigation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -19,6 +20,7 @@ import twb.brianlu.com.firebasetest.pair.PairFragment;
 import twb.brianlu.com.firebasetest.pair.PairFragment2;
 import twb.brianlu.com.firebasetest.profile.ProfileFragment;
 import twb.brianlu.com.firebasetest.rooms.RoomsFragment;
+import twb.brianlu.com.firebasetest.splash.SplashActivity;
 
 public class NavigationActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView {
 
@@ -85,7 +87,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     }
 
     public void showFragment(Fragment fragment) {
-        if(focusFragment==fragment)return;
+        if (focusFragment == fragment) return;
         if (focusFragment == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragment).commitAllowingStateLoss();
         } else if (!fragment.isAdded()) {
@@ -104,7 +106,14 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
 
     @Override
     public void onLogout() {
+//        ((ActivityManager) getBaseContext().getSystemService(ACTIVITY_SERVICE))
+//                .clearApplicationUserData();
         finish();
+
+        finishAffinity();
+        Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+        startActivity(intent);
+
     }
 
     @Override
