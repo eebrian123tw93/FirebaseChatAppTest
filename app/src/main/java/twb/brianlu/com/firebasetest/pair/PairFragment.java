@@ -73,7 +73,6 @@ public class PairFragment extends Fragment implements PairView, View.OnTouchList
     public void onRippleStop() {
         rippleBackground.stopRippleAnimation();
         rippleBackground.clearAnimation();
-
     }
 
     @Override

@@ -69,7 +69,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
                     }
                     break;
                 case R.id.pair:
-                    fragment = new PairFragment();
+                    fragment = new PairFragment2();
                     break;
                 default:
                     fragment = new PairFragment();
