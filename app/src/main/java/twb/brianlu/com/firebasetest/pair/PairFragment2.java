@@ -2,80 +2,112 @@ package twb.brianlu.com.firebasetest.pair;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.skyfishjy.library.RippleBackground;
-
-import ch.halcyon.squareprogressbar.SquareProgressBar;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import mx.com.pegasus.RippleCircleButton;
 import twb.brianlu.com.firebasetest.R;
 
+public class PairFragment2 extends Fragment implements PairView2, View.OnClickListener {
+    private RippleCircleButton rippleCircleButton;
+    private PairPresenter2 presenter;
 
-public class PairFragment2 extends Fragment {
-    RippleCircleButton rippleCircleButton;
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_pair2, container, false);
-
-
-         rippleCircleButton=view.findViewById(R.id.rippleCircleButton);
+        rippleCircleButton = view.findViewById(R.id.rippleCircleButton);
         rippleCircleButton.setMainCircleSize(100f); //Value is in DPs
         rippleCircleButton.setMainCircleColor(Color.parseColor("#000000FF"));
-
-        rippleCircleButton.setMainCircleBackgroundImage(ContextCompat.getDrawable(getContext(), R.drawable.make_friends_color));
         rippleCircleButton.setMainCircleBackgroundImageSize(100f); //Value is in DPs
-
         rippleCircleButton.setSecondaryCirclesNumber(6);
-
-
         rippleCircleButton.setSecondaryCirclesColor(Color.parseColor("#06BCF8"));
+        rippleCircleButton.stopAnimation();
 
-        rippleCircleButton.setAnimationDuration(3000); //Value is in Milliseconds
-
-
-        rippleCircleButton.setSecondaryCirclesAnimation(RippleCircleButton.PROGRESSIVE_ANIMATION);
-
-        rippleCircleButton.startAnimation();
-
-        new Thread(){
+        rippleCircleButton.setOnMainCircleClickListener(new Function0<Unit>() {
             @Override
-            public void run() {
-                super.run();
-                try {
-                    Thread.sleep(6000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-//                        rippleCircleButton.stopAnimation();
-//                        rippleCircleButton.setSecondaryCirclesNumber(10);
-                        rippleCircleButton.setAnimationDuration(2000);
-                        rippleCircleButton.setSecondaryCirclesAnimation(RippleCircleButton.EXPAND_AND_DISAPPEAR_ANIMATION);
-                        rippleCircleButton.startAnimation();
-                    }
-                });
-
+            public Unit invoke() {
+                presenter.pair();
+                return Unit.INSTANCE;
             }
-        }.start();
+        });
+
+
+        presenter = new PairPresenter2(this);
 
         return view;
     }
 
 
+    @Override
+    public void onRippleStart() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                rippleCircleButton.startAnimation();
+            }
+        });
+    }
 
+    @Override
+    public void onRippleStop() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                rippleCircleButton.stopAnimation();
+            }
+        });
+
+    }
+
+    @Override
+    public void onSetRippleViewBarImage(final int image) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                rippleCircleButton.setMainCircleBackgroundImage(ContextCompat.getDrawable(getContext(), image));
+            }
+        });
+
+    }
+
+    @Override
+    public void onSetRippleViewAnimationDuration(int duration) {
+        rippleCircleButton.setAnimationDuration(duration);
+    }
+
+    @Override
+    public void onSetRippleViewCirclesNumber(int number) {
+        rippleCircleButton.setSecondaryCirclesNumber(number);
+    }
+
+    @Override
+    public void onSetRippleViewAnimationType(int animation) {
+        rippleCircleButton.setSecondaryCirclesAnimation(animation);
+    }
+
+    @Override
+    public void onSetMessage(String message, int type) {
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+    }
 }
