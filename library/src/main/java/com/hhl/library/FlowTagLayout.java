@@ -234,6 +234,14 @@ public class FlowTagLayout extends ViewGroup {
                         mCheckedTagArray.put(i, true);
                         childView.setSelected(true);
                     }
+                }else {
+
+                }
+            }else {
+                switch (mTagCheckMode){
+                    case FLOW_TAG_CHECKED_NONE:
+                        childView.setClickable(false);
+                        break;
                 }
             }
 

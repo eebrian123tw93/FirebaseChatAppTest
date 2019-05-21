@@ -9,13 +9,13 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/round_rectangle_bg"
+        android:background="@drawable/tag_background"
         android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="5dp"
         android:text="TAG标签"
-        android:textColor="@drawable/normal_text_color" />
+        android:textColor="@drawable/tag_text_color" />
 
 </LinearLayout>
 
