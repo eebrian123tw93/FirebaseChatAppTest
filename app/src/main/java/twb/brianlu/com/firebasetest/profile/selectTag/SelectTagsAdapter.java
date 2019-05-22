@@ -84,6 +84,9 @@ public class SelectTagsAdapter extends BaseAdapter implements OnInitSelectedPosi
 
     public void setTagSelect(String tag, boolean select) {
         isSelectedTags.put(tag, select);
+//        mDataList.remove(tag);
+//        mDataList.add(0, tag);
+//        notifyDataSetChanged();
     }
 
     public void clear() {

@@ -84,7 +84,7 @@ public class RoomsRVAdapter extends RecyclerView.Adapter<RoomsRVAdapter.ViewHold
             messageTextView = itemView.findViewById(R.id.message_textView);
             cardView = itemView.findViewById(R.id.room_cardView);
             swipeLayout = itemView.findViewById(R.id.swipeLayout);
-            deleteImageView=itemView.findViewById(R.id.delete_imageView);
+            deleteImageView = itemView.findViewById(R.id.delete_imageView);
             //set show mode.
             swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
 

@@ -5,10 +5,12 @@ import android.app.Application;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BaseApplication extends Application {
 
+    public static List<String> tags;
     @SuppressLint("StaticFieldLeak")
     private static Context context;
 
@@ -19,15 +21,13 @@ public class BaseApplication extends Application {
         return context;
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        context = this;
-    }
-
-    public static List<String> tags;
-
     public static void initTags() {
+        String[] t = new String[]{
+                "sport", "work", "talk", "Index", "MV", "office", "Lyric", "Youtube"
+                , "Instagram", "Facebook", "WeChat", "Wootalk", "Dcard", "Discord"
+                , "TWB", "Allo", "Zenly", "Tos", "Trello", "Github", "Gitlab", "WaCare", "Google"
+                , "Gmail", "Excel", "Word", "PowerPoint", "WPS Office", "dfhsaljk", "jfd;g", "ghdfls", "jghfls", "jfhlg"
+        };
         tags = new ArrayList<>();
         tags.add("旅遊");
         tags.add("健行");
@@ -83,6 +83,13 @@ public class BaseApplication extends Application {
         tags.add("癡心絕對");
         tags.add("哭砂");
         tags.add("馮提莫");
+        tags.addAll(Arrays.asList(t));
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        context = this;
     }
 
 
