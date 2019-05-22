@@ -3,17 +3,21 @@ package twb.brianlu.com.firebasetest.profile;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ScrollView;
 
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.hhl.library.FlowTagLayout;
 
 import twb.brianlu.com.firebasetest.R;
+import twb.brianlu.com.firebasetest.profile.selectTag.SelectTagsDialogFragment;
 
 public class ProfileFragment extends Fragment implements ProfileView, View.OnClickListener {
 
@@ -21,6 +25,7 @@ public class ProfileFragment extends Fragment implements ProfileView, View.OnCli
     private Button logoutButton;
     private Button deleteButton;
     private FlowTagLayout flowTagLayout;
+    private ScrollView tagsScrollView;
 
 
     @Nullable
@@ -30,11 +35,13 @@ public class ProfileFragment extends Fragment implements ProfileView, View.OnCli
         logoutButton = view.findViewById(R.id.logout_button);
         deleteButton = view.findViewById(R.id.delete_user_button);
         flowTagLayout = view.findViewById(R.id.flowTagLayout);
+        tagsScrollView = view.findViewById(R.id.tags_scrollView);
 //        flowTagLayout.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_SINGLE);
         flowTagLayout.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_NONE);
 
         logoutButton.setOnClickListener(this);
         deleteButton.setOnClickListener(this);
+
 
         presenter = new ProfilePresenter(this);
         return view;
@@ -84,6 +91,16 @@ public class ProfileFragment extends Fragment implements ProfileView, View.OnCli
                         })
                         .setNegativeText("Cancel")
                         .show();
+
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+                // Create and show the dialog.
+                DialogFragment newFragment = new SelectTagsDialogFragment();
+                newFragment.show(ft, "dialog");
 
                 break;
 

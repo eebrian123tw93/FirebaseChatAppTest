@@ -36,6 +36,7 @@ public class ProfilePresenter extends BasePresenter {
                     tags.add(shot.getValue().toString());
                 }
                 tagsAdapter.addTags(tags);
+
             }
 
             @Override

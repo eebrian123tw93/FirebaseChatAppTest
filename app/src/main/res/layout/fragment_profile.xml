@@ -81,6 +81,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/button" />
 
             <ScrollView
+                android:id="@+id/tags_scrollView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="10dp"

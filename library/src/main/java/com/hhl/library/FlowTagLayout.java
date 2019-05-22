@@ -203,6 +203,18 @@ public class FlowTagLayout extends ViewGroup {
         }
     }
 
+    public void setChildViewSelected(int position, boolean select) {
+        final View childView = mAdapter.getView(position, null, this);
+//        addView(childView, new MarginLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)));
+        mCheckedTagArray.put(position, select);
+        childView.setActivated(select);
+        childView.setPressed(select);
+        childView.setSelected(select);
+        childView.callOnClick();
+        childView.invalidate();
+        reloadData();
+    }
+
 
     /**
      * 重新加载刷新数据
@@ -234,14 +246,8 @@ public class FlowTagLayout extends ViewGroup {
                         mCheckedTagArray.put(i, true);
                         childView.setSelected(true);
                     }
-                }else {
+                } else {
 
-                }
-            }else {
-                switch (mTagCheckMode){
-                    case FLOW_TAG_CHECKED_NONE:
-                        childView.setClickable(false);
-                        break;
                 }
             }
 
@@ -295,17 +301,16 @@ public class FlowTagLayout extends ViewGroup {
                 }
             });
         }
+
     }
 
     /**
      * 清除所有被选择的选项
      *
      * @author https://github.com/wanyt
-     *
      * @time 2016年11月13日16:07:23
-     *
      */
-    public void clearAllOption(){
+    public void clearAllOption() {
         for (int i = 0; i < mAdapter.getCount(); i++) {
             if (mCheckedTagArray.get(i)) {
                 getChildAt(i).setSelected(false);

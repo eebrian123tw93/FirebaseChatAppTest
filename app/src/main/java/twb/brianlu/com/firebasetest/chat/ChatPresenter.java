@@ -82,7 +82,7 @@ public class ChatPresenter extends BasePresenter {
                 System.out.println(dataSnapshot.getValue());
                 System.out.println(s);
                 tagsRVAdapter.addTag(value);
-                view.onScrollTagsToPosition(tagsRVAdapter.getItemCount()-1);
+                view.onScrollTagsToPosition(tagsRVAdapter.getItemCount() - 1);
             }
 
             @Override

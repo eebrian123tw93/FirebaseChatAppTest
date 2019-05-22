@@ -105,6 +105,8 @@ public class BasePresenter {
                     tags.add("桌球");
                     user.setTags(tags);
                     saveUser(user);
+
+
                 }
 
                 @Override

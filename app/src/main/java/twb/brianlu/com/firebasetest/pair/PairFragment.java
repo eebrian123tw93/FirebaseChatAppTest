@@ -1,12 +1,10 @@
 package twb.brianlu.com.firebasetest.pair;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,7 +13,6 @@ import android.view.ViewGroup;
 import com.skyfishjy.library.RippleBackground;
 
 import ch.halcyon.squareprogressbar.SquareProgressBar;
-import mx.com.pegasus.RippleCircleButton;
 import twb.brianlu.com.firebasetest.R;
 
 
@@ -41,7 +38,6 @@ public class PairFragment extends Fragment implements PairView, View.OnTouchList
         rippleBackground = view.findViewById(R.id.content);
 
 //        rippleBackground.setVisibility(View.INVISIBLE);
-
 
 
         return view;

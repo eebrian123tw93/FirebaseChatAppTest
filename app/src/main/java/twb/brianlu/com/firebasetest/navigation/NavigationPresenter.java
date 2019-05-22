@@ -1,9 +1,5 @@
 package twb.brianlu.com.firebasetest.navigation;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-
-import java.io.IOException;
-
 import twb.brianlu.com.firebasetest.core.BasePresenter;
 
 public class NavigationPresenter extends BasePresenter implements BasePresenter.UserListener {

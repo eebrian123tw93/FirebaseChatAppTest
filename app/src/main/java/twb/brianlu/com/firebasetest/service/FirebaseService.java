@@ -8,7 +8,6 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -132,8 +131,6 @@ public class FirebaseService extends FirebaseMessagingService {
             notificationManager.notify(notificationId, notificationBuilder.build());
         }
     }
-
-
 
 
     private boolean isAppOnForeground(Context context) {

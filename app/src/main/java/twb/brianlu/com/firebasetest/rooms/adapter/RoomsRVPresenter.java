@@ -5,17 +5,14 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import twb.brianlu.com.firebasetest.chat.ChatActivity;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
-
 import twb.brianlu.com.firebasetest.fbDataService.FirebaseDataService;
 import twb.brianlu.com.firebasetest.model.Room;
-import twb.brianlu.com.firebasetest.service.FirebaseService;
 
 public class RoomsRVPresenter extends BasePresenter {
     List<Room> rooms;
@@ -52,7 +49,7 @@ public class RoomsRVPresenter extends BasePresenter {
     }
 
     public void deleteRoom(Room room) {
-        FirebaseDataService.deleteRoom(FirebaseAuth.getInstance().getCurrentUser().getUid(),room.getRoomId());
+        FirebaseDataService.deleteRoom(FirebaseAuth.getInstance().getCurrentUser().getUid(), room.getRoomId());
     }
 
     public int getItemCount() {
