@@ -42,7 +42,7 @@ public class RoomsPresenter extends BasePresenter {
 
                 String[] ids = room.getRoomId().split("_");
                 for (String uid : ids) {
-                    if (uid.equals(user.getUid())) {
+                    if (uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                         room.setSelfUId(uid);
                     } else {
                         room.setOppositeUid(uid);
