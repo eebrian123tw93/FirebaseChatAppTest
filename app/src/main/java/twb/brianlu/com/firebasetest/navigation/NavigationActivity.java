@@ -108,12 +108,17 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     public void onLogout() {
 //        ((ActivityManager) getBaseContext().getSystemService(ACTIVITY_SERVICE))
 //                .clearApplicationUserData();
-        finish();
+
 
         finishAffinity();
         Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
         startActivity(intent);
 
+    }
+
+    @Override
+    public void onDeleteUser() {
+        finish();
     }
 
     @Override

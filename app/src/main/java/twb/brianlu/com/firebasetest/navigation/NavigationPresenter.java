@@ -23,16 +23,18 @@ public class NavigationPresenter extends BasePresenter implements BasePresenter.
 
     @Override
     public void onLogout() {
-        try {
-            FirebaseInstanceId.getInstance().deleteInstanceId();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         view.onLogout();
     }
 
     @Override
     public void toLoginPage() {
         view.toLoginPage();
+    }
+
+
+    @Override
+    public void onDeleteUser() {
+        view.onDeleteUser();
     }
 }

@@ -7,7 +7,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import twb.brianlu.com.firebasetest.core.BasePresenter;
@@ -46,12 +48,23 @@ public class ProfilePresenter extends BasePresenter {
     public void logout() {
 
         FirebaseAuth.getInstance().signOut();
+        try {
+            FirebaseInstanceId.getInstance().deleteInstanceId();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if (userListener != null) userListener.onLogout();
     }
 
     public void deleteUser() {
         FirebaseAuth.getInstance().getCurrentUser().delete();
+        try {
+            FirebaseInstanceId.getInstance().deleteInstanceId();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        if (userListener != null) userListener.onDeleteUser();
     }
 }

@@ -140,6 +140,8 @@ public class BasePresenter {
 
         void onLogout();
 
+        void onDeleteUser();
+
         void toLoginPage();
     }
 }

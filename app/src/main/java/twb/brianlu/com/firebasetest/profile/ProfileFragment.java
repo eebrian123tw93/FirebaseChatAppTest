@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.hhl.library.FlowTagLayout;
 
 import twb.brianlu.com.firebasetest.R;
@@ -48,11 +49,42 @@ public class ProfileFragment extends Fragment implements ProfileView, View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.delete_user_button:
-                presenter.deleteUser();
+                new BottomDialog.Builder(getContext())
+                        .setTitle("Warning")
+                        .setContent("This action will delete user")
+                        .setPositiveText("Confirm")
+                        .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                        //.setPositiveBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary)
+                        .setPositiveTextColorResource(android.R.color.white)
+                        //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                        .onPositive(new BottomDialog.ButtonCallback() {
+                            @Override
+                            public void onClick(BottomDialog dialog) {
+                                presenter.deleteUser();
+                            }
+                        })
+                        .setNegativeText("Cancel")
+                        .show();
 
                 break;
             case R.id.logout_button:
-                presenter.logout();
+                new BottomDialog.Builder(getContext())
+                        .setTitle("Warning")
+                        .setContent("This action will logout user,and restart application")
+                        .setPositiveText("Confirm")
+                        .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                        //.setPositiveBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary)
+                        .setPositiveTextColorResource(android.R.color.white)
+                        //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                        .onPositive(new BottomDialog.ButtonCallback() {
+                            @Override
+                            public void onClick(BottomDialog dialog) {
+                                presenter.logout();
+                            }
+                        })
+                        .setNegativeText("Cancel")
+                        .show();
+
                 break;
 
         }
