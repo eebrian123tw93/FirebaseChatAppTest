@@ -7,7 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.daimajia.swipe.SwipeLayout;
 
 import twb.brianlu.com.firebasetest.R;
 import twb.brianlu.com.firebasetest.model.Room;
@@ -35,7 +38,7 @@ public class RoomsRVAdapter extends RecyclerView.Adapter<RoomsRVAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.item_room, viewGroup, false);
+                .inflate(R.layout.item_room2, viewGroup, false);
         return new ViewHolder(v);
     }
 
@@ -71,6 +74,8 @@ public class RoomsRVAdapter extends RecyclerView.Adapter<RoomsRVAdapter.ViewHold
         private TextView nameTextView;
         private TextView messageTextView;
         private CardView cardView;
+        private SwipeLayout swipeLayout;
+        private ImageView deleteImageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,6 +83,13 @@ public class RoomsRVAdapter extends RecyclerView.Adapter<RoomsRVAdapter.ViewHold
             nameTextView = itemView.findViewById(R.id.roomName_textView);
             messageTextView = itemView.findViewById(R.id.message_textView);
             cardView = itemView.findViewById(R.id.room_cardView);
+            swipeLayout = itemView.findViewById(R.id.swipeLayout);
+            deleteImageView=itemView.findViewById(R.id.delete_imageView);
+            //set show mode.
+            swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
+
+            //add drag edge.(If the BottomView has 'layout_gravity' attribute, this line is unnecessary)
+            swipeLayout.addDrag(SwipeLayout.DragEdge.Left, itemView.findViewById(R.id.bottom_wrapper));
         }
 
         @Override
@@ -103,6 +115,16 @@ public class RoomsRVAdapter extends RecyclerView.Adapter<RoomsRVAdapter.ViewHold
         @Override
         public void onSetLongClickListener(View.OnLongClickListener listener) {
             cardView.setOnLongClickListener(listener);
+        }
+
+        @Override
+        public void onSetSwipeListener(SwipeLayout.SwipeListener listener) {
+            swipeLayout.addSwipeListener(listener);
+        }
+
+        @Override
+        public void onSetDeleteButton(View.OnClickListener listener) {
+            deleteImageView.setOnClickListener(listener);
         }
     }
 

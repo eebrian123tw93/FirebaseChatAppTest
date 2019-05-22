@@ -2,6 +2,8 @@ package twb.brianlu.com.firebasetest.rooms.adapter;
 
 import android.view.View;
 
+import com.daimajia.swipe.SwipeLayout;
+
 public interface RoomsVHView {
 
 
@@ -14,4 +16,8 @@ public interface RoomsVHView {
     void onSetClickListener(View.OnClickListener listener);
 
     void onSetLongClickListener(View.OnLongClickListener listener);
+
+    void onSetSwipeListener(SwipeLayout.SwipeListener listener);
+
+    void onSetDeleteButton(View.OnClickListener listener);
 }

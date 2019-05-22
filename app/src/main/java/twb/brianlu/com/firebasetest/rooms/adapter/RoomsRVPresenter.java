@@ -37,13 +37,12 @@ public class RoomsRVPresenter extends BasePresenter {
             }
         });
 
-        viewHolder.onSetLongClickListener(new View.OnLongClickListener() {
+        viewHolder.onSetDeleteButton(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 deleteRoom(room);
                 removeRoom(room);
                 dataChanged.onDataChanged();
-                return false;
             }
         });
 
