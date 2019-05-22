@@ -24,6 +24,7 @@ public class RegisterFragment extends Fragment implements RegisterView, View.OnC
     //    private EditText usernameEditText;
     private EditText passwordEditText;
     private EditText emailEditText;
+    private EditText displayNameEditText;
     private ProgressBar progressBar;
 
     private Button registerButton;
@@ -44,6 +45,7 @@ public class RegisterFragment extends Fragment implements RegisterView, View.OnC
 //        usernameEditText = view.findViewById(R.id.username_editText);
         passwordEditText = view.findViewById(R.id.password_editText);
         emailEditText = view.findViewById(R.id.email_editText);
+        displayNameEditText = view.findViewById(R.id.displayName_editText);
         progressBar = view.findViewById(R.id.progressBar);
         registerButton = view.findViewById(R.id.register_button);
         clearButton = view.findViewById(R.id.clear_button);
@@ -66,6 +68,7 @@ public class RegisterFragment extends Fragment implements RegisterView, View.OnC
     @Override
     public void onClearText() {
 //        usernameEditText.setText("");
+        displayNameEditText.setText("");
         passwordEditText.setText("");
         emailEditText.setText("");
         messageTextView.setText("");
@@ -98,7 +101,7 @@ public class RegisterFragment extends Fragment implements RegisterView, View.OnC
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
-                presenter.register(emailEditText.getText().toString(), passwordEditText.getText().toString());
+                presenter.register(emailEditText.getText().toString(), passwordEditText.getText().toString(),displayNameEditText.getText().toString());
                 break;
             case R.id.clear_button:
                 presenter.clear();

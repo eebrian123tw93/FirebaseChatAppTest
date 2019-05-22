@@ -41,7 +41,7 @@ public class BasePresenter {
         }
     }
 
-    public void  setTagsObserver(Observer observer){
+    public void setTagsObserver(Observer observer) {
         tagsObservable.subscribe(observer);
     }
 
@@ -73,6 +73,7 @@ public class BasePresenter {
                         user.setDisplayName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                         user.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         user.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                        user.setDisplayName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
                     }
                     user.setRooms(new ArrayList<String>());
