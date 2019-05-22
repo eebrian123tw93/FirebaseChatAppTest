@@ -31,6 +31,7 @@ public class RoomsRVPresenter extends BasePresenter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ChatActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("roomId", room.getRoomId());
                 context.startActivity(intent);
             }
