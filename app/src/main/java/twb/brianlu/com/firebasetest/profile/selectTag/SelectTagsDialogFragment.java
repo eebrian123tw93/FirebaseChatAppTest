@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hhl.library.FlowTagLayout;
 
@@ -109,13 +111,24 @@ public class SelectTagsDialogFragment extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 List<Integer> list = tagLayout.getSelectedList();
 
-                List<String> selectedTags = new ArrayList<>();
-                for (int index : list) selectedTags.add(adapter.getTagWithPosition(index));
+                final List<String> selectedTags = new ArrayList<>();
+                for (int index : list)
+                    selectedTags.add(adapter.getTagWithPosition(index));
                 if (selectedTags.size() < 5) {
                     Toast.makeText(getContext(), "需要選擇 5 個以上", Toast.LENGTH_SHORT).show();
                 } else {
-                    FirebaseDataService.addTag(FirebaseAuth.getInstance().getCurrentUser().getUid(), selectedTags);
-                    BasePresenter.saveUserTags(selectedTags);
+                    FirebaseDataService.addTag(FirebaseAuth.getInstance().getCurrentUser().getUid(), selectedTags).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                BasePresenter.saveUserTags(selectedTags);
+                            } else {
+
+                            }
+                        }
+                    });
+
+
                 }
             }
         });
@@ -125,6 +138,8 @@ public class SelectTagsDialogFragment extends DialogFragment {
                 dismiss();
             }
         });
+
+
         return builder.create();
     }
 

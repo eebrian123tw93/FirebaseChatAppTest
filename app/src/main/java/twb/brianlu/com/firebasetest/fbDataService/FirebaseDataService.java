@@ -2,6 +2,7 @@ package twb.brianlu.com.firebasetest.fbDataService;
 
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -76,8 +77,8 @@ public class FirebaseDataService {
         });
     }
 
-    public static void addTag(final String uid, final List<String> tags) {
-        FirebaseDatabase.getInstance().getReference("users").child(uid)
+    public static Task<Void> addTag(final String uid, final List<String> tags) {
+        return FirebaseDatabase.getInstance().getReference("users").child(uid)
                 .child("tags").setValue(tags);
     }
 

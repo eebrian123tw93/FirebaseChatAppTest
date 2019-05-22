@@ -62,12 +62,16 @@ public class PairPresenter2 extends BasePresenter {
                 for (int i = 0; isPairing; i++) {
                     if (i % 3 == 1) view.onSetRippleViewBarImage(R.drawable.make_friends);
                     else if (i % 3 == 2) view.onSetRippleViewBarImage(R.drawable.make_friends_half);
-                    else view.onSetRippleViewBarImage(R.drawable.make_friends_color);
+                    else {
+                        view.onSetRippleViewBarImage(R.drawable.make_friends_color);
+                    }
+                    if (i == 3) i = -1;
                     try {
                         Thread.sleep(700);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
                 }
             }
         }.start();

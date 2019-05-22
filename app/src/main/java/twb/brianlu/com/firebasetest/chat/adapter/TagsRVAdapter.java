@@ -65,7 +65,7 @@ public class TagsRVAdapter extends RecyclerView.Adapter<TagsRVAdapter.ViewHolder
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tagTextView = itemView.findViewById(R.id.tags_text);
+            tagTextView = itemView.findViewById(R.id.tag_text);
 
         }
 

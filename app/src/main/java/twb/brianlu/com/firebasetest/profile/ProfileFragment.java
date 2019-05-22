@@ -15,6 +15,7 @@ import android.widget.ScrollView;
 
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.hhl.library.FlowTagLayout;
+import com.hhl.library.OnTagClickListener;
 
 import twb.brianlu.com.firebasetest.R;
 import twb.brianlu.com.firebasetest.profile.selectTag.SelectTagsDialogFragment;
@@ -38,6 +39,23 @@ public class ProfileFragment extends Fragment implements ProfileView, View.OnCli
         tagsScrollView = view.findViewById(R.id.tags_scrollView);
 //        flowTagLayout.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_SINGLE);
         flowTagLayout.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_NONE);
+
+        flowTagLayout.setOnTagClickListener(new OnTagClickListener() {
+            @Override
+            public void onItemClick(FlowTagLayout parent, View view, int position) {
+                if (parent.getAdapter().getCount() - 1 == position) {
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                    if (prev != null) {
+                        ft.remove(prev);
+                    }
+                    ft.addToBackStack(null);
+                    // Create and show the dialog.
+                    DialogFragment newFragment = new SelectTagsDialogFragment();
+                    newFragment.show(ft, "dialog");
+                }
+            }
+        });
 
         logoutButton.setOnClickListener(this);
         deleteButton.setOnClickListener(this);
@@ -92,15 +110,6 @@ public class ProfileFragment extends Fragment implements ProfileView, View.OnCli
                         .setNegativeText("Cancel")
                         .show();
 
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-                if (prev != null) {
-                    ft.remove(prev);
-                }
-                ft.addToBackStack(null);
-                // Create and show the dialog.
-                DialogFragment newFragment = new SelectTagsDialogFragment();
-                newFragment.show(ft, "dialog");
 
                 break;
 

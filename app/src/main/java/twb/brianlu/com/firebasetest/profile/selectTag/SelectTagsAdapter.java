@@ -49,7 +49,7 @@ public class SelectTagsAdapter extends BaseAdapter implements OnInitSelectedPosi
 
         @SuppressLint("ViewHolder") View view = LayoutInflater.from(mContext).inflate(R.layout.item_select_tag, null);
 
-        TextView textView = view.findViewById(R.id.tags_text);
+        TextView textView = view.findViewById(R.id.tag_text);
 
         String tag = mDataList.get(position);
         textView.setText(tag);
