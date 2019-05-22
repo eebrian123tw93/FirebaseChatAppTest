@@ -7,6 +7,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import twb.brianlu.com.firebasetest.core.BasePresenter;
@@ -18,7 +20,18 @@ public class RegisterPresenter extends BasePresenter {
         this.view = view;
     }
 
-    public void register(String email, String password) {
+    public void register(String email, String password, final String displayName) {
+        if (displayName.isEmpty()) {
+            view.onSetMessage("匿名 can not be empty", FancyToast.ERROR);
+            view.onRegisterResult(false);
+            return;
+        }
+
+        if (displayName.length() < 5) {
+            view.onSetMessage("匿名 need 5 digits", FancyToast.ERROR);
+            view.onRegisterResult(false);
+            return;
+        }
         if (email.isEmpty()) {
             view.onSetMessage("Email can not be empty", FancyToast.ERROR);
             view.onRegisterResult(false);
@@ -51,10 +64,11 @@ public class RegisterPresenter extends BasePresenter {
 
                 if (task.isSuccessful()) {
 //                    // Sign in success
-//                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//
-//                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-//                            .setDisplayName(displayName).build();
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(displayName).build();
+                    user.updateProfile(profileUpdates);
 //
 //                    user.updateProfile(profiregisterView.onRegisterResult(true);
 //                        registerView.onSetMessage("Register Success", FancyToast.SUCCESS);leUpdates);

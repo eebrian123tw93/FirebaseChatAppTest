@@ -28,25 +28,25 @@ public class ChatPresenter extends BasePresenter {
 
     private TagsRVAdapter tagsRVAdapter;
 
-    public ChatPresenter(ChatView view,String roomId) {
+    public ChatPresenter(ChatView view, String roomId) {
         this.view = view;
         chatMessageRVAdapter = new ChatMessageRVAdapter(context);
-        tagsRVAdapter=new TagsRVAdapter(context);
+        tagsRVAdapter = new TagsRVAdapter(context);
         //debug
         room = new Room();
         room.setRoomId(roomId);
-        String [] ids=room.getRoomId().split("_");
-        for (String uid :ids) {
-            if(uid.equals(user.getUid())){
+        String[] ids = room.getRoomId().split("_");
+        for (String uid : ids) {
+            if (uid.equals(user.getUid())) {
                 room.setSelfUId(uid);
-            }else {
+            } else {
                 room.setOppositeUid(uid);
             }
         }
 //        room.setSelfUId("P8hxIBZunNfIfef6zGaqW8A8BLY2");
 //        room.setOppositeUid("YKd2m0doQShEGzIOFf96YauRmFu1");
         room.setOppositeTags(new ArrayList<String>());
-       room.getOppositeTags().add("旅遊");
+        room.getOppositeTags().add("旅遊");
         room.getOppositeTags().add("健行");
         room.getOppositeTags().add("露營");
         room.getOppositeTags().add("極限運動");
@@ -66,21 +66,23 @@ public class ChatPresenter extends BasePresenter {
         loadMessages();
         loadTags();
     }
-    public void addTags(){
+
+    public void addTags() {
         FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("tags").child(room.getOppositeUid())
                 .setValue(room.getOppositeTags());
 
-//        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("tags").child(room.getOppositeUid()).push().setValue(room.getOppositeTags().get(0));
     }
-    public void loadTags(){
+
+    public void loadTags() {
         FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("tags").child(room.getOppositeUid()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 System.out.println(s);
-                String value=dataSnapshot.getValue().toString();
+                String value = dataSnapshot.getValue().toString();
                 System.out.println(dataSnapshot.getValue());
                 System.out.println(s);
                 tagsRVAdapter.addTag(value);
+                view.onScrollTagsToPosition(tagsRVAdapter.getItemCount() - 1);
             }
 
             @Override
@@ -110,9 +112,9 @@ public class ChatPresenter extends BasePresenter {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 System.out.println(s);
-                ChatMessage chatMessage=dataSnapshot.getValue(ChatMessage.class);
+                ChatMessage chatMessage = dataSnapshot.getValue(ChatMessage.class);
                 chatMessageRVAdapter.addMessage(chatMessage);
-                view.onScrollToPosition(chatMessageRVAdapter.getItemCount() - 1);
+                view.onScrollMessagesToPosition(chatMessageRVAdapter.getItemCount() - 1);
                 System.out.println(chatMessage.getUserUid());
             }
 
@@ -141,7 +143,7 @@ public class ChatPresenter extends BasePresenter {
 
     public void sendMessage(String message) {
         if (isLogin() && !message.isEmpty()) {
-            ChatMessage chatMessage = new ChatMessage(message, user.getDisplayName(),user.getUid());
+            ChatMessage chatMessage = new ChatMessage(message, user.getDisplayName(), user.getUid());
             FirebaseDatabase.getInstance()
                     .getReference("rooms")
                     .child(room.getRoomId())

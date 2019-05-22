@@ -14,11 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import twb.brianlu.com.firebasetest.R;
-import twb.brianlu.com.firebasetest.chat.ChatActivity;
+import twb.brianlu.com.firebasetest.core.BasePresenter;
 import twb.brianlu.com.firebasetest.login.LoginFragment;
 import twb.brianlu.com.firebasetest.pair.PairFragment;
+import twb.brianlu.com.firebasetest.pair.PairFragment2;
 import twb.brianlu.com.firebasetest.profile.ProfileFragment;
 import twb.brianlu.com.firebasetest.rooms.RoomsFragment;
+import twb.brianlu.com.firebasetest.splash.SplashActivity;
 
 public class NavigationActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView {
 
@@ -62,14 +64,14 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
 
                     break;
                 case R.id.profile:
-                    if (navigationPresenter.isLogin()) {
+                    if (BasePresenter.isLogin()) {
                         fragment = new ProfileFragment();
                     } else {
                         fragment = new LoginFragment();
                     }
                     break;
                 case R.id.pair:
-                    fragment = new PairFragment();
+                    fragment = new PairFragment2();
                     break;
                 default:
                     fragment = new PairFragment();
@@ -85,11 +87,10 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     }
 
     public void showFragment(Fragment fragment) {
+        if (focusFragment == fragment) return;
         if (focusFragment == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragment).commit();
-            return;
-        }
-        if (!fragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragment).commitAllowingStateLoss();
+        } else if (!fragment.isAdded()) {
             getSupportFragmentManager().beginTransaction().hide(focusFragment).add(R.id.frame_layout, fragment).commitAllowingStateLoss();
         } else {
             getSupportFragmentManager().beginTransaction().hide(focusFragment).show(fragment).commitAllowingStateLoss();
@@ -105,6 +106,18 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
 
     @Override
     public void onLogout() {
+//        ((ActivityManager) getBaseContext().getSystemService(ACTIVITY_SERVICE))
+//                .clearApplicationUserData();
+
+
+        finishAffinity();
+        Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void onDeleteUser() {
         finish();
     }
 

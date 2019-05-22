@@ -9,6 +9,6 @@ public class Room {
     private String roomId;
     private String selfUId;
     private String oppositeUid;
-    private List<String>oppositeTags;
+    private List<String> oppositeTags;
     private String roomKey;
 }

@@ -1,12 +1,9 @@
 package twb.brianlu.com.firebasetest.chat.adapter;
 
-import android.text.format.DateFormat;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import twb.brianlu.com.firebasetest.core.BasePresenter;
-import twb.brianlu.com.firebasetest.model.ChatMessage;
 
 public class TagsRVPresenter extends BasePresenter {
     private List<String> tags;
@@ -33,10 +30,10 @@ public class TagsRVPresenter extends BasePresenter {
         this.tags.addAll(messages);
 
     }
+
     public void addTag(String tag) {
         this.tags.add(tag);
     }
-
 
 
     public void clear() {

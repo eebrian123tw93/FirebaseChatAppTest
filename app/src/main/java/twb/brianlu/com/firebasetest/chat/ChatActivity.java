@@ -44,13 +44,13 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
         messageRecyclerView.setLayoutManager(layoutManager);
 
 
-        tagsRecyclerView=findViewById(R.id.tags_recyclerView);
-        LinearLayoutManager tagsLinearLayoutManager=new LinearLayoutManager(getApplicationContext());
+        tagsRecyclerView = findViewById(R.id.tags_recyclerView);
+        LinearLayoutManager tagsLinearLayoutManager = new LinearLayoutManager(getApplicationContext());
         tagsLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         tagsRecyclerView.setLayoutManager(tagsLinearLayoutManager);
 
 
-        chatPresenter = new ChatPresenter(this,getIntent().getStringExtra("roomId"));
+        chatPresenter = new ChatPresenter(this, getIntent().getStringExtra("roomId"));
 
 
         refreshLayout = findViewById(R.id.refreshLayout);
@@ -116,8 +116,13 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
     }
 
     @Override
-    public void onScrollToPosition(int position) {
+    public void onScrollMessagesToPosition(int position) {
         messageRecyclerView.scrollToPosition(position);
+    }
+
+    @Override
+    public void onScrollTagsToPosition(int position) {
+        tagsRecyclerView.scrollToPosition(position);
     }
 
     @Override

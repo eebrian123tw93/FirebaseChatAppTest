@@ -5,67 +5,66 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import twb.brianlu.com.firebasetest.chat.ChatActivity;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
+import twb.brianlu.com.firebasetest.fbDataService.FirebaseDataService;
 import twb.brianlu.com.firebasetest.model.Room;
 
 public class RoomsRVPresenter extends BasePresenter {
-    List<Room>rooms;
+    List<Room> rooms;
     DataChanged dataChanged;
 
-    public RoomsRVPresenter(DataChanged dataChanged){
-        rooms=new ArrayList<>();
-        this.dataChanged=dataChanged;
+    public RoomsRVPresenter(DataChanged dataChanged) {
+        rooms = new ArrayList<>();
+        this.dataChanged = dataChanged;
     }
 
-    public void onBindViewHolder(@NonNull RoomsRVAdapter.ViewHolder viewHolder, int position){
-        final Room room=rooms.get(position);
+    public void onBindViewHolder(@NonNull RoomsRVAdapter.ViewHolder viewHolder, int position) {
+        final Room room = rooms.get(position);
 
         viewHolder.onSetName(room.getRoomId());
         viewHolder.onSetClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context, ChatActivity.class);
-                intent.putExtra("roomId",room.getRoomId());
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("roomId", room.getRoomId());
                 context.startActivity(intent);
             }
         });
 
-        viewHolder.onSetLongClickListener(new View.OnLongClickListener() {
+        viewHolder.onSetDeleteButton(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 deleteRoom(room);
                 removeRoom(room);
                 dataChanged.onDataChanged();
-                return false;
             }
         });
 
     }
 
-    public void deleteRoom(Room room){
-        FirebaseDatabase.getInstance().getReference("users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("rooms").child(room.getRoomKey()).removeValue();
+    public void deleteRoom(Room room) {
+        FirebaseDataService.deleteRoom(FirebaseAuth.getInstance().getCurrentUser().getUid(), room.getRoomId());
     }
 
-    public  int getItemCount(){
+    public int getItemCount() {
         return rooms.size();
     }
-    public void addRoom(Room room){
+
+    public void addRoom(Room room) {
         rooms.add(room);
     }
-    public void removeRoom(Room room){
+
+    public void removeRoom(Room room) {
         rooms.remove(room);
     }
-    public void clearAll(){
+
+    public void clearAll() {
         rooms.clear();
     }
 }

@@ -11,5 +11,7 @@ public interface ChatView extends BaseView {
 
     void onSetTagsAdapter(RecyclerView.Adapter adapter);
 
-    void onScrollToPosition(int position);
+    void onScrollMessagesToPosition(int position);
+
+    void onScrollTagsToPosition(int position);
 }

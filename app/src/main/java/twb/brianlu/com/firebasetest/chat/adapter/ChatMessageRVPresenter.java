@@ -31,12 +31,13 @@ public class ChatMessageRVPresenter extends BasePresenter {
         this.chatMessages.addAll(messages);
 
     }
+
     public void addMessage(ChatMessage chatMessage) {
         this.chatMessages.add(chatMessage);
     }
 
-    public boolean isSelf(int position){
-        ChatMessage chatMessage=this.chatMessages.get(position);
+    public boolean isSelf(int position) {
+        ChatMessage chatMessage = this.chatMessages.get(position);
         return chatMessage.getUserUid().equals(user.getUid());
     }
 

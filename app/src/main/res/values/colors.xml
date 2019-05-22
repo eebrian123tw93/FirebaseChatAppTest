@@ -12,4 +12,11 @@
     <color name="fabIconColor">#FFF</color>
 
     <color name="black">#000000</color>
+
+    <color name="ripple">#0099CC</color>
+    <color name="ripple2">#06BCF8</color>
+
+
+    <color name="delete_bg">#F44336</color>
+
 </resources>

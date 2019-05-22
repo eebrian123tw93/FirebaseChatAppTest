@@ -7,21 +7,30 @@ public class NavigationPresenter extends BasePresenter implements BasePresenter.
     NavigationView view;
 
     public NavigationPresenter(NavigationView navigationView) {
+        userListener = this;
         this.view = navigationView;
     }
 
     @Override
     public void onLogin() {
+
         view.onLogin();
     }
 
     @Override
     public void onLogout() {
+
         view.onLogout();
     }
 
     @Override
     public void toLoginPage() {
         view.toLoginPage();
+    }
+
+
+    @Override
+    public void onDeleteUser() {
+        view.onDeleteUser();
     }
 }

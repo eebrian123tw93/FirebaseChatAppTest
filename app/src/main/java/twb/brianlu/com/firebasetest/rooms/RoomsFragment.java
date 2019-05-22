@@ -16,20 +16,20 @@ import twb.brianlu.com.firebasetest.R;
 public class RoomsFragment extends Fragment implements RoomsView {
     private RecyclerView roomsRecyclerView;
     private RoomsPresenter presenter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v=inflater.inflate(R.layout.fragment_rooms,container,false);
-        roomsRecyclerView=v.findViewById(R.id.rooms_recyclerView);
+        View v = inflater.inflate(R.layout.fragment_rooms, container, false);
+        roomsRecyclerView = v.findViewById(R.id.rooms_recyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         roomsRecyclerView.setLayoutManager(layoutManager);
 
 
-
-        presenter=new RoomsPresenter(this);
-
+        presenter = new RoomsPresenter(this);
+        presenter.setRoomsRVAdapter();
 
 
         return v;
