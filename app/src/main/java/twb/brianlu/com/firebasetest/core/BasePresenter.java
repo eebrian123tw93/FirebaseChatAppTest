@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import twb.brianlu.com.firebasetest.model.User;
@@ -30,7 +31,23 @@ public class BasePresenter {
         if (user != null) {
             FirebaseDatabase.getInstance()
                     .getReference("users").child(user.getUid()).setValue(user);
+            if (user.getTags() != null || user.getTags().size() != 0) {
+                saveUserTags(user.getTags());
+            }
+
         }
+    }
+
+    public static void saveUserTags(List<String> tags) {
+        SharedPreferences preferences = BaseApplication.getContext().getSharedPreferences("AUTHENTICATION_FILE_NAME", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putStringSet("tags", new HashSet<>(tags));
+        editor.apply();
+    }
+
+    public static List<String> readUserTags() {
+        SharedPreferences prfs = BaseApplication.getContext().getSharedPreferences("AUTHENTICATION_FILE_NAME", Context.MODE_PRIVATE);
+        return new ArrayList<>(prfs.getStringSet("tags", new HashSet<String>()));
     }
 
     public static void readUser() {
@@ -56,10 +73,9 @@ public class BasePresenter {
                     tags.add("旅遊");
                     tags.add("健行");
                     tags.add("露營");
-
-                    tags.add("游泳");
-                    tags.add("衝浪");
-                    tags.add("浮潛");
+//                    tags.add("游泳");
+//                    tags.add("衝浪");
+//                    tags.add("浮潛");
                     tags.add("潛水");
                     tags.add("極限運動");
                     tags.add("生存遊戲");
@@ -74,11 +90,11 @@ public class BasePresenter {
                     tags.add("葡萄红色");
                     tags.add("绿色");
                     tags.add("彩虹色");
-                    tags.add("牡丹色");
-                    tags.add("周杰伦");
-                    tags.add("刘德华");
-                    tags.add("林俊杰");
-                    tags.add("邓紫棋");
+//                    tags.add("牡丹色");
+//                    tags.add("周杰伦");
+//                    tags.add("刘德华");
+//                    tags.add("林俊杰");
+//                    tags.add("邓紫棋");
                     tags.add("华晨宇");
                     tags.add("王力宏");
                     tags.add("Linkin Park");
@@ -88,11 +104,11 @@ public class BasePresenter {
                     tags.add("青鸟");
                     tags.add("in the end");
                     tags.add("Hey Jude");
-                    tags.add("告白气球");
-                    tags.add("see you again");
-                    tags.add("faded");
-                    tags.add("篮球");
-                    tags.add("网球");
+//                    tags.add("告白气球");
+//                    tags.add("see you again");
+//                    tags.add("faded");
+//                    tags.add("篮球");
+//                    tags.add("网球");
                     tags.add("棒球");
                     tags.add("乒乓球");
                     tags.add("足球");

@@ -11,6 +11,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import twb.brianlu.com.firebasetest.core.BasePresenter;
 import twb.brianlu.com.firebasetest.profile.adapter.TagsAdapter;
@@ -28,22 +29,8 @@ public class ProfilePresenter extends BasePresenter {
     }
 
     public void loadsTags() {
-        FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid()).child("tags").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<String> tags = new ArrayList<>();
-                for (DataSnapshot shot : dataSnapshot.getChildren()) {
-                    tags.add(shot.getValue().toString());
-                }
-                tagsAdapter.addTags(tags);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        List<String> tags=readUserTags();
+        tagsAdapter.addTags(tags);
     }
 
     public void logout() {

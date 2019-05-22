@@ -203,16 +203,87 @@ public class FlowTagLayout extends ViewGroup {
         }
     }
 
+    public void invalidate() {
+        removeAllViews();
+        boolean isSetted = false;
+        for (int i = 0; i < mAdapter.getCount(); i++) {
+            final int j = i;
+            final View childView = mAdapter.getView(i, null, this);
+//            addView(childView,
+//              new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));//这个构造方法所然能使用但是编译器会报错
+            addView(childView, new MarginLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)));
+            boolean isSelect = mCheckedTagArray.get(i);
+            childView.setSelected(isSelect);
+
+            childView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mTagCheckMode == FLOW_TAG_CHECKED_NONE) {
+                        if (mOnTagClickListener != null) {
+                            mOnTagClickListener.onItemClick(FlowTagLayout.this, childView, j);
+                        }
+                    } else if (mTagCheckMode == FLOW_TAG_CHECKED_SINGLE) {
+                        //判断状态
+                        if (mCheckedTagArray.get(j)) {
+                            mCheckedTagArray.put(j, false);
+                            childView.setSelected(false);
+                            if (mOnTagSelectListener != null) {
+                                mOnTagSelectListener.onItemSelect(FlowTagLayout.this, new ArrayList<Integer>());
+                            }
+                            return;
+                        }
+
+                        for (int k = 0; k < mAdapter.getCount(); k++) {
+                            mCheckedTagArray.put(k, false);
+                            getChildAt(k).setSelected(false);
+                        }
+                        mCheckedTagArray.put(j, true);
+                        childView.setSelected(true);
+
+                        if (mOnTagSelectListener != null) {
+                            mOnTagSelectListener.onItemSelect(FlowTagLayout.this, Arrays.asList(j));
+                        }
+                    } else if (mTagCheckMode == FLOW_TAG_CHECKED_MULTI) {
+                        if (mCheckedTagArray.get(j)) {
+                            mCheckedTagArray.put(j, false);
+                            childView.setSelected(false);
+                        } else {
+                            mCheckedTagArray.put(j, true);
+                            childView.setSelected(true);
+                        }
+                        //回调
+                        if (mOnTagSelectListener != null) {
+                            List<Integer> list = new ArrayList<Integer>();
+                            for (int k = 0; k < mAdapter.getCount(); k++) {
+                                if (mCheckedTagArray.get(k)) {
+                                    list.add(k);
+                                }
+                            }
+                            mOnTagSelectListener.onItemSelect(FlowTagLayout.this, list);
+                        }
+                    }
+                }
+            });
+
+        }
+    }
+
+    public List<Integer> getSelectedList() {
+        List<Integer> list = new ArrayList<Integer>();
+        for (int k = 0; k < mAdapter.getCount(); k++) {
+            if (mCheckedTagArray.get(k)) {
+                list.add(k);
+            }
+        }
+        return list;
+    }
+
     public void setChildViewSelected(int position, boolean select) {
-        final View childView = mAdapter.getView(position, null, this);
-//        addView(childView, new MarginLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)));
+//        final View childView = mAdapter.getView(position, null, this);
+////        addView(childView, new MarginLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)));
         mCheckedTagArray.put(position, select);
-        childView.setActivated(select);
-        childView.setPressed(select);
-        childView.setSelected(select);
-        childView.callOnClick();
-        childView.invalidate();
-        reloadData();
+        invalidate();
+
     }
 
 
@@ -246,10 +317,9 @@ public class FlowTagLayout extends ViewGroup {
                         mCheckedTagArray.put(i, true);
                         childView.setSelected(true);
                     }
-                } else {
-
                 }
             }
+
 
             childView.setOnClickListener(new OnClickListener() {
                 @Override

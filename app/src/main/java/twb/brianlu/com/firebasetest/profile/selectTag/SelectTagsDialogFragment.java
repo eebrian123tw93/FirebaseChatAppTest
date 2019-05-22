@@ -10,19 +10,17 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.hhl.library.FlowTagLayout;
-import com.hhl.library.OnTagSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import twb.brianlu.com.firebasetest.R;
+import twb.brianlu.com.firebasetest.core.BasePresenter;
+import twb.brianlu.com.firebasetest.fbDataService.FirebaseDataService;
 
 public class SelectTagsDialogFragment extends DialogFragment {
     private SelectTagsAdapter adapter;
@@ -51,7 +49,7 @@ public class SelectTagsDialogFragment extends DialogFragment {
 //        loadTags();
         tagLayout.setAdapter(adapter);
 
-        List<String> tags = new ArrayList<>();
+        final List<String> tags = new ArrayList<>();
         tags.add("旅遊");
         tags.add("健行");
         tags.add("露營");
@@ -102,23 +100,23 @@ public class SelectTagsDialogFragment extends DialogFragment {
         tags.add("羽毛球");
         tags.add("桌球");
         adapter.addTags(tags);
-
-
-        tagLayout.setOnTagSelectListener(new OnTagSelectListener() {
-            @Override
-            public void onItemSelect(FlowTagLayout parent, List<Integer> selectedList) {
-
-            }
-        });
-
-        tagLayout.setChildViewSelected(0,true);
+        loadTags();
 
 
         builder.setView(view);
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                List<Integer> list = tagLayout.getSelectedList();
 
+                List<String> selectedTags = new ArrayList<>();
+                for (int index : list) selectedTags.add(adapter.getTagWithPosition(index));
+                if (selectedTags.size() < 5) {
+                    Toast.makeText(getContext(), "需要選擇 5 個以上", Toast.LENGTH_SHORT).show();
+                } else {
+                    FirebaseDataService.addTag(FirebaseAuth.getInstance().getCurrentUser().getUid(), selectedTags);
+                    BasePresenter.saveUserTags(selectedTags);
+                }
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -131,21 +129,11 @@ public class SelectTagsDialogFragment extends DialogFragment {
     }
 
     public void loadTags() {
-        FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid()).child("tags").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<String> tags = new ArrayList<>();
-                for (DataSnapshot shot : dataSnapshot.getChildren()) {
-                    tags.add(shot.getValue().toString());
-                }
-//                adapter.addTags(tags);
-                tagLayout.setChildViewSelected(0,true);
-            }
+        List<String> userTags = BasePresenter.readUserTags();
+        for (String tag : userTags) {
+            adapter.setTagSelect(tag, true);
+        }
+        adapter.notifyDataSetChanged();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 }
