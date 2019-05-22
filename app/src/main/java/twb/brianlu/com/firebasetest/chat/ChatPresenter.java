@@ -12,11 +12,18 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
+import twb.brianlu.com.firebasetest.FCMApi.FCMApiService;
 import twb.brianlu.com.firebasetest.chat.adapter.ChatMessageRVAdapter;
 import twb.brianlu.com.firebasetest.chat.adapter.TagsRVAdapter;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
+import twb.brianlu.com.firebasetest.fbDataService.FirebaseDataService;
 import twb.brianlu.com.firebasetest.model.ChatMessage;
 import twb.brianlu.com.firebasetest.model.Room;
+import twb.brianlu.com.firebasetest.model.fcm.Notification;
 
 public class ChatPresenter extends BasePresenter {
 
@@ -141,7 +148,7 @@ public class ChatPresenter extends BasePresenter {
     }
 
 
-    public void sendMessage(String message) {
+    public void sendMessage(final String message) {
         if (isLogin() && !message.isEmpty()) {
             ChatMessage chatMessage = new ChatMessage(message, user.getDisplayName(), user.getUid());
             FirebaseDatabase.getInstance()
@@ -157,6 +164,54 @@ public class ChatPresenter extends BasePresenter {
                     }
                 }
             });
+            final Observer<Response<ResponseBody>> observer = new Observer<Response<ResponseBody>>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(Response<ResponseBody> responseBodyResponse) {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            };
+//
+            Observer<String> takenObserver = new Observer<String>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(String s) {
+                    Notification notification = new Notification();
+                    notification.setTitle(room.getRoomId());
+                    notification.setBody(message);
+                    FCMApiService.getInstance().pushNotification(observer, s, notification, false);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            };
+            FirebaseDataService.getUserToken(room.getOppositeUid(), takenObserver);
+
         }
     }
 }

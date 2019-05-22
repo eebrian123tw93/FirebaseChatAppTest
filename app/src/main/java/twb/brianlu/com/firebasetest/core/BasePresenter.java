@@ -72,7 +72,7 @@ public class BasePresenter {
 
                     }
                     user.setRooms(new ArrayList<String>());
-                    user.getRooms().add("P8hxIBZunNfIfef6zGaqW8A8BLY2_YKd2m0doQShEGzIOFf96YauRmFu1");
+                    user.getRooms().add("MMISAUJGIfVhQGqVMms5Unm0W183_zbPmIn1TaZQmtJQ9B9M7RJPYyv43");
                     user.setToken(readToken());
                     saveUser(user);
 

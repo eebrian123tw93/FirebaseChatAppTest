@@ -52,6 +52,8 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
 
         navigationPresenter = new NavigationPresenter(this);
         bottomNavigationView.setSelectedItemId(R.id.pair);
+
+
     }
 
     @Override
