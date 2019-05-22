@@ -101,7 +101,7 @@ public class RegisterFragment extends Fragment implements RegisterView, View.OnC
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
-                presenter.register(emailEditText.getText().toString(), passwordEditText.getText().toString(),displayNameEditText.getText().toString());
+                presenter.register(emailEditText.getText().toString(), passwordEditText.getText().toString(), displayNameEditText.getText().toString());
                 break;
             case R.id.clear_button:
                 presenter.clear();

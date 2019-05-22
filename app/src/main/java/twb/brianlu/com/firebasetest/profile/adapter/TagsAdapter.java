@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -17,6 +16,8 @@ import twb.brianlu.com.firebasetest.R;
 
 public class TagsAdapter extends BaseAdapter {
 
+    private static int SETTING_TYPE = 0;
+    private static int TAG_TYPE = 1;
     private final Context mContext;
     private final List<String> mDataList;
 
@@ -51,10 +52,6 @@ public class TagsAdapter extends BaseAdapter {
 
     }
 
-    private static int SETTING_TYPE = 0;
-    private static int TAG_TYPE = 1;
-
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -78,13 +75,13 @@ public class TagsAdapter extends BaseAdapter {
     }
 
     public void addTag(String tag) {
-        mDataList.add(mDataList.size()-1,tag);
+        mDataList.add(mDataList.size() - 1, tag);
         notifyDataSetChanged();
     }
 
     public void addTags(List<String> tags) {
         for (String tag : tags) {
-            mDataList.add(mDataList.size()-1,tag);
+            mDataList.add(mDataList.size() - 1, tag);
         }
         notifyDataSetChanged();
     }

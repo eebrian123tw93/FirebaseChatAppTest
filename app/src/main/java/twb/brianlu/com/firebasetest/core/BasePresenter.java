@@ -22,8 +22,8 @@ import twb.brianlu.com.firebasetest.model.User;
 public class BasePresenter {
     protected static User user;
     protected static UserListener userListener;
-    protected Context context;
     protected static PublishSubject<List<String>> tagsObservable = PublishSubject.create();
+    protected Context context;
 
 
     public BasePresenter() {
@@ -40,11 +40,6 @@ public class BasePresenter {
 
         }
     }
-
-    public void setTagsObserver(Observer observer) {
-        tagsObservable.subscribe(observer);
-    }
-
 
     public static void saveUserTags(List<String> tags) {
         tagsObservable.onNext(tags);
@@ -93,7 +88,6 @@ public class BasePresenter {
         }
     }
 
-
     public static boolean isLogin() {
 
         return FirebaseAuth.getInstance().getCurrentUser() != null;
@@ -110,6 +104,10 @@ public class BasePresenter {
     public static String readToken() {
         SharedPreferences prfs = BaseApplication.getContext().getSharedPreferences("AUTHENTICATION_FILE_NAME", Context.MODE_PRIVATE);
         return prfs.getString("Authentication_token", "");
+    }
+
+    public void setTagsObserver(Observer observer) {
+        tagsObservable.subscribe(observer);
     }
 
     public interface UserListener {

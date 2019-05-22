@@ -13,14 +13,6 @@ public class ObservableList<T> {
         this.onAdd = PublishSubject.create();
     }
 
-    public void onNext(T value) {
-        onAdd.onNext(value);
-    }
-
-    public Observable<T> getObservable() {
-        return onAdd;
-    }
-
     public static void main(String[] args) throws Exception {
 //        ObservableList<List<String>> olist = new ObservableList<>();
 //
@@ -54,5 +46,13 @@ public class ObservableList<T> {
 //        olist.add(new ArrayList<String>());
 
 
+    }
+
+    public void onNext(T value) {
+        onAdd.onNext(value);
+    }
+
+    public Observable<T> getObservable() {
+        return onAdd;
     }
 }
