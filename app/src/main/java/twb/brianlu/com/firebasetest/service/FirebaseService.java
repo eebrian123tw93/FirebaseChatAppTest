@@ -100,12 +100,13 @@ public class FirebaseService extends FirebaseMessagingService {
         String channelId = "daily_data_channel_id";
 
         Intent notificationIntent = new Intent(this, ChatActivity.class);
-//        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         notificationIntent.putExtra("roomId", notification.getTitle());
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
 
-        stackBuilder.addParentStack(NavigationActivity.class);
+//        stackBuilder.addParentStack(NavigationActivity.class);
+//        stackBuilder.addNextIntent(notificationIntent);
 
         stackBuilder.addNextIntentWithParentStack(notificationIntent);
         PendingIntent resultPendingIntent =

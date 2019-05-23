@@ -2,6 +2,8 @@ package twb.brianlu.com.firebasetest.chat.adapter;
 
 import android.text.format.DateFormat;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class ChatMessageRVPresenter extends BasePresenter {
 
     public boolean isSelf(int position) {
         ChatMessage chatMessage = this.chatMessages.get(position);
-        return chatMessage.getUserUid().equals(user.getUid());
+        return chatMessage.getUserUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
     public void clear() {

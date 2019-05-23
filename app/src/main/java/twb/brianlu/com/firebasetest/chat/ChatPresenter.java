@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,7 +45,7 @@ public class ChatPresenter extends BasePresenter {
         room.setRoomId(roomId);
         String[] ids = room.getRoomId().split("_");
         for (String uid : ids) {
-            if (uid.equals(user.getUid())) {
+            if (uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                 room.setSelfUId(uid);
             } else {
                 room.setOppositeUid(uid);
