@@ -151,7 +151,7 @@ public class ChatPresenter extends BasePresenter {
 
     public void sendMessage(final String message) {
         if (isLogin() && !message.isEmpty()) {
-            ChatMessage chatMessage = new ChatMessage(message, user.getDisplayName(), user.getUid());
+            ChatMessage chatMessage = new ChatMessage(message, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), FirebaseAuth.getInstance().getCurrentUser().getUid());
             FirebaseDatabase.getInstance()
                     .getReference("rooms")
                     .child(room.getRoomId())

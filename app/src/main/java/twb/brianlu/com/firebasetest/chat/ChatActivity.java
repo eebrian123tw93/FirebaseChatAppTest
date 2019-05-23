@@ -20,7 +20,6 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
 
     private static int SIGN_IN_REQUEST_CODE = 1000;
     private FirebaseListAdapter<ChatMessage> adapter;
-    private User user;
     private ImageView sendImageView;
     private ChatPresenter chatPresenter;
     private RecyclerView messageRecyclerView;
