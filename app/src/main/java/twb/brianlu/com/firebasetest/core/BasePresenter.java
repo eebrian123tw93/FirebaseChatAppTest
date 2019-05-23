@@ -117,6 +117,6 @@ public class BasePresenter {
 
         void onDeleteUser();
 
-        void toLoginPage();
+        void toProfilePage();
     }
 }

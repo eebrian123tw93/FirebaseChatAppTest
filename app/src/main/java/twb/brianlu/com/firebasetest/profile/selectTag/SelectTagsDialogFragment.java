@@ -112,7 +112,6 @@ public class SelectTagsDialogFragment extends DialogFragment {
     }
 
 
-
     public void loadTags() {
         List<String> userTags = BasePresenter.readUserTags();
         for (String tag : userTags) {

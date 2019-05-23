@@ -3,8 +3,16 @@ package twb.brianlu.com.firebasetest.pair;
 import android.os.Handler;
 import android.os.HandlerThread;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.shashank.sony.fancytoastlib.FancyToast;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import mx.com.pegasus.RippleCircleButton;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import twb.brianlu.com.firebasetest.R;
+import twb.brianlu.com.firebasetest.api.PairApiService;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
 
 public class PairPresenter2 extends BasePresenter {
@@ -28,11 +36,44 @@ public class PairPresenter2 extends BasePresenter {
     }
 
     public void pair() {
+        if (readUserTags().size() < 5) {
+            view.onSetMessage("最少需要 5 個標籤", FancyToast.ERROR);
+            if (userListener != null) userListener.toProfilePage();
+        }
         if (!isPairing) {
             setRippleViewPairMode();
         } else {
             setRippleViewUnPairMode();
         }
+        Observer observer = new Observer<Response<ResponseBody>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Response<ResponseBody> responseBodyResponse) {
+
+                if (responseBodyResponse.isSuccessful()) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+
+        PairApiService.getInstance().pair(observer, FirebaseAuth.getInstance().getCurrentUser().getUid()
+                , false);
+
     }
 
     private void setRippleViewPairMode() {

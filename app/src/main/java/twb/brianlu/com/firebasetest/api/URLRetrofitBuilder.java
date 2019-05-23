@@ -1,4 +1,4 @@
-package twb.brianlu.com.firebasetest.FCMApi;
+package twb.brianlu.com.firebasetest.api;
 
 import com.google.gson.GsonBuilder;
 

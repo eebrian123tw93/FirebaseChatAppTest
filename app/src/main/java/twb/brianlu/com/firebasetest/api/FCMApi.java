@@ -1,4 +1,4 @@
-package twb.brianlu.com.firebasetest.FCMApi;
+package twb.brianlu.com.firebasetest.api;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;

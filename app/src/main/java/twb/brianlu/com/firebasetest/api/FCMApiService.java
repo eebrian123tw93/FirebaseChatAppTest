@@ -1,4 +1,4 @@
-package twb.brianlu.com.firebasetest.FCMApi;
+package twb.brianlu.com.firebasetest.api;
 
 import android.support.annotation.NonNull;
 
@@ -31,27 +31,6 @@ public class FCMApiService {
         return FCMApiService.SingletonHolder.INSTANCE;
     }
 
-    public void pushNotification(@NonNull Observer observer, @NonNull String to, @NonNull Notification notification, boolean isObserveOnIO) {
-        Data data = new Data();
-        data.setNotification(notification);
-        FCM fcm = new FCM();
-        fcm.setTo(to);
-        fcm.setData(data);
-        String json = new Gson().toJson(fcm);
-        System.out.println(json);
-        FCMApi.pushFCM(json)
-                .subscribeOn(Schedulers.io())
-                .observeOn(isObserveOnIO ? Schedulers.io() : AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
-                .subscribe(observer);
-    }
-
-
-    // 創建實例
-    private static class SingletonHolder {
-        private static final FCMApiService INSTANCE = new FCMApiService();
-    }
-
     public static void main(String[] args) {
         Notification notification = new Notification();
         notification.setBody("djfhals");
@@ -80,6 +59,26 @@ public class FCMApiService {
                                                          }
                                                      }, "esfZFKC5BSY:APA91bEpGobPbKtScD5vqTyXuPYA09y-vhzVvlWfCp4vl_qYE8u8hEZ3bnXasna-hk8nL0HRffAsYx8jCjDF6FjoJk_Yk6wNj5uUOFAXTvTViQ6Gwor2fn07okkzI7liIk1y-iAbECUf"
                 , notification, true);
+    }
+
+    public void pushNotification(@NonNull Observer observer, @NonNull String to, @NonNull Notification notification, boolean isObserveOnIO) {
+        Data data = new Data();
+        data.setNotification(notification);
+        FCM fcm = new FCM();
+        fcm.setTo(to);
+        fcm.setData(data);
+        String json = new Gson().toJson(fcm);
+        System.out.println(json);
+        FCMApi.pushFCM(json)
+                .subscribeOn(Schedulers.io())
+                .observeOn(isObserveOnIO ? Schedulers.io() : AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(observer);
+    }
+
+    // 創建實例
+    private static class SingletonHolder {
+        private static final FCMApiService INSTANCE = new FCMApiService();
     }
 }
 

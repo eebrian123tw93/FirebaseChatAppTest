@@ -124,8 +124,8 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     }
 
     @Override
-    public void toLoginPage() {
-
+    public void toProfilePage() {
+        bottomNavigationView.setSelectedItemId(R.id.profile);
     }
 
 

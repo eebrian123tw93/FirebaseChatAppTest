@@ -1,4 +1,4 @@
-package twb.brianlu.com.firebasetest.FCMApi;
+package twb.brianlu.com.firebasetest.api;
 
 import java.nio.charset.Charset;
 import java.security.cert.X509Certificate;

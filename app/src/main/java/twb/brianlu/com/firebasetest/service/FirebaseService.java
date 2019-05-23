@@ -24,7 +24,6 @@ import twb.brianlu.com.firebasetest.chat.ChatActivity;
 import twb.brianlu.com.firebasetest.core.BaseApplication;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
 import twb.brianlu.com.firebasetest.model.fcm.Notification;
-import twb.brianlu.com.firebasetest.navigation.NavigationActivity;
 
 public class FirebaseService extends FirebaseMessagingService {
     private static final String TAG = "FirebaseService";

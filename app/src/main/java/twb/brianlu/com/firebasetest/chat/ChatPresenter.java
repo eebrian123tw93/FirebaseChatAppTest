@@ -17,7 +17,7 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
-import twb.brianlu.com.firebasetest.FCMApi.FCMApiService;
+import twb.brianlu.com.firebasetest.api.FCMApiService;
 import twb.brianlu.com.firebasetest.chat.adapter.ChatMessageRVAdapter;
 import twb.brianlu.com.firebasetest.chat.adapter.TagsRVAdapter;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
