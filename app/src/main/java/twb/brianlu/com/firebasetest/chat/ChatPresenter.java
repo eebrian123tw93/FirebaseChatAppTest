@@ -161,10 +161,6 @@ public class ChatPresenter extends BasePresenter {
             });
 
 
-//            if (chatMessageRVAdapter.getItemCount() % 10 == 0) {
-
-//            }
-
         }
 
 
