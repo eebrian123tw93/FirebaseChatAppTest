@@ -2,6 +2,7 @@ package twb.brianlu.com.firebasetest.fbDataService;
 
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -103,7 +104,7 @@ public class FirebaseDataService {
         });
     }
 
-    public static void addTagToRoom(String uid, final String roomId, final String tag) {
+    public static void addTagToRoom(final String uid, final String roomId, final String tag, final OnCompleteListener onCompleteListener) {
         FirebaseDatabase.getInstance().getReference("rooms").child(roomId)
                 .child("tags").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -112,9 +113,12 @@ public class FirebaseDataService {
                 for (DataSnapshot shot : dataSnapshot.getChildren()) {
                     tags.add(shot.getValue().toString());
                 }
-                if (!tags.contains(tags)) tags.add(tag);
-                FirebaseDatabase.getInstance().getReference("rooms").child(roomId)
-                        .child("tags").setValue(tags);
+                if (!tags.contains(tags)) {
+                    tags.add(tag);
+                    FirebaseDatabase.getInstance().getReference("rooms").child(roomId)
+                            .child("tags").child(uid).setValue(tags).addOnCompleteListener(onCompleteListener);
+                }
+
             }
 
             @Override

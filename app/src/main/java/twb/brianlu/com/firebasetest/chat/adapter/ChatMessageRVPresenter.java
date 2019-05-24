@@ -13,6 +13,10 @@ import twb.brianlu.com.firebasetest.model.ChatMessage;
 public class ChatMessageRVPresenter extends BasePresenter {
     private List<ChatMessage> chatMessages;
 
+    public List<ChatMessage> getChatMessages() {
+        return chatMessages;
+    }
+
     public ChatMessageRVPresenter() {
         chatMessages = new ArrayList<>();
     }
