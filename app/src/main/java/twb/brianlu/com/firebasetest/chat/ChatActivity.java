@@ -14,7 +14,6 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
 import twb.brianlu.com.firebasetest.R;
 import twb.brianlu.com.firebasetest.model.ChatMessage;
-import twb.brianlu.com.firebasetest.model.User;
 
 public class ChatActivity extends AppCompatActivity implements ChatView, View.OnClickListener {
 

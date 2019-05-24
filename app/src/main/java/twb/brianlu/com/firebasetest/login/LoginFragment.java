@@ -85,8 +85,11 @@ public class LoginFragment extends Fragment implements LoginView, View.OnClickLi
     }
 
     @Override
-    public void onForgetPassword() {
-//        getContext().startActivity(new Intent(getContext(), ForgotPasswordActivity.class));
+    public void onForgetPassword(boolean result) {
+        loginPresenter.setProgressBarVisibility(View.INVISIBLE);
+        loginButton.setEnabled(true);
+        clearButton.setEnabled(true);
+        forgetPasswordButton.setEnabled(true);
     }
 
     @Override
@@ -101,26 +104,28 @@ public class LoginFragment extends Fragment implements LoginView, View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
         switch (v.getId()) {
             case R.id.login_button:
                 loginPresenter.setProgressBarVisibility(View.VISIBLE);
                 loginButton.setEnabled(false);
                 forgetPasswordButton.setEnabled(false);
                 clearButton.setEnabled(false);
-
-                View view = getActivity().getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
-
                 loginPresenter.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
                 break;
             case R.id.clear_button:
                 loginPresenter.clear();
                 break;
             case R.id.forget_password_button:
-                loginPresenter.forgetPassword();
+                loginPresenter.setProgressBarVisibility(View.VISIBLE);
+                loginButton.setEnabled(false);
+                forgetPasswordButton.setEnabled(false);
+                clearButton.setEnabled(false);
+                loginPresenter.forgetPassword(usernameEditText.getText().toString());
                 break;
             case R.id.register_textview:
                 loginPresenter.register();

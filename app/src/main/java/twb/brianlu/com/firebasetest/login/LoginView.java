@@ -10,7 +10,7 @@ public interface LoginView extends BaseView {
 
     void onSetProgressBarVisibility(int visibility);
 
-    void onForgetPassword();
+    void onForgetPassword(boolean result);
 
     void onRegister();
 }
