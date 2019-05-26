@@ -152,9 +152,11 @@ public class ChatPresenter extends BasePresenter {
                     if (task.isSuccessful()) {
                         view.onSendMessageSuccess();
                         pushNewMessageNotification(message);
-                        if (chatMessageRVAdapter.getItemCount() % new Random().nextInt(5) + 10 == 0) {
+
+                        if (chatMessageRVAdapter.getItemCount() % (new Random().nextInt(5) + 10) == 0) {
                             unlockNewTagToOpposite();
                         }
+
 
                     }
                 }
