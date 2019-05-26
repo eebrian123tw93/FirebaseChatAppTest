@@ -18,6 +18,7 @@ public class LoginPresenter extends BasePresenter {
         this.view = view;
     }
 
+
     public void login(String email, String password) {
         if (email.isEmpty()) {
             view.onSetMessage("Email cant not be empty", FancyToast.ERROR);
@@ -45,16 +46,14 @@ public class LoginPresenter extends BasePresenter {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-
+                view.onLoginResult(true);
+                view.onSetMessage("Login Success", FancyToast.SUCCESS);
+                BasePresenter.readUser();
             }
         }).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    view.onLoginResult(true);
-                    view.onSetMessage("Login Success", FancyToast.SUCCESS);
-                    BasePresenter.readUser();
-                } else {
+                if (!task.isSuccessful()) {
                     view.onLoginResult(false);
                     view.onSetMessage("Login Failed", FancyToast.ERROR);
                 }
@@ -79,8 +78,34 @@ public class LoginPresenter extends BasePresenter {
         view.onSetProgressBarVisibility(visibility);
     }
 
-    public void forgetPassword() {
-        view.onForgetPassword();
+    public void forgetPassword(final String email) {
+        if (email.isEmpty()) {
+            view.onSetMessage("Email cant not be empty", FancyToast.ERROR);
+            view.onForgetPassword(true);
+            return;
+        }
+        if (!isValidEmailAddress(email)) {
+            view.onSetMessage("Email is not valid", FancyToast.ERROR);
+            view.onForgetPassword(true);
+            return;
+        }
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                view.onSetMessage("Receive mail in " + email, FancyToast.SUCCESS);
+                view.onForgetPassword(true);
+            }
+        })
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (!task.isSuccessful()) {
+                            view.onSetMessage("error mail in " + email, FancyToast.ERROR);
+                            view.onForgetPassword(false);
+                        }
+                    }
+                });
+
     }
 
     public void register() {

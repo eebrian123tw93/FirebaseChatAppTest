@@ -24,10 +24,9 @@ public class NavigationPresenter extends BasePresenter implements BasePresenter.
     }
 
     @Override
-    public void toLoginPage() {
-        view.toLoginPage();
+    public void toProfilePage() {
+        view.toProfilePage();
     }
-
 
     @Override
     public void onDeleteUser() {

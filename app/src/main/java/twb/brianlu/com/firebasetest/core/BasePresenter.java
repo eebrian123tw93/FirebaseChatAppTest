@@ -71,8 +71,6 @@ public class BasePresenter {
                         user.setDisplayName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
                     }
-                    user.setRooms(new ArrayList<String>());
-                    user.getRooms().add("P8hxIBZunNfIfef6zGaqW8A8BLY2_YKd2m0doQShEGzIOFf96YauRmFu1");
                     user.setToken(readToken());
                     saveUser(user);
 
@@ -117,6 +115,6 @@ public class BasePresenter {
 
         void onDeleteUser();
 
-        void toLoginPage();
+        void toProfilePage();
     }
 }

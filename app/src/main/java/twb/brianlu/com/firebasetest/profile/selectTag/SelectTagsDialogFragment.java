@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -61,27 +62,7 @@ public class SelectTagsDialogFragment extends DialogFragment {
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                List<Integer> list = tagLayout.getSelectedList();
 
-                final List<String> selectedTags = new ArrayList<>();
-                for (int index : list)
-                    selectedTags.add(adapter.getTagWithPosition(index));
-                if (selectedTags.size() < 5) {
-                    Toast.makeText(getContext(), "需要選擇 5 個以上", Toast.LENGTH_SHORT).show();
-                } else {
-                    FirebaseDataService.addTag(FirebaseAuth.getInstance().getCurrentUser().getUid(), selectedTags).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                BasePresenter.saveUserTags(selectedTags);
-                            } else {
-
-                            }
-                        }
-                    });
-
-
-                }
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -94,6 +75,42 @@ public class SelectTagsDialogFragment extends DialogFragment {
 
         return builder.create();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        final AlertDialog d = (AlertDialog) getDialog();
+        if (d != null) {
+            Button positiveButton = d.getButton(Dialog.BUTTON_POSITIVE);
+            positiveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    List<Integer> list = tagLayout.getSelectedList();
+
+                    final List<String> selectedTags = new ArrayList<>();
+                    for (int index : list)
+                        selectedTags.add(adapter.getTagWithPosition(index));
+                    if (selectedTags.size() < 5) {
+                        Toast.makeText(getContext(), "需要選擇 5 個以上", Toast.LENGTH_SHORT).show();
+                    } else {
+                        FirebaseDataService.addTag(FirebaseAuth.getInstance().getCurrentUser().getUid(), selectedTags).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    BasePresenter.saveUserTags(selectedTags);
+                                } else {
+
+                                }
+                            }
+                        });
+                        dismiss();
+
+                    }
+                }
+            });
+        }
+    }
+
 
     public void loadTags() {
         List<String> userTags = BasePresenter.readUserTags();

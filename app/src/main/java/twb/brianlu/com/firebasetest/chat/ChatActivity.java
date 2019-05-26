@@ -14,13 +14,11 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
 import twb.brianlu.com.firebasetest.R;
 import twb.brianlu.com.firebasetest.model.ChatMessage;
-import twb.brianlu.com.firebasetest.model.User;
 
 public class ChatActivity extends AppCompatActivity implements ChatView, View.OnClickListener {
 
     private static int SIGN_IN_REQUEST_CODE = 1000;
     private FirebaseListAdapter<ChatMessage> adapter;
-    private User user;
     private ImageView sendImageView;
     private ChatPresenter chatPresenter;
     private RecyclerView messageRecyclerView;

@@ -26,6 +26,10 @@ public class ChatMessageRVAdapter extends RecyclerView.Adapter<ChatMessageRVAdap
         this.presenter = new ChatMessageRVPresenter();
     }
 
+    public ChatMessageRVPresenter getPresenter() {
+        return presenter;
+    }
+
     @Override
     public int getItemViewType(int position) {
         if (presenter.isSelf(position)) {

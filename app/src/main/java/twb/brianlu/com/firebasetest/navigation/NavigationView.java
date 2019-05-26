@@ -7,7 +7,7 @@ public interface NavigationView extends BaseView {
 
     void onLogout();
 
-    void toLoginPage();
+    void toProfilePage();
 
     void onDeleteUser();
 }

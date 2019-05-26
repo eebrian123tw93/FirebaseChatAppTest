@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.shashank.sony.fancytoastlib.FancyToast;
+
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import mx.com.pegasus.RippleCircleButton;
@@ -107,7 +109,7 @@ public class PairFragment2 extends Fragment implements PairView2, View.OnClickLi
 
     @Override
     public void onSetMessage(String message, int type) {
-
+        FancyToast.makeText(getContext(), message, FancyToast.LENGTH_SHORT, type, false).show();
     }
 
 

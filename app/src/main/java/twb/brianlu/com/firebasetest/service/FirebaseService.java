@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ import twb.brianlu.com.firebasetest.R;
 import twb.brianlu.com.firebasetest.chat.ChatActivity;
 import twb.brianlu.com.firebasetest.core.BaseApplication;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
-import twb.brianlu.com.firebasetest.navigation.NavigationActivity;
+import twb.brianlu.com.firebasetest.model.fcm.Notification;
 
 public class FirebaseService extends FirebaseMessagingService {
     private static final String TAG = "FirebaseService";
@@ -32,26 +33,24 @@ public class FirebaseService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
 //        super.onMessageReceived(remoteMessage);
         Map<String, String> datas = remoteMessage.getData();
-        String title = "";
-        String body = "";
+
         for (Map.Entry<String, String> entry : datas.entrySet()) {
             Log.i(TAG, "key " + entry.getKey() + " value " + entry.getValue());
-            if (entry.getKey().equals("title")) {
-                title = entry.getValue();
-            }
-            if (entry.getKey().equals("body")) {
-                body = entry.getValue();
+            if (entry.getKey().equals("notification")) {
+                String notificationJson = entry.getValue();
+                Notification notification = new Gson().fromJson(notificationJson, Notification.class);
+                if (notification != null) {
+                    pushNotification(notification);
+                }
             }
         }
 
-//        if (remoteMessage.getNotification() != null) {
-//            Log.i(TAG, "title " + remoteMessage.getNotification().getTitle());
-//            Log.i(TAG, "body " + remoteMessage.getNotification().getBody());
-//        }
+    }
+
+    private void pushNotification(Notification notification) {
         if (!isAppOnForeground(BaseApplication.getContext())) {
             if (BasePresenter.isLogin()) {
-                notification(title, body);
-                System.out.println(title + body);
+                notification(notification);
             }
         }
     }
@@ -64,7 +63,7 @@ public class FirebaseService extends FirebaseMessagingService {
         BasePresenter.readUser();
     }
 
-    private void notification(String title, String body) {
+    private void notification(Notification notification) {
 
         // notification
         NotificationManager notificationManager =
@@ -100,23 +99,30 @@ public class FirebaseService extends FirebaseMessagingService {
         String channelId = "daily_data_channel_id";
 
         Intent notificationIntent = new Intent(this, ChatActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        notificationIntent.putExtra("roomId", notification.getTitle());
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
-        stackBuilder.addParentStack(NavigationActivity.class);
-        stackBuilder.addNextIntent(notificationIntent);
+
+//        stackBuilder.addParentStack(NavigationActivity.class);
+//        stackBuilder.addNextIntent(notificationIntent);
+
+        stackBuilder.addNextIntentWithParentStack(notificationIntent);
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId);
         notificationBuilder
-                .setAutoCancel(true)
+
 
 //                .setCustomContentView(remoteViews)
                 .setSmallIcon(R.drawable.make_friends_color)
                 .setContentIntent(resultPendingIntent)
 //                .setCustomBigContentView(remoteViews)
-                .setContentTitle(title)
-                .setContentText(body);
+                .setContentTitle(notification.getTitle())
+                .setContentText(notification.getBody())
+                .setAutoCancel(true);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int important = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel notificationChannel =
@@ -128,7 +134,9 @@ public class FirebaseService extends FirebaseMessagingService {
         }
 
         if (notificationManager != null) {
-            notificationManager.notify(notificationId, notificationBuilder.build());
+            android.app.Notification notification1 = notificationBuilder.build();
+            notificationManager.notify(notificationId, notification1);
+
         }
     }
 
