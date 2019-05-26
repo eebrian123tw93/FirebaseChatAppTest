@@ -62,6 +62,14 @@ public class PairApiService {
                 .unsubscribeOn(Schedulers.io())
                 .subscribe(observer);
     }
+    public void cancelPair(@NonNull Observer observer, @NonNull String uid, boolean isObserveOnIO) {
+
+        pairApi.cancelPair(uid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(isObserveOnIO ? Schedulers.io() : AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(observer);
+    }
 
     // 創建實例
     private static class SingletonHolder {

@@ -42,37 +42,66 @@ public class PairPresenter2 extends BasePresenter {
         }
         if (!isPairing) {
             setRippleViewPairMode();
-        } else {
-            setRippleViewUnPairMode();
-        }
-        Observer observer = new Observer<Response<ResponseBody>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(Response<ResponseBody> responseBodyResponse) {
-
-                if (responseBodyResponse.isSuccessful()) {
+            Observer observer = new Observer<Response<ResponseBody>>() {
+                @Override
+                public void onSubscribe(Disposable d) {
 
                 }
-            }
 
-            @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
+                @Override
+                public void onNext(Response<ResponseBody> responseBodyResponse) {
 
-            }
+                    if (responseBodyResponse.isSuccessful()) {
 
-            @Override
-            public void onComplete() {
+                    }
+                }
 
-            }
-        };
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
 
-        PairApiService.getInstance().pair(observer, FirebaseAuth.getInstance().getCurrentUser().getUid()
-                , false);
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            };
+
+            PairApiService.getInstance().pair(observer, FirebaseAuth.getInstance().getCurrentUser().getUid()
+                    , false);
+
+        } else {
+            Observer observer = new Observer<Response<ResponseBody>>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(Response<ResponseBody> responseBodyResponse) {
+
+                    if (responseBodyResponse.isSuccessful()) {
+
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            };
+
+            PairApiService.getInstance().cancelPair(observer, FirebaseAuth.getInstance().getCurrentUser().getUid()
+                    , false);
+            setRippleViewUnPairMode();
+        }
 
     }
 

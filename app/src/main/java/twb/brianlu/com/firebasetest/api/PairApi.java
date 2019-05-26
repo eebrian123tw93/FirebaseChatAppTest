@@ -10,4 +10,7 @@ public interface PairApi {
 
     @POST("/requestpair")
     Observable<Response<ResponseBody>> pair(@Body String s);
+
+    @POST("/cancelpair")
+    Observable<Response<ResponseBody>> cancelPair(@Body String s);
 }
