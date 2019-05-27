@@ -39,6 +39,7 @@ public class PairPresenter2 extends BasePresenter {
         if (readUserTags().size() < 5) {
             view.onSetMessage("最少需要 5 個標籤", FancyToast.ERROR);
             if (userListener != null) userListener.toProfilePage();
+            return;
         }
         if (!isPairing) {
             setRippleViewPairMode();
