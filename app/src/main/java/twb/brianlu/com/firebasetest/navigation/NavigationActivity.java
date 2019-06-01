@@ -22,138 +22,141 @@ import twb.brianlu.com.firebasetest.profile.ProfileFragment;
 import twb.brianlu.com.firebasetest.rooms.RoomsFragment;
 import twb.brianlu.com.firebasetest.splash.SplashActivity;
 
-public class NavigationActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView {
+public class NavigationActivity extends AppCompatActivity
+    implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView {
 
+  private BottomNavigationView bottomNavigationView;
+  private Map<Integer, Fragment> fragmentHashMap;
+  private Fragment focusFragment;
 
-    private BottomNavigationView bottomNavigationView;
-    private Map<Integer, Fragment> fragmentHashMap;
-    private Fragment focusFragment;
+  private NavigationPresenter navigationPresenter;
 
-    private NavigationPresenter navigationPresenter;
+  private int exitCount;
 
-    private int exitCount;
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_navigation);
+    fragmentHashMap = new HashMap<>();
+    bottomNavigationView = findViewById(R.id.bottomNavigationView);
+    bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation);
-        fragmentHashMap = new HashMap<>();
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+    //        focusFragment = new PairFragment();
+    //        fragmentHashMap.put(R.id.pair, focusFragment);
+    //        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,
+    // fragmentHashMap.get(R.id.pair)).commit();
+    //        if (getSupportActionBar() != null) {
+    //
+    // getSupportActionBar().setTitle(bottomNavigationView.getMenu().getItem(1).getTitle());
+    //        }
+    //            startActivity(new Intent(this, ChatActivity.class));
 
+    navigationPresenter = new NavigationPresenter(this);
+    bottomNavigationView.setSelectedItemId(R.id.pair);
+  }
 
-//        focusFragment = new PairFragment();
-//        fragmentHashMap.put(R.id.pair, focusFragment);
-//        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragmentHashMap.get(R.id.pair)).commit();
-//        if (getSupportActionBar() != null) {
-//            getSupportActionBar().setTitle(bottomNavigationView.getMenu().getItem(1).getTitle());
-//        }
-//            startActivity(new Intent(this, ChatActivity.class));
+  @Override
+  public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+    Fragment fragment = fragmentHashMap.get(menuItem.getItemId());
+    if (fragment == null) {
+      switch (menuItem.getItemId()) {
+        case R.id.room:
+          fragment = new RoomsFragment();
 
-        navigationPresenter = new NavigationPresenter(this);
-        bottomNavigationView.setSelectedItemId(R.id.pair);
-
-
+          break;
+        case R.id.profile:
+          if (BasePresenter.isLogin()) {
+            fragment = new ProfileFragment();
+          } else {
+            fragment = new LoginFragment();
+          }
+          break;
+        case R.id.pair:
+          fragment = new PairFragment2();
+          break;
+        default:
+          fragment = new PairFragment();
+          break;
+      }
+      fragmentHashMap.put(menuItem.getItemId(), fragment);
     }
+    showFragment(fragment);
+    if (getSupportActionBar() != null) {
+      getSupportActionBar().setTitle(menuItem.getTitle());
+    }
+    return true;
+  }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Fragment fragment = fragmentHashMap.get(menuItem.getItemId());
-        if (fragment == null) {
-            switch (menuItem.getItemId()) {
-                case R.id.room:
-                    fragment = new RoomsFragment();
+  public void showFragment(Fragment fragment) {
+    if (focusFragment == fragment) return;
+    if (focusFragment == null) {
+      getSupportFragmentManager()
+          .beginTransaction()
+          .replace(R.id.frame_layout, fragment)
+          .commitAllowingStateLoss();
+    } else if (!fragment.isAdded()) {
+      getSupportFragmentManager()
+          .beginTransaction()
+          .hide(focusFragment)
+          .add(R.id.frame_layout, fragment)
+          .commitAllowingStateLoss();
+    } else {
+      getSupportFragmentManager()
+          .beginTransaction()
+          .hide(focusFragment)
+          .show(fragment)
+          .commitAllowingStateLoss();
+    }
+    focusFragment = fragment;
+  }
 
-                    break;
-                case R.id.profile:
-                    if (BasePresenter.isLogin()) {
-                        fragment = new ProfileFragment();
-                    } else {
-                        fragment = new LoginFragment();
-                    }
-                    break;
-                case R.id.pair:
-                    fragment = new PairFragment2();
-                    break;
-                default:
-                    fragment = new PairFragment();
-                    break;
-            }
-            fragmentHashMap.put(menuItem.getItemId(), fragment);
+  @Override
+  public void onLogin() {}
+
+  @Override
+  public void onLogout() {
+    //        ((ActivityManager) getBaseContext().getSystemService(ACTIVITY_SERVICE))
+    //                .clearApplicationUserData();
+
+    finishAffinity();
+    Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+    startActivity(intent);
+  }
+
+  @Override
+  public void onDeleteUser() {
+    finish();
+  }
+
+  @Override
+  public void toProfilePage() {
+    bottomNavigationView.setSelectedItemId(R.id.profile);
+  }
+
+  @Override
+  public void onSetMessage(String message, int type) {
+
+    FancyToast.makeText(getBaseContext(), message, FancyToast.LENGTH_SHORT, type, false).show();
+  }
+
+  @Override
+  public void onBackPressed() {
+    exitCount++;
+    if (exitCount == 1) {
+      onSetMessage("再點擊一下離開", FancyToast.INFO);
+      new Thread() {
+        @Override
+        public void run() {
+          try {
+            sleep(3000);
+            exitCount = 0;
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
         }
-        showFragment(fragment);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(menuItem.getTitle());
-        }
-        return true;
+      }.start();
+    } else if (exitCount == 2) {
+      moveTaskToBack(true);
     }
-
-    public void showFragment(Fragment fragment) {
-        if (focusFragment == fragment) return;
-        if (focusFragment == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragment).commitAllowingStateLoss();
-        } else if (!fragment.isAdded()) {
-            getSupportFragmentManager().beginTransaction().hide(focusFragment).add(R.id.frame_layout, fragment).commitAllowingStateLoss();
-        } else {
-            getSupportFragmentManager().beginTransaction().hide(focusFragment).show(fragment).commitAllowingStateLoss();
-        }
-        focusFragment = fragment;
-    }
-
-    @Override
-    public void onLogin() {
-
-    }
-
-
-    @Override
-    public void onLogout() {
-//        ((ActivityManager) getBaseContext().getSystemService(ACTIVITY_SERVICE))
-//                .clearApplicationUserData();
-
-
-        finishAffinity();
-        Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
-        startActivity(intent);
-
-    }
-
-    @Override
-    public void onDeleteUser() {
-        finish();
-    }
-
-    @Override
-    public void toProfilePage() {
-        bottomNavigationView.setSelectedItemId(R.id.profile);
-    }
-
-
-    @Override
-    public void onSetMessage(String message, int type) {
-
-        FancyToast.makeText(getBaseContext(), message, FancyToast.LENGTH_SHORT, type, false).show();
-    }
-
-    @Override
-    public void onBackPressed() {
-        exitCount++;
-        if (exitCount == 1) {
-            onSetMessage("再點擊一下離開", FancyToast.INFO);
-            new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        sleep(3000);
-                        exitCount = 0;
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }.start();
-        } else if (exitCount == 2) {
-            moveTaskToBack(true);
-        }
-
-    }
+  }
 }

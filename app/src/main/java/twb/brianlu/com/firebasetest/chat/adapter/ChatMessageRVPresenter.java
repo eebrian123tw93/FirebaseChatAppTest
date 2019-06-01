@@ -11,44 +11,42 @@ import twb.brianlu.com.firebasetest.core.BasePresenter;
 import twb.brianlu.com.firebasetest.model.ChatMessage;
 
 public class ChatMessageRVPresenter extends BasePresenter {
-    private List<ChatMessage> chatMessages;
+  private List<ChatMessage> chatMessages;
 
-    public ChatMessageRVPresenter() {
-        chatMessages = new ArrayList<>();
-    }
+  public ChatMessageRVPresenter() {
+    chatMessages = new ArrayList<>();
+  }
 
-    public List<ChatMessage> getChatMessages() {
-        return chatMessages;
-    }
+  public List<ChatMessage> getChatMessages() {
+    return chatMessages;
+  }
 
-    public void bindData(ChatMessageRVAdapter.ViewHolder viewHolder, int position) {
-        ChatMessage chatMessage = chatMessages.get(position);
-        viewHolder.onSetUsername(chatMessage.getMessageUser());
-        viewHolder.onSetMessage(chatMessage.getMessageText());
-        viewHolder.onSetMessageTime(String.valueOf(DateFormat.format("MM/dd(HH:mm)", chatMessage.getMessageTime())));
+  public void bindData(ChatMessageRVAdapter.ViewHolder viewHolder, int position) {
+    ChatMessage chatMessage = chatMessages.get(position);
+    viewHolder.onSetUsername(chatMessage.getMessageUser());
+    viewHolder.onSetMessage(chatMessage.getMessageText());
+    viewHolder.onSetMessageTime(
+        String.valueOf(DateFormat.format("MM/dd(HH:mm)", chatMessage.getMessageTime())));
+  }
 
-    }
+  public int getItemCount() {
+    return chatMessages.size();
+  }
 
-    public int getItemCount() {
-        return chatMessages.size();
-    }
+  public void addMessages(List<ChatMessage> messages) {
+    this.chatMessages.addAll(messages);
+  }
 
-    public void addMessages(List<ChatMessage> messages) {
-        this.chatMessages.addAll(messages);
+  public void addMessage(ChatMessage chatMessage) {
+    this.chatMessages.add(chatMessage);
+  }
 
-    }
+  public boolean isSelf(int position) {
+    ChatMessage chatMessage = this.chatMessages.get(position);
+    return chatMessage.getUserUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
+  }
 
-    public void addMessage(ChatMessage chatMessage) {
-        this.chatMessages.add(chatMessage);
-    }
-
-    public boolean isSelf(int position) {
-        ChatMessage chatMessage = this.chatMessages.get(position);
-        return chatMessage.getUserUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
-    }
-
-    public void clear() {
-        this.chatMessages.clear();
-
-    }
+  public void clear() {
+    this.chatMessages.clear();
+  }
 }

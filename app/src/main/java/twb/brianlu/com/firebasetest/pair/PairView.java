@@ -3,14 +3,13 @@ package twb.brianlu.com.firebasetest.pair;
 import twb.brianlu.com.firebasetest.core.BaseView;
 
 public interface PairView extends BaseView {
-    void onSetProgressBarVisibility(boolean visible);
+  void onSetProgressBarVisibility(boolean visible);
 
-    void onSetProgressBarImage(int image);
+  void onSetProgressBarImage(int image);
 
-    void onSetProgressBarProgress(double value);
+  void onSetProgressBarProgress(double value);
 
-    void onRippleStart();
+  void onRippleStart();
 
-    void onRippleStop();
-
+  void onRippleStop();
 }

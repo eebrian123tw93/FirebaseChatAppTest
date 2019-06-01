@@ -12,103 +12,109 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
 
 public class LoginPresenter extends BasePresenter {
-    private LoginView view;
+  private LoginView view;
 
-    public LoginPresenter(LoginView view) {
-        this.view = view;
+  public LoginPresenter(LoginView view) {
+    this.view = view;
+  }
+
+  public void login(String email, String password) {
+    if (email.isEmpty()) {
+      view.onSetMessage("Email cant not be empty", FancyToast.ERROR);
+      view.onLoginResult(false);
+      return;
+    }
+    if (password.isEmpty()) {
+      view.onSetMessage("Password cant not be empty", FancyToast.ERROR);
+      view.onLoginResult(false);
+      return;
     }
 
+    if (password.length() < 6) {
+      view.onSetMessage("Password need 6 digits", FancyToast.ERROR);
+      view.onLoginResult(false);
+      return;
+    }
 
-    public void login(String email, String password) {
-        if (email.isEmpty()) {
-            view.onSetMessage("Email cant not be empty", FancyToast.ERROR);
-            view.onLoginResult(false);
-            return;
-        }
-        if (password.isEmpty()) {
-            view.onSetMessage("Password cant not be empty", FancyToast.ERROR);
-            view.onLoginResult(false);
-            return;
-        }
+    if (!isValidEmailAddress(email)) {
+      view.onSetMessage("Email is not valid", FancyToast.ERROR);
+      view.onLoginResult(false);
+      return;
+    }
 
-        if (password.length() < 6) {
-            view.onSetMessage("Password need 6 digits", FancyToast.ERROR);
-            view.onLoginResult(false);
-            return;
-        }
-
-        if (!isValidEmailAddress(email)) {
-            view.onSetMessage("Email is not valid", FancyToast.ERROR);
-            view.onLoginResult(false);
-            return;
-        }
-
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
+    FirebaseAuth.getInstance()
+        .signInWithEmailAndPassword(email, password)
+        .addOnSuccessListener(
+            new OnSuccessListener<AuthResult>() {
+              @Override
+              public void onSuccess(AuthResult authResult) {
                 view.onLoginResult(true);
                 view.onSetMessage("Login Success", FancyToast.SUCCESS);
                 BasePresenter.readUser();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
+              }
+            })
+        .addOnCompleteListener(
+            new OnCompleteListener<AuthResult>() {
+              @Override
+              public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
-                    view.onLoginResult(false);
-                    view.onSetMessage("Login Failed", FancyToast.ERROR);
+                  view.onLoginResult(false);
+                  view.onSetMessage("Login Failed", FancyToast.ERROR);
                 }
-            }
-        });
+              }
+            });
+  }
 
+  public boolean isValidEmailAddress(String email) {
+    String ePattern =
+        "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+    java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+    java.util.regex.Matcher m = p.matcher(email);
+    return m.matches();
+  }
 
+  public void clear() {
+    view.onClearText();
+  }
+
+  public void setProgressBarVisibility(int visibility) {
+    view.onSetProgressBarVisibility(visibility);
+  }
+
+  public void forgetPassword(final String email) {
+    if (email.isEmpty()) {
+      view.onSetMessage("Email cant not be empty", FancyToast.ERROR);
+      view.onForgetPassword(true);
+      return;
     }
-
-    public boolean isValidEmailAddress(String email) {
-        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
-        java.util.regex.Matcher m = p.matcher(email);
-        return m.matches();
+    if (!isValidEmailAddress(email)) {
+      view.onSetMessage("Email is not valid", FancyToast.ERROR);
+      view.onForgetPassword(true);
+      return;
     }
-
-    public void clear() {
-        view.onClearText();
-    }
-
-    public void setProgressBarVisibility(int visibility) {
-        view.onSetProgressBarVisibility(visibility);
-    }
-
-    public void forgetPassword(final String email) {
-        if (email.isEmpty()) {
-            view.onSetMessage("Email cant not be empty", FancyToast.ERROR);
-            view.onForgetPassword(true);
-            return;
-        }
-        if (!isValidEmailAddress(email)) {
-            view.onSetMessage("Email is not valid", FancyToast.ERROR);
-            view.onForgetPassword(true);
-            return;
-        }
-        FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
+    FirebaseAuth.getInstance()
+        .sendPasswordResetEmail(email)
+        .addOnSuccessListener(
+            new OnSuccessListener<Void>() {
+              @Override
+              public void onSuccess(Void aVoid) {
                 view.onSetMessage("Receive mail in " + email, FancyToast.SUCCESS);
                 view.onForgetPassword(true);
-            }
-        })
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (!task.isSuccessful()) {
-                            view.onSetMessage("error mail in " + email, FancyToast.ERROR);
-                            view.onForgetPassword(false);
-                        }
-                    }
-                });
+              }
+            })
+        .addOnCompleteListener(
+            new OnCompleteListener<Void>() {
+              @Override
+              public void onComplete(@NonNull Task<Void> task) {
+                if (!task.isSuccessful()) {
+                  view.onSetMessage("error mail in " + email, FancyToast.ERROR);
+                  view.onForgetPassword(false);
+                }
+              }
+            });
+  }
 
-    }
-
-    public void register() {
-        view.onRegister();
-    }
+  public void register() {
+    view.onRegister();
+  }
 }

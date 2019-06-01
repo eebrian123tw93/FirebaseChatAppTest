@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class FCM {
-    private String to;
-    private twb.brianlu.com.firebasetest.model.fcm.Data data;
+  private String to;
+  private twb.brianlu.com.firebasetest.model.fcm.Data data;
 }

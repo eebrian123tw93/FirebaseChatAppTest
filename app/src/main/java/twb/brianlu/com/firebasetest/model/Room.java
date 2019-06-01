@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 public class Room {
-    private String roomId;
-    private String selfUId;
-    private String oppositeUid;
-    private List<String> oppositeTags;
-    private String roomKey;
+  private String roomId;
+  private String selfUId;
+  private String oppositeUid;
+  private List<String> oppositeTags;
+  private String roomKey;
 }

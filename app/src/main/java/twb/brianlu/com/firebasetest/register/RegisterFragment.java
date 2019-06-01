@@ -19,93 +19,97 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 import twb.brianlu.com.firebasetest.R;
 
 public class RegisterFragment extends Fragment implements RegisterView, View.OnClickListener {
-    private RegisterPresenter presenter;
+  private RegisterPresenter presenter;
 
-    //    private EditText usernameEditText;
-    private EditText passwordEditText;
-    private EditText emailEditText;
-    private EditText displayNameEditText;
-    private ProgressBar progressBar;
+  //    private EditText usernameEditText;
+  private EditText passwordEditText;
+  private EditText emailEditText;
+  private EditText displayNameEditText;
+  private ProgressBar progressBar;
 
-    private Button registerButton;
-    private Button clearButton;
+  private Button registerButton;
+  private Button clearButton;
 
-    private TextView messageTextView;
+  private TextView messageTextView;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_register, container, false);
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
+    View view = inflater.inflate(R.layout.fragment_register, container, false);
 
+    //        if (getActivity().getSupportActionBar() != null) {
+    //            getSupportActionBar().setDisplayShowHomeEnabled(true);
+    //            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    //        }
 
-//        if (getActivity().getSupportActionBar() != null) {
-//            getSupportActionBar().setDisplayShowHomeEnabled(true);
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        }
+    //        usernameEditText = view.findViewById(R.id.username_editText);
+    passwordEditText = view.findViewById(R.id.password_editText);
+    emailEditText = view.findViewById(R.id.email_editText);
+    displayNameEditText = view.findViewById(R.id.displayName_editText);
+    progressBar = view.findViewById(R.id.progressBar);
+    registerButton = view.findViewById(R.id.register_button);
+    clearButton = view.findViewById(R.id.clear_button);
+    messageTextView = view.findViewById(R.id.message_textView);
 
+    registerButton.setOnClickListener(this);
+    clearButton.setOnClickListener(this);
 
-//        usernameEditText = view.findViewById(R.id.username_editText);
-        passwordEditText = view.findViewById(R.id.password_editText);
-        emailEditText = view.findViewById(R.id.email_editText);
-        displayNameEditText = view.findViewById(R.id.displayName_editText);
-        progressBar = view.findViewById(R.id.progressBar);
-        registerButton = view.findViewById(R.id.register_button);
-        clearButton = view.findViewById(R.id.clear_button);
-        messageTextView = view.findViewById(R.id.message_textView);
+    presenter = new RegisterPresenter(this);
+    presenter.setProgressBarVisibility(View.GONE);
+    return view;
+  }
 
-        registerButton.setOnClickListener(this);
-        clearButton.setOnClickListener(this);
+  @Override
+  public void onSetMessage(String message, int type) {
+    FancyToast.makeText(getContext(), message, FancyToast.LENGTH_SHORT, type, false).show();
+  }
 
+  @Override
+  public void onClearText() {
+    //        usernameEditText.setText("");
+    displayNameEditText.setText("");
+    passwordEditText.setText("");
+    emailEditText.setText("");
+    messageTextView.setText("");
+  }
 
-        presenter = new RegisterPresenter(this);
-        presenter.setProgressBarVisibility(View.GONE);
-        return view;
+  @Override
+  public void onRegisterResult(boolean result) {
+    presenter.setProgressBarVisibility(View.GONE);
+    registerButton.setEnabled(true);
+    clearButton.setEnabled(true);
+    if (result) {
+      getActivity().finish();
     }
+  }
 
-    @Override
-    public void onSetMessage(String message, int type) {
-        FancyToast.makeText(getContext(), message, FancyToast.LENGTH_SHORT, type, false).show();
-    }
+  @Override
+  public void onSetProgressBarVisibility(int visibility) {
+    progressBar.setVisibility(visibility);
+  }
 
-    @Override
-    public void onClearText() {
-//        usernameEditText.setText("");
-        displayNameEditText.setText("");
-        passwordEditText.setText("");
-        emailEditText.setText("");
-        messageTextView.setText("");
-    }
-
-    @Override
-    public void onRegisterResult(boolean result) {
-        presenter.setProgressBarVisibility(View.GONE);
-        registerButton.setEnabled(true);
-        clearButton.setEnabled(true);
-        if (result) {
-            getActivity().finish();
+  @Override
+  public void onClick(View v) {
+    switch (v.getId()) {
+      case R.id.register_button:
+        presenter.setProgressBarVisibility(View.VISIBLE);
+        registerButton.setEnabled(false);
+        clearButton.setEnabled(false);
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+          InputMethodManager imm =
+              (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+          imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+        presenter.register(
+            emailEditText.getText().toString(),
+            passwordEditText.getText().toString(),
+            displayNameEditText.getText().toString());
+        break;
+      case R.id.clear_button:
+        presenter.clear();
+        break;
     }
-
-    @Override
-    public void onSetProgressBarVisibility(int visibility) {
-        progressBar.setVisibility(visibility);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.register_button:
-                presenter.setProgressBarVisibility(View.VISIBLE);
-                registerButton.setEnabled(false);
-                clearButton.setEnabled(false);
-                View view = getActivity().getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
-                presenter.register(emailEditText.getText().toString(), passwordEditText.getText().toString(), displayNameEditText.getText().toString());
-                break;
-            case R.id.clear_button:
-                presenter.clear();
-                break;
-        }
-    }
+  }
 }

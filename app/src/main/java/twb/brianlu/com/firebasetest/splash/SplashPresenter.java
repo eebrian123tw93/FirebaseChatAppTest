@@ -11,30 +11,32 @@ import com.google.firebase.iid.InstanceIdResult;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
 
 public class SplashPresenter extends BasePresenter {
-    private SplashView view;
+  private SplashView view;
 
-    SplashPresenter(SplashView view) {
-        this.view = view;
-        readUser();
-    }
+  SplashPresenter(SplashView view) {
+    this.view = view;
+    readUser();
+  }
 
-    public void checkUserLogin() {
-        view.onCheckUserLogin(isLogin());
-    }
+  public void checkUserLogin() {
+    view.onCheckUserLogin(isLogin());
+  }
 
-    public void getToken() {
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (task.isSuccessful() && task.getResult() != null) {
-                            String token = task.getResult().getToken();
-                            // Log and toast
-                            Log.i("SplashPresenter", "token " + token);
-                            saveToken(token);
-                            readUser();
-                        }
-                    }
-                });
-    }
+  public void getToken() {
+    FirebaseInstanceId.getInstance()
+        .getInstanceId()
+        .addOnCompleteListener(
+            new OnCompleteListener<InstanceIdResult>() {
+              @Override
+              public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if (task.isSuccessful() && task.getResult() != null) {
+                  String token = task.getResult().getToken();
+                  // Log and toast
+                  Log.i("SplashPresenter", "token " + token);
+                  saveToken(token);
+                  readUser();
+                }
+              }
+            });
+  }
 }

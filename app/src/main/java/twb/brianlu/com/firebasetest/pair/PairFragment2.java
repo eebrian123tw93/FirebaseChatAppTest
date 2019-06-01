@@ -20,101 +20,104 @@ import mx.com.pegasus.RippleCircleButton;
 import twb.brianlu.com.firebasetest.R;
 
 public class PairFragment2 extends Fragment implements PairView2, View.OnClickListener {
-    private RippleCircleButton rippleCircleButton;
-    private PairPresenter2 presenter;
+  private RippleCircleButton rippleCircleButton;
+  private PairPresenter2 presenter;
 
+  @RequiresApi(api = Build.VERSION_CODES.M)
+  @SuppressLint("ClickableViewAccessibility")
+  @Nullable
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @SuppressLint("ClickableViewAccessibility")
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    View view = inflater.inflate(R.layout.fragment_pair2, container, false);
+    rippleCircleButton = view.findViewById(R.id.rippleCircleButton);
+    rippleCircleButton.setMainCircleSize(100f); // Value is in DPs
+    rippleCircleButton.setMainCircleColor(Color.parseColor("#000000FF"));
+    rippleCircleButton.setMainCircleBackgroundImageSize(100f); // Value is in DPs
+    rippleCircleButton.setSecondaryCirclesNumber(6);
+    rippleCircleButton.setSecondaryCirclesColor(Color.parseColor("#06BCF8"));
+    rippleCircleButton.stopAnimation();
 
-        View view = inflater.inflate(R.layout.fragment_pair2, container, false);
-        rippleCircleButton = view.findViewById(R.id.rippleCircleButton);
-        rippleCircleButton.setMainCircleSize(100f); //Value is in DPs
-        rippleCircleButton.setMainCircleColor(Color.parseColor("#000000FF"));
-        rippleCircleButton.setMainCircleBackgroundImageSize(100f); //Value is in DPs
-        rippleCircleButton.setSecondaryCirclesNumber(6);
-        rippleCircleButton.setSecondaryCirclesColor(Color.parseColor("#06BCF8"));
-        rippleCircleButton.stopAnimation();
-
-        rippleCircleButton.setOnMainCircleClickListener(new Function0<Unit>() {
-            @Override
-            public Unit invoke() {
-                presenter.pair();
-                return Unit.INSTANCE;
-            }
+    rippleCircleButton.setOnMainCircleClickListener(
+        new Function0<Unit>() {
+          @Override
+          public Unit invoke() {
+            presenter.pair();
+            return Unit.INSTANCE;
+          }
         });
 
+    presenter = new PairPresenter2(this);
 
-        presenter = new PairPresenter2(this);
+    return view;
+  }
 
-        return view;
-    }
-
-
-    @Override
-    public void onRippleStart() {
-        if (getActivity() != null)
-            getActivity().runOnUiThread(new Runnable() {
+  @Override
+  public void onRippleStart() {
+    if (getActivity() != null)
+      getActivity()
+          .runOnUiThread(
+              new Runnable() {
                 @Override
                 public void run() {
-                    rippleCircleButton.startAnimation();
+                  rippleCircleButton.startAnimation();
                 }
-            });
-    }
+              });
+  }
 
-    @Override
-    public void onRippleStop() {
-        if (getActivity() != null)
-            getActivity().runOnUiThread(new Runnable() {
+  @Override
+  public void onRippleStop() {
+    if (getActivity() != null)
+      getActivity()
+          .runOnUiThread(
+              new Runnable() {
                 @Override
                 public void run() {
-                    rippleCircleButton.stopAnimation();
+                  rippleCircleButton.stopAnimation();
                 }
-            });
+              });
+  }
 
-    }
-
-    @Override
-    public void onSetRippleViewBarImage(final int image) {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(new Runnable() {
+  @Override
+  public void onSetRippleViewBarImage(final int image) {
+    if (getActivity() != null) {
+      getActivity()
+          .runOnUiThread(
+              new Runnable() {
                 @Override
                 public void run() {
-                    if (getActivity() != null) {
-                        rippleCircleButton.setMainCircleBackgroundImage(getActivity().getDrawable(image));
-                    }
+                  if (getActivity() != null) {
+                    rippleCircleButton.setMainCircleBackgroundImage(
+                        getActivity().getDrawable(image));
+                  }
                 }
-            });
-        }
-
+              });
     }
+  }
 
-    @Override
-    public void onSetRippleViewAnimationDuration(int duration) {
-        rippleCircleButton.setAnimationDuration(duration);
-    }
+  @Override
+  public void onSetRippleViewAnimationDuration(int duration) {
+    rippleCircleButton.setAnimationDuration(duration);
+  }
 
-    @Override
-    public void onSetRippleViewCirclesNumber(int number) {
-        rippleCircleButton.setSecondaryCirclesNumber(number);
-    }
+  @Override
+  public void onSetRippleViewCirclesNumber(int number) {
+    rippleCircleButton.setSecondaryCirclesNumber(number);
+  }
 
-    @Override
-    public void onSetRippleViewAnimationType(int animation) {
-        rippleCircleButton.setSecondaryCirclesAnimation(animation);
-    }
+  @Override
+  public void onSetRippleViewAnimationType(int animation) {
+    rippleCircleButton.setSecondaryCirclesAnimation(animation);
+  }
 
-    @Override
-    public void onSetMessage(String message, int type) {
-        FancyToast.makeText(getContext(), message, FancyToast.LENGTH_SHORT, type, false).show();
-    }
+  @Override
+  public void onSetMessage(String message, int type) {
+    FancyToast.makeText(getContext(), message, FancyToast.LENGTH_SHORT, type, false).show();
+  }
 
-
-    @Override
-    public void onClick(View v) {
-
-    }
+  @Override
+  public void onClick(View v) {}
 }
