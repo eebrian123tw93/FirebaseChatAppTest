@@ -32,6 +32,11 @@ public class RegisterPresenter extends BasePresenter {
             view.onRegisterResult(false);
             return;
         }
+        if (displayName.length() > 20) {
+            view.onSetMessage("匿名 can't not over 20 digits", FancyToast.ERROR);
+            view.onRegisterResult(false);
+            return;
+        }
         if (email.isEmpty()) {
             view.onSetMessage("Email can not be empty", FancyToast.ERROR);
             view.onRegisterResult(false);
