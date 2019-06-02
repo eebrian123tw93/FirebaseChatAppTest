@@ -20,6 +20,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -91,6 +95,10 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation "com.daimajia.swipelayout:library:1.2.0@aar"
 
+    implementation 'org.webrtc:google-webrtc:1.0.23995'
+    implementation fileTree(dir: './libs/third_party/autobanh/lib', include: ['autobanh.jar'])
+
 }
+
 
 apply plugin: 'com.google.gms.google-services'
