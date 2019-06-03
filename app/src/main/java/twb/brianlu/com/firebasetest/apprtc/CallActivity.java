@@ -534,10 +534,10 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
     }
   }
 
-  @Override
-  public void onVideoScalingSwitch(ScalingType scalingType) {
-    fullscreenRenderer.setScalingType(scalingType);
-  }
+//  @Override
+//  public void onVideoScalingSwitch(ScalingType scalingType) {
+//    fullscreenRenderer.setScalingType(scalingType);
+//  }
 
   @Override
   public void onCaptureFormatChange(int width, int height, int framerate) {

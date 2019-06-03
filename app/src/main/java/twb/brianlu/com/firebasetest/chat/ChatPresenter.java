@@ -32,6 +32,7 @@ import twb.brianlu.com.firebasetest.fbDataService.FirebaseDataService;
 import twb.brianlu.com.firebasetest.model.ChatMessage;
 import twb.brianlu.com.firebasetest.model.Room;
 import twb.brianlu.com.firebasetest.model.fcm.Notification;
+import twb.brianlu.com.firebasetest.model.fcm.WebrtcCall;
 
 public class ChatPresenter extends BasePresenter {
 
@@ -306,11 +307,60 @@ public class ChatPresenter extends BasePresenter {
         FirebaseDataService.getUserToken(room.getOppositeUid(), takenObserver);
     }
 
+    public void phoneCall(final WebrtcCall webrtcCall) {
+        final Observer<Response<ResponseBody>> observer =
+                new Observer<Response<ResponseBody>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(Response<ResponseBody> responseBodyResponse) {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                };
+
+        Observer<String> takenObserver =
+                new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+//                        webrtcCall
+//                        webrtcCa
+//                        webrtcCall.
+                        FCMApiService.getInstance().phoneCall(observer, s, webrtcCall, false);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                };
+        FirebaseDataService.getUserToken(room.getOppositeUid(), takenObserver);
+    }
+
     public void call(){
         UUID uuid=UUID.randomUUID();
         String roomId=uuid.toString();
         view.onCall(roomId);
-        //push nfc to opposite with token;
+        WebrtcCall webrtcCall=new WebrtcCall();
+        webrtcCall.setRoomId(roomId);
+        webrtcCall.setSelfUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        webrtcCall.setDisplayName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        phoneCall(webrtcCall);
 
     }
 }

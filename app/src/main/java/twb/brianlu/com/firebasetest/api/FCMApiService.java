@@ -11,6 +11,7 @@ import retrofit2.Retrofit;
 import twb.brianlu.com.firebasetest.model.fcm.Data;
 import twb.brianlu.com.firebasetest.model.fcm.FCM;
 import twb.brianlu.com.firebasetest.model.fcm.Notification;
+import twb.brianlu.com.firebasetest.model.fcm.WebrtcCall;
 
 public class FCMApiService {
   private FCMApi FCMApi;
@@ -74,6 +75,25 @@ public class FCMApiService {
         .observeOn(isObserveOnIO ? Schedulers.io() : AndroidSchedulers.mainThread())
         .unsubscribeOn(Schedulers.io())
         .subscribe(observer);
+  }
+
+  public void phoneCall(
+          @NonNull Observer observer,
+          @NonNull String to,
+          @NonNull WebrtcCall webrtcCall,
+          boolean isObserveOnIO) {
+    Data data = new Data();
+    data.setWebrtcCall(webrtcCall);
+    FCM fcm = new FCM();
+    fcm.setTo(to);
+    fcm.setData(data);
+    String json = new Gson().toJson(fcm);
+    System.out.println(json);
+    FCMApi.phoneCall(json)
+            .subscribeOn(Schedulers.io())
+            .observeOn(isObserveOnIO ? Schedulers.io() : AndroidSchedulers.mainThread())
+            .unsubscribeOn(Schedulers.io())
+            .subscribe(observer);
   }
 
   // 創建實例

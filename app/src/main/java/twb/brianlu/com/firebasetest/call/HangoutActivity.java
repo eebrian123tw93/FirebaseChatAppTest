@@ -1,42 +1,26 @@
-package twb.brianlu.com.firebasetest.chat;
+package twb.brianlu.com.firebasetest.call;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.webkit.URLUtil;
-import android.widget.EditText;
-import android.widget.ImageView;
-
-import com.firebase.ui.database.FirebaseListAdapter;
-import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
-import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
 import java.util.Random;
 
 import twb.brianlu.com.firebasetest.R;
 import twb.brianlu.com.firebasetest.apprtc.CallActivity;
-import twb.brianlu.com.firebasetest.apprtc.ConnectActivity;
-import twb.brianlu.com.firebasetest.model.ChatMessage;
+import twb.brianlu.com.firebasetest.chat.ChatActivity;
+import twb.brianlu.com.firebasetest.model.fcm.WebrtcCall;
 
-public class ChatActivity extends AppCompatActivity implements ChatView, View.OnClickListener, View.OnLongClickListener {
-    private static final String TAG = "ChatActivity";
+public class HangoutActivity extends AppCompatActivity {
+    private static final String TAG = "HangoutActivity";
     private static int SIGN_IN_REQUEST_CODE = 1000;
-    private FirebaseListAdapter<ChatMessage> adapter;
-    private ImageView sendImageView;
-    private ChatPresenter chatPresenter;
-    private RecyclerView messageRecyclerView;
-    private RecyclerView tagsRecyclerView;
-    private TwinklingRefreshLayout refreshLayout;
-    private EditText input;
 
     private static final int CONNECTION_REQUEST = 1;
 
@@ -46,133 +30,23 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_habgout);
 
         // Get setting keys.
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        sendImageView = findViewById(R.id.send_imageView);
-        sendImageView.setOnClickListener(this);
-        sendImageView.setOnLongClickListener(this);
-        input = findViewById(R.id.message_editText);
-        messageRecyclerView = findViewById(R.id.messages_recyclerView);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        messageRecyclerView.setLayoutManager(layoutManager);
-
-        tagsRecyclerView = findViewById(R.id.tags_recyclerView);
-        LinearLayoutManager tagsLinearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        tagsLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        tagsRecyclerView.setLayoutManager(tagsLinearLayoutManager);
-
-        chatPresenter = new ChatPresenter(this, getIntent().getStringExtra("roomId"));
-
-        refreshLayout = findViewById(R.id.refreshLayout);
-        refreshLayout.setEnableLoadmore(false);
-        refreshLayout.setEnableRefresh(false);
-        //        refreshLayout.setAutoLoadMore(true);
-        refreshLayout.setOnRefreshListener(
-                new RefreshListenerAdapter() {
-
-                    @Override
-                    public void onRefresh(TwinklingRefreshLayout refreshLayout) {
-                        super.onRefresh(refreshLayout);
-                    }
-
-                    @Override
-                    public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
-                        super.onLoadMore(refreshLayout);
-                    }
-                });
-
-        //        ListView listOfMessages = findViewById(R.id.list_of_messages);
-
-        //        adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
-        //                R.layout.item_self_message,
-        // FirebaseDatabase.getInstance().getReference("rooms/" + "roomId")) {
-        //            @Override
-        //            protected void populateView(View v, ChatMessage model, int position) {
-        //                // Get references to the views of item_messagessage.xml
-        //
-        //                TextView messageText = (TextView) v.findViewById(R.id.message_text);
-        //                TextView messageUser = (TextView) v.findViewById(R.id.message_user);
-        //                TextView messageTime = (TextView) v.findViewById(R.id.message_time);
-        //
-        //                // Set their text
-        //                messageText.setText(model.getMessageText());
-        //                messageUser.setText(model.getMessageUser());
-        //
-        //                // Format the date before showing it
-        //                messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
-        //                        model.getMessageTime()));
-        //            }
-        //        };
-
-        //        listOfMessages.setAdapter(adapter);
-        //        messageRecyclerView.setAdapter(adapter);
-
-    }
-
-    @Override
-    public void onSendMessageSuccess() {
-        input.setText("");
-    }
-
-    @Override
-    public void onSetMessagesAdapter(RecyclerView.Adapter adapter) {
-        messageRecyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onSetTagsAdapter(RecyclerView.Adapter adapter) {
-        tagsRecyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onScrollMessagesToPosition(int position) {
-        messageRecyclerView.scrollToPosition(position);
-    }
-
-    @Override
-    public void onScrollTagsToPosition(int position) {
-        tagsRecyclerView.scrollToPosition(position);
-    }
-
-    @Override
-    public void onSetMessage(String message, int type) {
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.send_imageView:
-                chatPresenter.sendMessage(input.getText().toString());
-                break;
+        Intent intent=getIntent();
+        WebrtcCall webrtcCall=(WebrtcCall) intent.getSerializableExtra("room");
+        if(webrtcCall!=null){
+            connectToRoom(webrtcCall.getRoomId(),false,false,false,0);
+            finish();
         }
     }
-
-    @Override
-    public boolean onLongClick(View v) {
-        switch (v.getId()) {
-            case R.id.send_imageView:
-                chatPresenter.call();
-                break;
-        }
-        return false;
-    }
-
-    @Override
-    public void onCall(String roomId) {
-        Log.i(TAG,roomId);
-        connectToRoom(roomId,false,false,false,0);
-    }
-
 
     private void connectToRoom(String roomId, boolean commandLineRun, boolean loopback,
                                boolean useValuesFromIntent, int runTimeMs) {
-        ChatActivity.commandLineRun = commandLineRun;
+        HangoutActivity.commandLineRun = commandLineRun;
 
         // roomId is random for loopback.
         if (loopback) {
@@ -522,4 +396,5 @@ public class ChatActivity extends AppCompatActivity implements ChatView, View.On
     private String keyprefAudioBitrateValue;
     private String keyprefRoomServerUrl;
     private String keyprefRoom;
+
 }

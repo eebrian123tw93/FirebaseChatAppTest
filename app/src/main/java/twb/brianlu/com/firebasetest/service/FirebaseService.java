@@ -20,10 +20,12 @@ import java.util.Map;
 import java.util.Random;
 
 import twb.brianlu.com.firebasetest.R;
+import twb.brianlu.com.firebasetest.call.HangoutActivity;
 import twb.brianlu.com.firebasetest.chat.ChatActivity;
 import twb.brianlu.com.firebasetest.core.BaseApplication;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
 import twb.brianlu.com.firebasetest.model.fcm.Notification;
+import twb.brianlu.com.firebasetest.model.fcm.WebrtcCall;
 
 public class FirebaseService extends FirebaseMessagingService {
     private static final String TAG = "FirebaseService";
@@ -49,7 +51,12 @@ public class FirebaseService extends FirebaseMessagingService {
                     break;
                 case "match":
                     break;
-                case "videoCall":
+                case "webrtcCall":
+                    String webrtcJson = entry.getValue();
+                    WebrtcCall webrtcCall=new Gson().fromJson(webrtcJson,WebrtcCall.class);
+                    Intent intent=new Intent(getApplicationContext(), HangoutActivity.class);
+                    intent.putExtra("room",webrtcCall);
+                    startActivity(intent);
                     break;
             }
 
@@ -168,4 +175,12 @@ public class FirebaseService extends FirebaseMessagingService {
         }
         return false;
     }
+
+
+
+
+
+
+
+
 }

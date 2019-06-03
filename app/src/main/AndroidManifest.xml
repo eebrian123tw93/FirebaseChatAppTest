@@ -7,16 +7,16 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAPTURE_VIDEO_OUTPUT"
+    <uses-permission
+        android:name="android.permission.CAPTURE_VIDEO_OUTPUT"
         tools:ignore="ProtectedPermissions" />
 
     <application
@@ -28,7 +28,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".login.LoginActivity"/>
+        <activity android:name=".call.HangoutActivity"></activity>
+        <activity android:name=".login.LoginActivity" />
         <activity
             android:name=".splash.SplashActivity"
             android:theme="@style/Theme.Design.Light.NoActionBar">
@@ -39,14 +40,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".register.RegisterActivity" />
-        <activity android:name=".navigation.NavigationActivity"/>
-        <activity android:name=".chat.ChatActivity" android:parentActivityName=".navigation.NavigationActivity"/>
-
-        <activity android:name=".apprtc.CallActivity"
+        <activity android:name=".navigation.NavigationActivity" />
+        <activity
+            android:name=".chat.ChatActivity"
+            android:parentActivityName=".navigation.NavigationActivity" />
+        <activity
+            android:name=".apprtc.CallActivity"
+            android:configChanges="orientation|smallestScreenSize|screenSize|screenLayout"
             android:label="@string/app_name"
-            android:screenOrientation="fullUser"
-            android:configChanges="orientation|smallestScreenSize|screenSize|screenLayout">
-        </activity>
+            android:screenOrientation="fullUser"></activity>
 
         <service
             android:name=".service.FirebaseService"
@@ -55,8 +57,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-
     </application>
 
 </manifest>

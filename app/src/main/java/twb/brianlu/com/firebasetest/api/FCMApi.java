@@ -15,4 +15,12 @@ public interface FCMApi {
   })
   @POST("fcm/send")
   Observable<Response<ResponseBody>> pushFCM(@Body String s);
+
+
+  @Headers({
+          "Content-Type:application/json",
+          "Authorization:key=AAAAit6rMy8:APA91bG9nPyj_MWSxRxTKldnsodZ9spA9zIGEcW0V5DGtQaGFgfZrxHabGTyKILSVn5ZInKdTO6h9l8ApbRv3i_nw38NhK121SNJyd5yDj2XqbL2SOI3QC05ozwc5jd6WW9Xg0D-I4cc"
+  })
+  @POST("fcm/send")
+  Observable<Response<ResponseBody>> phoneCall(@Body String s);
 }
