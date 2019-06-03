@@ -109,7 +109,12 @@ public class FirebaseService extends FirebaseMessagingService {
 
         Intent notificationIntent = new Intent(this, ChatActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notificationIntent.putExtra("roomId", notification.getTitle());
+        if (notification.getRoomId() == null){
+            notificationIntent.putExtra("roomId", notification.getTitle());
+        } else {
+            notificationIntent.putExtra("roomId", notification.getRoomId());
+        }
+
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
         //        stackBuilder.addParentStack(NavigationActivity.class);

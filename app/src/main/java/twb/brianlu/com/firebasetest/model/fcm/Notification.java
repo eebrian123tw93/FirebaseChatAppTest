@@ -8,4 +8,5 @@ import lombok.Data;
 public class Notification implements Serializable {
   private String title;
   private String body;
+  private String roomId;
 }
