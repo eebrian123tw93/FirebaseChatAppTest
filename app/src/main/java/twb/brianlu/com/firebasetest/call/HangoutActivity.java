@@ -9,7 +9,10 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.webkit.URLUtil;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.Random;
 
@@ -27,6 +30,10 @@ public class HangoutActivity extends AppCompatActivity {
     private static boolean commandLineRun = false;
     private SharedPreferences sharedPref;
 
+    private TextView userNameTextView;
+    private ImageView hangoutImageView;
+    private ImageView hangupImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,12 +42,33 @@ public class HangoutActivity extends AppCompatActivity {
         // Get setting keys.
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        userNameTextView=findViewById(R.id.user_diaplay_name_textView);
+
+        hangoutImageView=findViewById(R.id.hangout_imageView);
+        hangupImageView=findViewById(R.id.hangup_textView);
+        hangupImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
 
         Intent intent=getIntent();
         WebrtcCall webrtcCall=(WebrtcCall) intent.getSerializableExtra("room");
         if(webrtcCall!=null){
-            connectToRoom(webrtcCall.getRoomId(),false,false,false,0);
-            finish();
+            userNameTextView.setText(webrtcCall.getDisplayName());
+//
+//            finish();
+            hangoutImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    connectToRoom(webrtcCall.getRoomId(),false,false,false,0);
+                    finish();
+                }
+            });
+
         }
     }
 

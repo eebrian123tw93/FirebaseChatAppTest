@@ -28,7 +28,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".call.HangoutActivity"></activity>
+        <activity android:name=".call.HangoutActivity"
+            android:theme="@style/Theme.Design.Light.NoActionBar"
+            android:configChanges="orientation|smallestScreenSize|screenSize|screenLayout"
+            >
+
+
+        </activity>
         <activity android:name=".login.LoginActivity" />
         <activity
             android:name=".splash.SplashActivity"
