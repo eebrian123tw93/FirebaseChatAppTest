@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -303,5 +304,13 @@ public class ChatPresenter extends BasePresenter {
                     }
                 };
         FirebaseDataService.getUserToken(room.getOppositeUid(), takenObserver);
+    }
+
+    public void call(){
+        UUID uuid=UUID.randomUUID();
+        String roomId=uuid.toString();
+        view.onCall(roomId);
+        //push nfc to opposite with token;
+
     }
 }

@@ -14,4 +14,6 @@ public interface ChatView extends BaseView {
   void onScrollMessagesToPosition(int position);
 
   void onScrollTagsToPosition(int position);
+
+  void  onCall(String roomId);
 }
