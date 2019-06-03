@@ -8,9 +8,11 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import twb.brianlu.com.firebasetest.core.BaseApplication;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
+import twb.brianlu.com.firebasetest.model.ChatMessage;
 import twb.brianlu.com.firebasetest.model.Room;
 import twb.brianlu.com.firebasetest.rooms.adapter.RoomsRVAdapter;
 
@@ -41,8 +43,8 @@ public class RoomsPresenter extends BasePresenter {
                 System.out.println(dataSnapshot.getValue());
                 System.out.println(s);
 
-                Room room = new Room();
-                room.setRoomKey(dataSnapshot.getKey());
+                final Room room = new Room();
+//                final int
                 room.setRoomId(dataSnapshot.getValue().toString());
 
                 String[] ids = room.getRoomId().split("_");
@@ -54,7 +56,49 @@ public class RoomsPresenter extends BasePresenter {
                   }
                 }
 
-                roomsRVAdapter.addRoom(room);
+
+                FirebaseDatabase.getInstance().getReference("users").child(room.getOppositeUid()).child("displayName").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        room.setOppositeDisplayName(dataSnapshot.getValue().toString());
+                        roomsRVAdapter.addRoom(room);
+
+                        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("messages")
+                                .addChildEventListener(
+                                        new ChildEventListener() {
+                                            @Override
+                                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                                System.out.println(s);
+                                                ChatMessage chatMessage = dataSnapshot.getValue(ChatMessage.class);
+                                                room.setLastMessage(chatMessage);
+                                                roomsRVAdapter.removeRoom(room);
+                                                roomsRVAdapter.addRoom(room);
+//                                roomsRVAdapter.notifyItemChanged();
+                                            }
+
+                                            @Override
+                                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+                                            @Override
+                                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+
+                                            @Override
+                                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                        });
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
               }
 
               @Override

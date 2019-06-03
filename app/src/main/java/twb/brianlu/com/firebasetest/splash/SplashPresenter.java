@@ -26,17 +26,14 @@ public class SplashPresenter extends BasePresenter {
     FirebaseInstanceId.getInstance()
         .getInstanceId()
         .addOnCompleteListener(
-            new OnCompleteListener<InstanceIdResult>() {
-              @Override
-              public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                if (task.isSuccessful() && task.getResult() != null) {
-                  String token = task.getResult().getToken();
-                  // Log and toast
-                  Log.i("SplashPresenter", "token " + token);
-                  saveToken(token);
-                  readUser();
-                }
-              }
-            });
+                task -> {
+                  if (task.isSuccessful() && task.getResult() != null) {
+                    String token = task.getResult().getToken();
+                    // Log and toast
+                    Log.i("SplashPresenter", "token " + token);
+                    saveToken(token);
+                    readUser();
+                  }
+                });
   }
 }
