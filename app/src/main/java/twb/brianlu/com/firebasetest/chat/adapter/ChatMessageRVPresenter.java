@@ -1,6 +1,7 @@
 package twb.brianlu.com.firebasetest.chat.adapter;
 
 import android.text.format.DateFormat;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -27,6 +28,11 @@ public class ChatMessageRVPresenter extends BasePresenter {
     viewHolder.onSetMessage(chatMessage.getMessageText());
     viewHolder.onSetMessageTime(
         String.valueOf(DateFormat.format("MM/dd(HH:mm)", chatMessage.getMessageTime())));
+
+    if (chatMessage.getFileModel() != null) {
+      viewHolder.onSetImage(chatMessage.getFileModel().getFileUrl());
+      viewHolder.onSetImageVisibility(View.VISIBLE);
+    } else viewHolder.onSetImageVisibility(View.GONE);
   }
 
   public int getItemCount() {

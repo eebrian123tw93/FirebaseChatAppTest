@@ -40,6 +40,13 @@
             android:textSize="12sp"
             android:textStyle="normal|bold" />
 
+        <ImageView
+            android:id="@+id/photo_imageView"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:visibility="gone"
+            tools:srcCompat="@tools:sample/backgrounds/scenic[1]" />
+
         <TextView
             android:id="@+id/message_textView"
             android:layout_width="wrap_content"
