@@ -17,10 +17,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.asksira.bsimagepicker.BSImagePicker;
+import com.asksira.bsimagepicker.Utils;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
+import java.util.List;
 import java.util.Random;
 
 import twb.brianlu.com.firebasetest.R;
@@ -28,8 +31,13 @@ import twb.brianlu.com.firebasetest.apprtc.CallActivity;
 import twb.brianlu.com.firebasetest.model.ChatMessage;
 
 public class ChatActivity extends AppCompatActivity
-    implements ChatView, View.OnClickListener, View.OnLongClickListener {
+    implements ChatView,
+        View.OnClickListener,
+        View.OnLongClickListener,
+        BSImagePicker.OnSingleImageSelectedListener,
+        BSImagePicker.OnMultiImageSelectedListener {
   private static final String TAG = "ChatActivity";
+  private static final String PROVIDER_AUTHORITY = "twb.brianlu.com.firebasetest.fileprovider";
   private static int SIGN_IN_REQUEST_CODE = 1000;
   private FirebaseListAdapter<ChatMessage> adapter;
   private ImageView sendImageView;
@@ -38,7 +46,8 @@ public class ChatActivity extends AppCompatActivity
   private RecyclerView tagsRecyclerView;
   private TwinklingRefreshLayout refreshLayout;
   private EditText input;
-  private Button imgGalleryButton;
+  private ImageView imgGalleryImageView;
+  private ImageView cameraImageView;
 
   private static final int CONNECTION_REQUEST = 1;
 
@@ -61,8 +70,12 @@ public class ChatActivity extends AppCompatActivity
     sendImageView.setOnLongClickListener(this);
     input = findViewById(R.id.message_editText);
     messageRecyclerView = findViewById(R.id.messages_recyclerView);
-    imgGalleryButton = findViewById(R.id.img_gallery_button);
-    imgGalleryButton.setOnClickListener(this);
+
+    imgGalleryImageView = findViewById(R.id.image_gallery_imageView);
+    imgGalleryImageView.setOnClickListener(this);
+
+    cameraImageView = findViewById(R.id.camera_imageView);
+    cameraImageView.setOnClickListener(this);
 
     LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -92,33 +105,6 @@ public class ChatActivity extends AppCompatActivity
             super.onLoadMore(refreshLayout);
           }
         });
-
-    //        ListView listOfMessages = findViewById(R.id.list_of_messages);
-
-    //        adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
-    //                R.layout.item_self_message,
-    // FirebaseDatabase.getInstance().getReference("rooms/" + "roomId")) {
-    //            @Override
-    //            protected void populateView(View v, ChatMessage model, int position) {
-    //                // Get references to the views of item_messagessage.xml
-    //
-    //                TextView messageText = (TextView) v.findViewById(R.id.message_text);
-    //                TextView messageUser = (TextView) v.findViewById(R.id.message_user);
-    //                TextView messageTime = (TextView) v.findViewById(R.id.message_time);
-    //
-    //                // Set their text
-    //                messageText.setText(model.getMessageText());
-    //                messageUser.setText(model.getMessageUser());
-    //
-    //                // Format the date before showing it
-    //                messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
-    //                        model.getMessageTime()));
-    //            }
-    //        };
-
-    //        listOfMessages.setAdapter(adapter);
-    //        messageRecyclerView.setAdapter(adapter);
-
   }
 
   @Override
@@ -155,38 +141,62 @@ public class ChatActivity extends AppCompatActivity
       case R.id.send_imageView:
         chatPresenter.sendMessage(input.getText().toString());
         break;
-      case R.id.img_gallery_button:
-        Log.i(TAG, "onClick: gallery");
+      case R.id.image_gallery_imageView:
+        Log.d(TAG, "onClick: gallery");
         photoGalleryIntent();
+        break;
+
+      case R.id.camera_imageView:
+        Log.d(TAG, "onClick: camera");
+        cameraIntent();
         break;
     }
   }
 
   private void photoGalleryIntent() {
-    //    BSImagePicker singleSelectionPicker = new
-    // BSImagePicker.Builder("twb.conwaybrian.com.twbandroid.fileprovider")
-    //            .setMaximumDisplayingImages(0) //Default: Integer.MAX_VALUE. Don't worry about
-    // performance :)
-    //            .setSpanCount(1) //Default: 3. This is the number of columns
-    //
-    //            .setGridSpacing(Utils.dp2px(2)) //Default: 2dp. Remember to pass in a value in
-    // pixel.
-    //            .setPeekHeight(Utils.dp2px(360)) //Default: 360dp. This is the initial height of
-    // the dialog.
-    //            //Default: show. Set this if you don't want user to take photo.
-    //            .hideGalleryTile() //Default: show. Set this if you don't want to further let user
-    // select from a gallery app. In such case, I suggest you to set maximum displaying images to
-    // Integer.MAX_VALUE.
-    //            .setTag("A request ID") //Default: null. Set this if you need to identify which
-    // picker is calling back your fragment / activity.
-    //            //Default: true. Set this if you do not want the picker to dismiss right after
-    // selection. But then you will have to dismiss by yourself.
-    //            .build();
+    BSImagePicker multiSelectionPicker =
+        new BSImagePicker.Builder(PROVIDER_AUTHORITY)
+            .isMultiSelect()
+            .setMultiSelectBarBgColor(android.R.color.white)
+            .setMultiSelectTextColor(R.color.primary_text)
+            .setMultiSelectDoneTextColor(R.color.colorAccent)
+            .setOverSelectTextColor(R.color.error_text)
+            .disableOverSelectionMessage()
+            .build();
+    multiSelectionPicker.show(getSupportFragmentManager(), "ticker");
 
-    Intent intent = new Intent();
-    intent.setType("image/*");
-    intent.setAction(Intent.ACTION_GET_CONTENT);
-    startActivityForResult(Intent.createChooser(intent, "choose photo"), PICK_IMAGE_CODE);
+    //    Intent intent = new Intent();
+    //    intent.setType("image/*");
+    //    intent.setAction(Intent.ACTION_GET_CONTENT);
+    //    startActivityForResult(Intent.createChooser(intent, "choose photo"), PICK_IMAGE_CODE);
+    //    chatPresenter.sendFileFirebase();
+  }
+
+  private void cameraIntent() {
+    BSImagePicker singleSelectionPicker =
+        new BSImagePicker.Builder(PROVIDER_AUTHORITY)
+            .setMaximumDisplayingImages(0)
+            .setSpanCount(1)
+            .setGridSpacing(Utils.dp2px(2))
+            .setPeekHeight(Utils.dp2px(360))
+            .hideGalleryTile()
+            .setTag("taggg")
+            .build();
+    singleSelectionPicker.show(getSupportFragmentManager(), "picker");
+    //    singleSelectionPicker.show(getChildFragmentManager(), "ticker");
+  }
+
+  @Override
+  public void onSingleImageSelected(Uri uri, String tag) {
+    //    Log.i(TAG, "onSingleImageSelected: " + uri + " " + tag);
+    chatPresenter.sendFileFirebase(uri);
+  }
+
+  @Override
+  public void onMultiImageSelected(List<Uri> uriList, String tag) {
+    for (Uri uri : uriList) {
+      chatPresenter.sendFileFirebase(uri);
+    }
   }
 
   @Override

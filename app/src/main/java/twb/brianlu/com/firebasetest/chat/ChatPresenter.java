@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -55,10 +54,8 @@ public class ChatPresenter extends BasePresenter {
   private List<String> tags;
 
   private static final String TAG = "ChatPresenter";
-
-  // todo: change
-  public static final String URL_STORAGE_REFERENCE = "gs://firenbasetest.appspot.com/";
-  public static final String FOLDER_STORAGE_IMG = "images";
+  private static final String URL_STORAGE_REFERENCE = "gs://firenbasetest.appspot.com/";
+  private static final String FOLDER_STORAGE_IMG = "images";
 
   public ChatPresenter(ChatView view, String roomId) {
     this.view = view;
