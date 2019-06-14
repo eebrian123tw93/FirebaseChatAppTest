@@ -49,23 +49,33 @@
             card_view:layout_constraintHorizontal_bias="0.5"
             card_view:layout_constraintStart_toStartOf="parent">
 
+            <Button
+                android:id="@+id/img_gallery_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="284dp"
+                android:text="Button"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toEndOf="@+id/send_imageView"
+                card_view:layout_constraintStart_toStartOf="parent" />
+
             <EditText
                 android:id="@+id/message_editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:ems="10"
 
+                android:ems="10"
                 android:inputType="text"
                 android:paddingHorizontal="10dp"
-                android:text=""
 
+                android:text=""
                 android:textSize="20sp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toStartOf="@+id/send_imageView"
-                card_view:layout_constraintHorizontal_bias="1.0"
-                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintStart_toEndOf="@+id/img_gallery_button"
                 card_view:layout_constraintTop_toTopOf="parent"
                 card_view:layout_constraintVertical_bias="0.0" />
 
