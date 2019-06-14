@@ -63,6 +63,7 @@ public class FirebaseService extends FirebaseMessagingService {
                     String webrtcJson = entry.getValue();
                     WebrtcCall webrtcCall=new Gson().fromJson(webrtcJson,WebrtcCall.class);
                     Intent intent=new Intent(getApplicationContext(), HangoutActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("room",webrtcCall);
                     startActivity(intent);
                     break;
