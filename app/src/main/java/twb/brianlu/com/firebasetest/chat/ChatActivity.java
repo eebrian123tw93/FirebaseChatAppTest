@@ -13,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.webkit.URLUtil;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -22,6 +21,7 @@ import com.asksira.bsimagepicker.Utils;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.util.List;
 import java.util.Random;
@@ -48,12 +48,12 @@ public class ChatActivity extends AppCompatActivity
   private EditText input;
   private ImageView imgGalleryImageView;
   private ImageView cameraImageView;
+  private ImageView phoneImageView;
 
   private static final int CONNECTION_REQUEST = 1;
 
-  private static final int PICK_IMAGE_CODE = 2;
-
   private static boolean commandLineRun = false;
+
   private SharedPreferences sharedPref;
 
   @Override
@@ -76,6 +76,9 @@ public class ChatActivity extends AppCompatActivity
 
     cameraImageView = findViewById(R.id.camera_imageView);
     cameraImageView.setOnClickListener(this);
+
+    phoneImageView = findViewById(R.id.video_call_imageView);
+    phoneImageView.setOnClickListener(this);
 
     LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -133,7 +136,9 @@ public class ChatActivity extends AppCompatActivity
   }
 
   @Override
-  public void onSetMessage(String message, int type) {}
+  public void onSetMessage(String message, int type) {
+    FancyToast.makeText(this, message, FancyToast.LENGTH_LONG, type, false).show();
+  }
 
   @Override
   public void onClick(View v) {
@@ -149,6 +154,9 @@ public class ChatActivity extends AppCompatActivity
       case R.id.camera_imageView:
         Log.d(TAG, "onClick: camera");
         cameraIntent();
+        break;
+      case R.id.video_call_imageView:
+        chatPresenter.call();
         break;
     }
   }
@@ -188,7 +196,6 @@ public class ChatActivity extends AppCompatActivity
 
   @Override
   public void onSingleImageSelected(Uri uri, String tag) {
-    //    Log.i(TAG, "onSingleImageSelected: " + uri + " " + tag);
     chatPresenter.sendFileFirebase(uri);
   }
 
@@ -198,15 +205,6 @@ public class ChatActivity extends AppCompatActivity
       chatPresenter.sendFileFirebase(uri);
     }
   }
-
-//  @Override
-//  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//    if (requestCode == PICK_IMAGE_CODE && resultCode == RESULT_OK) {
-//      Uri selectedImageUri = data.getData();
-//      if (selectedImageUri != null) chatPresenter.sendFileFirebase(selectedImageUri);
-//      else Log.e(TAG, "onActivityResult: selectedImageUri is null");
-//    }
-//  }
 
   @Override
   public boolean onLongClick(View v) {
@@ -222,6 +220,11 @@ public class ChatActivity extends AppCompatActivity
   public void onCall(String roomId) {
     Log.i(TAG, roomId);
     connectToRoom(roomId, false, false, false, 0);
+  }
+
+  @Override
+  public void onSetPhoneImageAlpha(int alpha) {
+    phoneImageView.setImageAlpha(alpha);
   }
 
   private void connectToRoom(
