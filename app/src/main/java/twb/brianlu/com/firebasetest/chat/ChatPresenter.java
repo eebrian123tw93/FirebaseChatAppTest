@@ -5,10 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.View;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -59,7 +56,7 @@ public class ChatPresenter extends BasePresenter {
   private static final String URL_STORAGE_REFERENCE = "gs://firenbasetest.appspot.com/";
   private static final String FOLDER_STORAGE_IMG = "images";
 
-  private static final int TAGS_TO_UNLOCK_CALL = 10;
+  private static final int TAGS_TO_UNLOCK_CALL = 3;
   private static final int MESSAGES_PER_TAG_UNLOCK = 5;
 
   public ChatPresenter(ChatView view, String roomId) {
@@ -98,7 +95,8 @@ public class ChatPresenter extends BasePresenter {
                 String value = dataSnapshot.getValue().toString();
                 Log.i(TAG, "unlocked tag " + value);
                 tagsRVAdapter.addTag(value);
-                if (tags.size() > TAGS_TO_UNLOCK_CALL) view.onSetPhoneImageAlpha(255);
+                if (tagsRVAdapter.getItemCount() >= TAGS_TO_UNLOCK_CALL)
+                  view.onSetPhoneImageAlpha(255);
                 else view.onSetPhoneImageAlpha(90);
                 view.onScrollTagsToPosition(tagsRVAdapter.getItemCount() - 1);
               }
@@ -362,7 +360,7 @@ public class ChatPresenter extends BasePresenter {
   }
 
   public void call() {
-    if (tags.size() > TAGS_TO_UNLOCK_CALL) {
+    if (tagsRVAdapter.getItemCount() > TAGS_TO_UNLOCK_CALL) {
       UUID uuid = UUID.randomUUID();
       String roomId = uuid.toString();
       view.onCall(roomId);
