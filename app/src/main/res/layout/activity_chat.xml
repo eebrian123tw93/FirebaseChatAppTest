@@ -49,33 +49,55 @@
             card_view:layout_constraintHorizontal_bias="0.5"
             card_view:layout_constraintStart_toStartOf="parent">
 
-            <Button
-                android:id="@+id/img_gallery_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="284dp"
-                android:text="Button"
+            <ImageView
+                android:id="@+id/camera_imageView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="@+id/send_imageView"
-                card_view:layout_constraintStart_toStartOf="parent" />
+                card_view:layout_constraintEnd_toStartOf="@+id/image_gallery_imageView"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:srcCompat="@drawable/camera" />
+
+            <ImageView
+                android:id="@+id/image_gallery_imageView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="60dp"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toStartOf="@+id/message_editText"
+                card_view:layout_constraintHorizontal_bias="0.163"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:srcCompat="@drawable/gallery" />
+
+            <!--<Button-->
+                <!--android:id="@+id/img_gallery_button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="8dp"-->
+                <!--android:layout_marginEnd="284dp"-->
+                <!--android:text="Button"-->
+                <!--card_view:layout_constraintBottom_toBottomOf="parent"-->
+                <!--card_view:layout_constraintEnd_toEndOf="@+id/send_imageView"-->
+                <!--card_view:layout_constraintStart_toStartOf="parent" />-->
 
             <EditText
                 android:id="@+id/message_editText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
 
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"
                 android:ems="10"
+
                 android:inputType="text"
                 android:paddingHorizontal="10dp"
-
                 android:text=""
                 android:textSize="20sp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toStartOf="@+id/send_imageView"
-                card_view:layout_constraintStart_toEndOf="@+id/img_gallery_button"
+                card_view:layout_constraintStart_toEndOf="@+id/image_gallery_imageView"
                 card_view:layout_constraintTop_toTopOf="parent"
                 card_view:layout_constraintVertical_bias="0.0" />
 
