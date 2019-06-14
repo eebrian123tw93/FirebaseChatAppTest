@@ -25,14 +25,17 @@ public class ChatMessageRVPresenter extends BasePresenter {
   public void bindData(ChatMessageRVAdapter.ViewHolder viewHolder, int position) {
     ChatMessage chatMessage = chatMessages.get(position);
     viewHolder.onSetUsername(chatMessage.getMessageUser());
-    viewHolder.onSetMessage(chatMessage.getMessageText());
     viewHolder.onSetMessageTime(
         String.valueOf(DateFormat.format("MM/dd(HH:mm)", chatMessage.getMessageTime())));
 
     if (chatMessage.getFileModel() != null) {
       viewHolder.onSetImage(chatMessage.getFileModel().getFileUrl());
       viewHolder.onSetImageVisibility(View.VISIBLE);
-    } else viewHolder.onSetImageVisibility(View.GONE);
+      viewHolder.onSetMessage("");
+    } else {
+      viewHolder.onSetImageVisibility(View.GONE);
+      viewHolder.onSetMessage(chatMessage.getMessageText());
+    }
   }
 
   public int getItemCount() {
