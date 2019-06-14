@@ -17,6 +17,7 @@
     <string name="delete_user">刪除帳號</string>
     <string name="logout">登出</string>
     <string name="displayName">匿稱</string>
+    <string name="customize">自訂義</string>
 
 
     <string name="settings_name" translatable="false">AppRTC Settings</string>

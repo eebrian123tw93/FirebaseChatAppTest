@@ -3,14 +3,17 @@ package twb.brianlu.com.firebasetest.core;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class BaseApplication extends Application {
 
   public static List<String> tags;
+  public static List<String> customizeTags;
 
   @SuppressLint("StaticFieldLeak")
   private static Context context;
@@ -115,6 +118,30 @@ public class BaseApplication extends Application {
     tags.add("哭砂");
     tags.add("馮提莫");
     tags.addAll(Arrays.asList(t));
+//    tags.addAll(customizeTags);
+    customizeTags=readCustomizeTags();
+    tags.addAll(customizeTags);
+  }
+
+
+  public static List<String> readCustomizeTags() {
+    SharedPreferences prfs =
+            context
+                    .getSharedPreferences("AUTHENTICATION_FILE_NAME", Context.MODE_PRIVATE);
+    return new ArrayList<>(prfs.getStringSet("customize", new HashSet<String>()));
+  }
+
+  public static void addNewCustomizeTags(String newCustomizeTag) {
+    customizeTags.add(newCustomizeTag);
+    if(!customizeTags.contains(newCustomizeTag))customizeTags.add(newCustomizeTag);
+    if(!tags.contains(newCustomizeTag))tags.add(newCustomizeTag);
+
+    SharedPreferences preferences =
+            context
+                    .getSharedPreferences("AUTHENTICATION_FILE_NAME", Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = preferences.edit();
+    editor.putStringSet("customize", new HashSet<>(customizeTags));
+    editor.apply();
   }
 
   @Override

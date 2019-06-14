@@ -18,6 +18,7 @@ public class TagsAdapter extends BaseAdapter {
 
   private static int SETTING_TYPE = 0;
   private static int TAG_TYPE = 1;
+  private static int CUSTOMIZE_TYPE=2;
   private final Context mContext;
   private final List<String> mDataList;
 
@@ -25,6 +26,7 @@ public class TagsAdapter extends BaseAdapter {
     this.mContext = context;
     mDataList = new ArrayList<>();
     mDataList.add("設定");
+    mDataList.add("自訂義");
   }
 
   @Override
@@ -46,7 +48,9 @@ public class TagsAdapter extends BaseAdapter {
   public int getItemViewType(int position) {
     if (mDataList.size() - 1 == position) {
       return SETTING_TYPE;
-    } else {
+    } else if(mDataList.size() - 2 == position){
+      return CUSTOMIZE_TYPE;
+    }else {
       return TAG_TYPE;
     }
   }
@@ -58,12 +62,20 @@ public class TagsAdapter extends BaseAdapter {
     if (type == SETTING_TYPE) {
       @SuppressLint("ViewHolder")
       View view = LayoutInflater.from(mContext).inflate(R.layout.item_tag_setting, null);
-      ImageButton imageButton = view.findViewById(R.id.add_tag_button);
+      ImageButton imageButton = view.findViewById(R.id.custom_tag_button);
       imageButton.setClickable(false);
       //            imageButton.getLayoutParams().height= (int) new Button(mContext).getTextSize();
       //            imageButton.getLayoutParams().width=(int) new Button(mContext).getTextSize();
       return view;
-    } else {
+    } else if(type == CUSTOMIZE_TYPE){
+      @SuppressLint("ViewHolder")
+      View view = LayoutInflater.from(mContext).inflate(R.layout.item_tag_custom ,null);
+      TextView textView = view.findViewById(R.id.tag_text);
+      textView.setClickable(false);
+      //            imageButton.getLayoutParams().height= (int) new Button(mContext).getTextSize();
+      //            imageButton.getLayoutParams().width=(int) new Button(mContext).getTextSize();
+      return view;
+    }else {
       @SuppressLint("ViewHolder")
       View view = LayoutInflater.from(mContext).inflate(R.layout.item_tag, null);
       TextView textView = view.findViewById(R.id.tag_text);
@@ -75,13 +87,13 @@ public class TagsAdapter extends BaseAdapter {
   }
 
   public void addTag(String tag) {
-    mDataList.add(mDataList.size() - 1, tag);
+    mDataList.add(mDataList.size() - 2, tag);
     notifyDataSetChanged();
   }
 
   public void addTags(List<String> tags) {
     for (String tag : tags) {
-      mDataList.add(mDataList.size() - 1, tag);
+      mDataList.add(mDataList.size() - 2, tag);
     }
     notifyDataSetChanged();
   }
@@ -89,6 +101,7 @@ public class TagsAdapter extends BaseAdapter {
   public void clear() {
     mDataList.clear();
     mDataList.add("設定");
+    mDataList.add("自訂義");
     notifyDataSetChanged();
   }
 }
