@@ -1,11 +1,16 @@
 package twb.brianlu.com.firebasetest.call;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +19,10 @@ import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import twb.brianlu.com.firebasetest.R;
@@ -65,7 +74,6 @@ public class HangoutActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     connectToRoom(webrtcCall.getRoomId(),false,false,false,0);
-                    finish();
                 }
             });
 
@@ -335,6 +343,10 @@ public class HangoutActivity extends AppCompatActivity {
                     intent.putExtra(CallActivity.EXTRA_SAVE_REMOTE_VIDEO_TO_FILE_HEIGHT, videoOutHeight);
                 }
             }
+            serviceIntent = intent;
+            if (checkAndRequestPermissions()) {
+                startServiceIntent();
+            }
 
             startActivityForResult(intent, CONNECTION_REQUEST);
         }
@@ -425,4 +437,114 @@ public class HangoutActivity extends AppCompatActivity {
     private String keyprefRoomServerUrl;
     private String keyprefRoom;
 
+    private void startServiceIntent() {
+        if (serviceIntent != null) {
+            startActivityForResult(serviceIntent, CONNECTION_REQUEST);
+            serviceIntent = null;
+            finish();
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        Log.d(TAG, "Permission callback called-------");
+        switch (requestCode) {
+            case REQUEST_ID_MULTIPLE_PERMISSIONS: {
+
+                Map<String, Integer> perms = new HashMap<>();
+                // Initialize the map with both permissionsNeedRequest
+
+                // Fill with actual results from user
+                if (grantResults.length > 0) {
+
+                    boolean granted = true;
+                    for (int i = 0; i < permissions.length; i++) {
+                        perms.put(permissions[i], grantResults[i]);
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                            granted = false;
+                            break;
+                        }
+                    }
+
+                    if (granted) {
+                        Log.d(TAG, "permission granted");
+
+                        startServiceIntent();
+
+
+                    } else {
+                        Log.d(TAG, "Some permissionsNeedRequest are not granted ask again ");
+                        boolean once = false;
+                        for (String permission : permissions) {
+                            once = once || ActivityCompat.shouldShowRequestPermissionRationale(this, permission);
+                        }
+
+                        if (once) {
+                            new AlertDialog.Builder(this)
+                                    .setTitle("Permission Request")
+                                    .setMessage("This is explanation: Please give us permission")
+                                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            checkAndRequestPermissions();
+                                        }
+                                    }).create().show();
+
+
+                        } else {
+
+
+                            new AlertDialog.Builder(this)
+                                    .setTitle("Permission Request")
+                                    .setMessage("On no, user deny to grant this runtime permission, and also check never ask again!")
+                                    .setPositiveButton("Go to App Setting to grant permission", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                                    Uri.fromParts("package", getPackageName(), null));
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
+                                            isReturnedFromSettings = true;
+                                        }
+                                    }).create().show();
+
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    private boolean checkAndRequestPermissions() {
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String permission : permissionsNeedRequest) {
+            if (!hasPermission(permission)) {
+                listPermissionsNeeded.add(permission);
+            }
+        }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean hasPermission(String permission) {
+
+        return ContextCompat.checkSelfPermission(getApplicationContext(), permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1101;
+    private boolean isReturnedFromSettings = false;
+    private Intent serviceIntent;
+    private static final String permissionsNeedRequest[] = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO,
+    };
 }
