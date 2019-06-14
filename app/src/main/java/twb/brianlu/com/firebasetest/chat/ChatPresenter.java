@@ -382,7 +382,9 @@ public class ChatPresenter extends BasePresenter {
     String currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     final String filename =
-        currentUserUid + DateFormat.format("yyyy-MM-dd_hhmmss", new Date()).toString();
+        currentUserUid
+            + DateFormat.format("yyyy-MM-ddThhmmss.sss", new Date()).toString()
+            + UUID.randomUUID();
     StorageReference imageGalleryRef = storageReference.child(filename + "_img");
     UploadTask uploadTask = imageGalleryRef.putFile(file);
 
