@@ -348,7 +348,7 @@ public class HangoutActivity extends AppCompatActivity {
                 startServiceIntent();
             }
 
-            startActivityForResult(intent, CONNECTION_REQUEST);
+//            startActivityForResult(intent, CONNECTION_REQUEST);
         }
     }
     private boolean validateUrl(String url) {
