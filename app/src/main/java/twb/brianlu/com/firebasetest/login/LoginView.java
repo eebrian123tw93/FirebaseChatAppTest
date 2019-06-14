@@ -4,13 +4,13 @@ import twb.brianlu.com.firebasetest.core.BaseView;
 
 public interface LoginView extends BaseView {
 
-    void onClearText();
+  void onClearText();
 
-    void onLoginResult(boolean result);
+  void onLoginResult(boolean result);
 
-    void onSetProgressBarVisibility(int visibility);
+  void onSetProgressBarVisibility(int visibility);
 
-    void onForgetPassword();
+  void onForgetPassword(boolean result);
 
-    void onRegister();
+  void onRegister();
 }

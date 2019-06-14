@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx.com.pegasus.RippleCircleButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:circlesButton="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rippleCircleButton"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+
+    circlesButton:animationDuration="1700"
+    circlesButton:mainCircleBackgroundImage="@drawable/make_friends_half"
+
+    circlesButton:mainCircleBackgroundImageSize="72dp"
+    circlesButton:mainCircleColor="#CCFFFFFF"
+
+    circlesButton:mainCircleSize="100dp"
+    circlesButton:secondaryCirclesAnimation="expandAndDisappear"
+
+    circlesButton:secondaryCirclesColor="#88FFFFFF"
+    circlesButton:secondaryCirclesNumber="3" />

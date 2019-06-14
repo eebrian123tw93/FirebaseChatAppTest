@@ -6,9 +6,10 @@ import lombok.Data;
 
 @Data
 public class User {
-    private String uid;
-    private String email;
-    private String displayName;
-    private List<String> rooms;
-    private String token;
+  private String uid;
+  private String email;
+  private String displayName;
+  private List<String> rooms;
+  private List<String> tags;
+  private String token;
 }

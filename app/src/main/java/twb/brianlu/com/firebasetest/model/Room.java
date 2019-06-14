@@ -6,6 +6,10 @@ import lombok.Data;
 
 @Data
 public class Room {
-    private String roomId;
-    private List<ChatMessage> chatMessages;
+  private String roomId;
+  private String selfUId;
+  private String oppositeDisplayName;
+  private String oppositeUid;
+  private List<String> oppositeTags;
+  private ChatMessage lastMessage;
 }

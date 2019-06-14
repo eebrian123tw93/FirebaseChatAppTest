@@ -69,6 +69,6 @@ fastlane/readme.md
 \.idea/
 gradle
 
-app/src/main/\.DS_Store
 
-app/src/main/res/\.DS_Store
+
+.DS_Store
