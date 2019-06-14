@@ -6,4 +6,8 @@ public interface ChatMessageVHView {
   void onSetUsername(String username);
 
   void onSetMessageTime(String messageTime);
+
+  void onSetImage(String image);
+
+  void onSetImageVisibility(int option);
 }

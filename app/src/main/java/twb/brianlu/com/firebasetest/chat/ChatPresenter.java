@@ -57,7 +57,7 @@ public class ChatPresenter extends BasePresenter {
   private static final String TAG = "ChatPresenter";
 
   // todo: change
-  public static final String URL_STORAGE_REFERENCE = "gs://testgsurl";
+  public static final String URL_STORAGE_REFERENCE = "gs://firenbasetest.appspot.com/";
   public static final String FOLDER_STORAGE_IMG = "images";
 
   public ChatPresenter(ChatView view, String roomId) {
@@ -161,17 +161,11 @@ public class ChatPresenter extends BasePresenter {
           .push()
           .setValue(chatMessage)
           .addOnCompleteListener(
-              new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                  if (task.isSuccessful()) {
-                    view.onSendMessageSuccess();
-                    pushNewMessageNotification(message);
-
-                    if (chatMessageRVAdapter.getItemCount() % (new Random().nextInt(5) + 10) == 0) {
-                      unlockNewTagToOpposite();
-                    }
-                  }
+              task -> {
+                if (task.isSuccessful()) {
+                  view.onSendMessageSuccess();
+                  pushNewMessageNotification(message);
+                  tagUnlock();
                 }
               });
     }
@@ -184,6 +178,7 @@ public class ChatPresenter extends BasePresenter {
       chatMessage.setMessageText(message);
       chatMessage.setMessageUser(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
       chatMessage.setUserUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
+      chatMessage.setMessageTime(new Date().getTime());
       chatMessage.setFileModel(fileModel);
 
       FirebaseDatabase.getInstance()
@@ -193,14 +188,12 @@ public class ChatPresenter extends BasePresenter {
           .push()
           .setValue(chatMessage)
           .addOnCompleteListener(
-              new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                  if (task.isSuccessful()) {
-                    view.onSendMessageSuccess();
-                    pushNewMessageNotification(fileModel.getType());
-                    tagUnlock();
-                  }
+              task -> {
+                if (task.isSuccessful()) {
+                  view.onSendMessageSuccess();
+                  pushNewMessageNotification(
+                      FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "傳送了照片");
+                  tagUnlock();
                 }
               });
     }

@@ -6,7 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -91,12 +94,14 @@ public class ChatMessageRVAdapter extends RecyclerView.Adapter<ChatMessageRVAdap
     private TextView messageTextView;
     private TextView usernameTextView;
     private TextView timeTextView;
+    private ImageView photoImageView;
 
     public ViewHolder(@NonNull View itemView) {
       super(itemView);
       messageTextView = itemView.findViewById(R.id.message_textView);
       usernameTextView = itemView.findViewById(R.id.message_user);
       timeTextView = itemView.findViewById(R.id.message_time);
+      photoImageView = itemView.findViewById(R.id.photo_imageView);
     }
 
     @Override
@@ -112,6 +117,16 @@ public class ChatMessageRVAdapter extends RecyclerView.Adapter<ChatMessageRVAdap
     @Override
     public void onSetMessageTime(String messageTime) {
       timeTextView.setText(messageTime);
+    }
+
+    @Override
+    public void onSetImage(String image) {
+      Glide.with(context).load(image).into(photoImageView);
+    }
+
+    @Override
+    public void onSetImageVisibility(int option) {
+      photoImageView.setVisibility(option);
     }
   }
 }

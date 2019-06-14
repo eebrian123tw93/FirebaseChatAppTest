@@ -62,11 +62,7 @@ public class ChatActivity extends AppCompatActivity
     input = findViewById(R.id.message_editText);
     messageRecyclerView = findViewById(R.id.messages_recyclerView);
     imgGalleryButton = findViewById(R.id.img_gallery_button);
-    imgGalleryButton.setOnClickListener(
-        v -> {
-          Log.i(TAG, "onClick: img_gallery_button");
-          photoGalleryIntent();
-        });
+    imgGalleryButton.setOnClickListener(this);
 
     LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -159,16 +155,34 @@ public class ChatActivity extends AppCompatActivity
       case R.id.send_imageView:
         chatPresenter.sendMessage(input.getText().toString());
         break;
-        // todo: why is this not working??
-
-        //      case R.id.img_gallery_button:
-        //        Log.i(TAG, "onClick: gallery");
-        //        photoGalleryIntent();
-        //        break;
+      case R.id.img_gallery_button:
+        Log.i(TAG, "onClick: gallery");
+        photoGalleryIntent();
+        break;
     }
   }
 
   private void photoGalleryIntent() {
+    //    BSImagePicker singleSelectionPicker = new
+    // BSImagePicker.Builder("twb.conwaybrian.com.twbandroid.fileprovider")
+    //            .setMaximumDisplayingImages(0) //Default: Integer.MAX_VALUE. Don't worry about
+    // performance :)
+    //            .setSpanCount(1) //Default: 3. This is the number of columns
+    //
+    //            .setGridSpacing(Utils.dp2px(2)) //Default: 2dp. Remember to pass in a value in
+    // pixel.
+    //            .setPeekHeight(Utils.dp2px(360)) //Default: 360dp. This is the initial height of
+    // the dialog.
+    //            //Default: show. Set this if you don't want user to take photo.
+    //            .hideGalleryTile() //Default: show. Set this if you don't want to further let user
+    // select from a gallery app. In such case, I suggest you to set maximum displaying images to
+    // Integer.MAX_VALUE.
+    //            .setTag("A request ID") //Default: null. Set this if you need to identify which
+    // picker is calling back your fragment / activity.
+    //            //Default: true. Set this if you do not want the picker to dismiss right after
+    // selection. But then you will have to dismiss by yourself.
+    //            .build();
+
     Intent intent = new Intent();
     intent.setType("image/*");
     intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -659,4 +673,14 @@ public class ChatActivity extends AppCompatActivity
   private String keyprefAudioBitrateValue;
   private String keyprefRoomServerUrl;
   private String keyprefRoom;
+
+  //  @Override
+  //  public void clickImageChat(View view, int position, String nameUser, String urlPhotoUser,
+  // String urlPhotoClick) {
+  //    Intent intent = new Intent(this,FullScreenImageActivity.class);
+  //    intent.putExtra("nameUser",nameUser);
+  //    intent.putExtra("urlPhotoUser",urlPhotoUser);
+  //    intent.putExtra("urlPhotoClick",urlPhotoClick);
+  //    startActivity(intent);
+  //  }
 }
