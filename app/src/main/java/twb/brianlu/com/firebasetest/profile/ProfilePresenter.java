@@ -1,5 +1,9 @@
 package twb.brianlu.com.firebasetest.profile;
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -13,7 +17,9 @@ import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import twb.brianlu.com.firebasetest.core.BaseApplication;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
+import twb.brianlu.com.firebasetest.fbDataService.FirebaseDataService;
 import twb.brianlu.com.firebasetest.profile.adapter.TagsAdapter;
 
 public class ProfilePresenter extends BasePresenter {
@@ -59,6 +65,29 @@ public class ProfilePresenter extends BasePresenter {
 
                 });
 
+    }
+
+    public void addNewCustomizeTag(String customTag){
+        final List<String> tags = readUserTags();
+        tags.add(customTag);
+        BaseApplication.addNewCustomizeTags(customTag);
+//        tagsAdapter.addTag(customTag);
+        FirebaseDataService.addTag(
+                FirebaseAuth.getInstance().getCurrentUser().getUid(),tags )
+                .addOnCompleteListener(
+                        new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    BasePresenter.saveUserTags(tags);
+//                                    loadsTags();
+                                    tagsAdapter.clear();
+                                    tagsAdapter.addTags(tags);
+                                } else {
+
+                                }
+                            }
+                        });
     }
 
     public void loadsTags() {

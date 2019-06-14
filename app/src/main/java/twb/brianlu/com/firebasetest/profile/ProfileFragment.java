@@ -63,6 +63,27 @@ public class ProfileFragment extends Fragment implements ProfileView, View.OnCli
                             // Create and show the dialog.
                             DialogFragment newFragment = new SelectTagsDialogFragment();
                             newFragment.show(ft, "dialog");
+                        } else if (parent.getAdapter().getCount() - 2 == position) {
+                            AlertDialog.Builder editDialog = new AlertDialog.Builder(getContext());
+                            editDialog.setTitle("New Customize tag");
+
+                            final EditText editText = new EditText(getContext());
+                            editDialog.setView(editText);
+
+                            editDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                // do something when the button is clicked
+                                public void onClick(DialogInterface arg0, int arg1) {
+//                                    presenter.changeDisplayName(editText.getText().toString());
+                                    presenter.addNewCustomizeTag(editText.getText().toString().trim());
+                                }
+                            });
+                            editDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                // do something when the button is clicked
+                                public void onClick(DialogInterface arg0, int arg1) {
+
+                                }
+                            });
+                            editDialog.show();
                         }
                     }
                 });
@@ -133,7 +154,7 @@ public class ProfileFragment extends Fragment implements ProfileView, View.OnCli
                 editDialog.setTitle("Change Display Name");
 
                 final EditText editText = new EditText(getContext());
-                editText.setText(userNameTextView.getText().subSequence(5,userNameTextView.getText().length()));
+                editText.setText(userNameTextView.getText().subSequence(5, userNameTextView.getText().length()));
                 editDialog.setView(editText);
 
                 editDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {

@@ -3,19 +3,22 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageButton
-        android:id="@+id/custom_tag_button"
-        android:layout_width="50sp"
+    <TextView
+        android:id="@+id/tag_text"
+        android:layout_width="wrap_content"
         android:layout_height="30sp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/tag_setting_background"
-        android:paddingLeft="3dp"
-        android:paddingTop="3dp"
-        android:paddingRight="3dp"
-        android:paddingBottom="3dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/plus" />
+
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:text="@string/customize"
+        android:textColor="#4DAEFF"
+        android:textStyle="bold" />
+
 
 </LinearLayout>
 
