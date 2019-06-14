@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import io.reactivex.Observer;
+import io.reactivex.subjects.PublishSubject;
 import twb.brianlu.com.firebasetest.R;
 import twb.brianlu.com.firebasetest.call.HangoutActivity;
 import twb.brianlu.com.firebasetest.chat.ChatActivity;
@@ -29,6 +31,7 @@ import twb.brianlu.com.firebasetest.model.fcm.WebrtcCall;
 
 public class FirebaseService extends FirebaseMessagingService {
     private static final String TAG = "FirebaseService";
+    static PublishSubject<Boolean>matchResult=PublishSubject.create();
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -50,6 +53,11 @@ public class FirebaseService extends FirebaseMessagingService {
                     }
                     break;
                 case "match":
+                    String matchResult=entry.getValue();
+                    boolean result = Boolean.parseBoolean(matchResult);
+                    if(result){
+                        this.matchResult.onNext(result);
+                    }
                     break;
                 case "webrtcCall":
                     String webrtcJson = entry.getValue();
@@ -174,6 +182,10 @@ public class FirebaseService extends FirebaseMessagingService {
             }
         }
         return false;
+    }
+
+    public static void setMatchResultObserver(Observer observer){
+        matchResult.subscribe(observer);
     }
 
 
