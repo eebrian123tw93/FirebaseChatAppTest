@@ -407,7 +407,9 @@ public class ChatPresenter extends BasePresenter {
                 fileModel.setFileName(filename);
                 fileModel.setType("file");
                 fileModel.setFileUrl(downloadUrl.toString());
-                sendFile("", fileModel);
+                sendFile(
+                    FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "傳送了照片",
+                    fileModel);
               } else {
                 Log.e(TAG, "onComplete: taskFailed");
               }

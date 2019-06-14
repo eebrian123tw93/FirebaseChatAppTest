@@ -199,14 +199,14 @@ public class ChatActivity extends AppCompatActivity
     }
   }
 
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == PICK_IMAGE_CODE && resultCode == RESULT_OK) {
-      Uri selectedImageUri = data.getData();
-      if (selectedImageUri != null) chatPresenter.sendFileFirebase(selectedImageUri);
-      else Log.e(TAG, "onActivityResult: selectedImageUri is null");
-    }
-  }
+//  @Override
+//  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//    if (requestCode == PICK_IMAGE_CODE && resultCode == RESULT_OK) {
+//      Uri selectedImageUri = data.getData();
+//      if (selectedImageUri != null) chatPresenter.sendFileFirebase(selectedImageUri);
+//      else Log.e(TAG, "onActivityResult: selectedImageUri is null");
+//    }
+//  }
 
   @Override
   public boolean onLongClick(View v) {
