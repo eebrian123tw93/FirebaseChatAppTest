@@ -81,6 +81,8 @@ public class PairPresenter2 extends BasePresenter {
                         setRippleViewUnPairMode();
 
                         view.onSetMessage("配對成功",FancyToast.SUCCESS);
+
+                        if(userListener!=null)userListener.toChatRooms();
                     }
                 }
 
@@ -94,7 +96,7 @@ public class PairPresenter2 extends BasePresenter {
 
                 }
             };
-
+            view.onSetMessage("配對中...",FancyToast.SUCCESS);
             FirebaseService.setMatchResultObserver(matchResult);
             setRippleViewPairMode();
             PairApiService.getInstance()

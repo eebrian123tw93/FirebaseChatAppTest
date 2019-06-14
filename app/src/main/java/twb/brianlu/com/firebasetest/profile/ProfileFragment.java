@@ -65,7 +65,7 @@ public class ProfileFragment extends Fragment implements ProfileView, View.OnCli
                             newFragment.show(ft, "dialog");
                         } else if (parent.getAdapter().getCount() - 2 == position) {
                             AlertDialog.Builder editDialog = new AlertDialog.Builder(getContext());
-                            editDialog.setTitle("New Customize tag");
+                            editDialog.setTitle("新增自定義標籤");
 
                             final EditText editText = new EditText(getContext());
                             editDialog.setView(editText);

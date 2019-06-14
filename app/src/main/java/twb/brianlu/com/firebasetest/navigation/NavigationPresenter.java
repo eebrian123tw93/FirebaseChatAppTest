@@ -32,4 +32,9 @@ public class NavigationPresenter extends BasePresenter implements BasePresenter.
   public void onDeleteUser() {
     view.onDeleteUser();
   }
+
+  @Override
+  public void toChatRooms() {
+    view.toChatRooms();
+  }
 }

@@ -121,5 +121,7 @@ public class BasePresenter {
     void onDeleteUser();
 
     void toProfilePage();
+
+    void toChatRooms();
   }
 }

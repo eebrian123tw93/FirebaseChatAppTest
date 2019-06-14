@@ -134,6 +134,14 @@ public class NavigationActivity extends AppCompatActivity
   }
 
   @Override
+  public void toChatRooms() {
+    runOnUiThread(()->{
+      bottomNavigationView.setSelectedItemId(R.id.room);
+    });
+
+  }
+
+  @Override
   public void onSetMessage(String message, int type) {
 
     FancyToast.makeText(getBaseContext(), message, FancyToast.LENGTH_SHORT, type, false).show();
@@ -159,4 +167,5 @@ public class NavigationActivity extends AppCompatActivity
       moveTaskToBack(true);
     }
   }
+
 }

@@ -9,5 +9,7 @@ public interface NavigationView extends BaseView {
 
   void toProfilePage();
 
+  void toChatRooms();
+
   void onDeleteUser();
 }

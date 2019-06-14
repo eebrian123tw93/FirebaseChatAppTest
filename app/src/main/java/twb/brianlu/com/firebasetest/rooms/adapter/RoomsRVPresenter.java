@@ -61,7 +61,10 @@ public class RoomsRVPresenter extends BasePresenter {
     }
 
     public void addRoom(Room room) {
-        rooms.add(room);
+        if(rooms.stream().filter((room1)->room1.getRoomId().equals(room.getRoomId())).findAny().orElse(null)==null){
+            rooms.add(room);
+        }
+
     }
 
     public void removeRoom(Room room) {
