@@ -4,5 +4,6 @@ import java.io.Serializable;
 
 @lombok.Data
 public class Data implements Serializable {
-    private Notification notification;
+  private Notification notification;
+  private WebrtcCall webrtcCall;
 }

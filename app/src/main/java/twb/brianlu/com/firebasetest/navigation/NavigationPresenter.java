@@ -4,32 +4,32 @@ import twb.brianlu.com.firebasetest.core.BasePresenter;
 
 public class NavigationPresenter extends BasePresenter implements BasePresenter.UserListener {
 
-    NavigationView view;
+  NavigationView view;
 
-    public NavigationPresenter(NavigationView navigationView) {
-        userListener = this;
-        this.view = navigationView;
-    }
+  public NavigationPresenter(NavigationView navigationView) {
+    userListener = this;
+    this.view = navigationView;
+  }
 
-    @Override
-    public void onLogin() {
+  @Override
+  public void onLogin() {
 
-        view.onLogin();
-    }
+    view.onLogin();
+  }
 
-    @Override
-    public void onLogout() {
+  @Override
+  public void onLogout() {
 
-        view.onLogout();
-    }
+    view.onLogout();
+  }
 
-    @Override
-    public void toProfilePage() {
-        view.toProfilePage();
-    }
+  @Override
+  public void toProfilePage() {
+    view.toProfilePage();
+  }
 
-    @Override
-    public void onDeleteUser() {
-        view.onDeleteUser();
-    }
+  @Override
+  public void onDeleteUser() {
+    view.onDeleteUser();
+  }
 }

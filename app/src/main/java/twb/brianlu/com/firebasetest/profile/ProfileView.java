@@ -6,5 +6,7 @@ import twb.brianlu.com.firebasetest.core.BaseView;
 
 public interface ProfileView extends BaseView {
 
-    void onSetTagsAdapter(BaseAdapter adapter);
+  void onSetTagsAdapter(BaseAdapter adapter);
+
+  void onSetUserDisplayName(String name);
 }

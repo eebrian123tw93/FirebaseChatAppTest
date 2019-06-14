@@ -2,6 +2,7 @@ package twb.brianlu.com.firebasetest.rooms.adapter;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.text.format.DateFormat;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,30 +27,33 @@ public class RoomsRVPresenter extends BasePresenter {
     public void onBindViewHolder(@NonNull RoomsRVAdapter.ViewHolder viewHolder, int position) {
         final Room room = rooms.get(position);
 
-        viewHolder.onSetName(room.getRoomId());
-        viewHolder.onSetClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ChatActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("roomId", room.getRoomId());
-                context.startActivity(intent);
-            }
-        });
+        viewHolder.onSetName(room.getOppositeDisplayName());
+        if (room.getLastMessage() != null) {
+            viewHolder.onSetMessage(room.getLastMessage().getMessageText());
+            viewHolder.onSetTime(String.valueOf(DateFormat.format("MM/dd(HH:mm)", room.getLastMessage().getMessageTime())));
+        }else {
+            viewHolder.onSetMessage("");
+            viewHolder.onSetTime("");
+        }
+        viewHolder.onSetClickListener(
+                v -> {
+                    Intent intent = new Intent(context, ChatActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("roomId", room.getRoomId());
+                    context.startActivity(intent);
+                });
 
-        viewHolder.onSetDeleteButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteRoom(room);
-                removeRoom(room);
-                dataChanged.onDataChanged();
-            }
-        });
-
+        viewHolder.onSetDeleteButton(
+                v -> {
+                    deleteRoom(room);
+                    removeRoom(room);
+                    dataChanged.onDataChanged();
+                });
     }
 
     public void deleteRoom(Room room) {
-        FirebaseDataService.deleteRoom(FirebaseAuth.getInstance().getCurrentUser().getUid(), room.getRoomId());
+        FirebaseDataService.deleteRoom(
+                FirebaseAuth.getInstance().getCurrentUser().getUid(), room.getRoomId());
     }
 
     public int getItemCount() {

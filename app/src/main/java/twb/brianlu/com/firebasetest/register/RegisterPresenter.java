@@ -14,96 +14,97 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 import twb.brianlu.com.firebasetest.core.BasePresenter;
 
 public class RegisterPresenter extends BasePresenter {
-    private RegisterView view;
+  private RegisterView view;
 
-    public RegisterPresenter(RegisterView view) {
-        this.view = view;
+  public RegisterPresenter(RegisterView view) {
+    this.view = view;
+  }
+
+  public void register(String email, String password, final String displayName) {
+    if (displayName.isEmpty()) {
+      view.onSetMessage("匿名 can not be empty", FancyToast.ERROR);
+      view.onRegisterResult(false);
+      return;
     }
 
-    public void register(String email, String password, final String displayName) {
-        if (displayName.isEmpty()) {
-            view.onSetMessage("匿名 can not be empty", FancyToast.ERROR);
-            view.onRegisterResult(false);
-            return;
-        }
+    if (displayName.length() < 5) {
+      view.onSetMessage("匿名 need 5 digits", FancyToast.ERROR);
+      view.onRegisterResult(false);
+      return;
+    }
+    if (displayName.length() > 20) {
+      view.onSetMessage("匿名 can't not over 20 digits", FancyToast.ERROR);
+      view.onRegisterResult(false);
+      return;
+    }
+    if (email.isEmpty()) {
+      view.onSetMessage("Email can not be empty", FancyToast.ERROR);
+      view.onRegisterResult(false);
+      return;
+    }
+    if (password.isEmpty()) {
+      view.onSetMessage("Password can not be empty", FancyToast.ERROR);
+      view.onRegisterResult(false);
+      return;
+    }
+    if (password.length() < 6) {
+      view.onSetMessage("Password need 6 digits", FancyToast.ERROR);
+      view.onRegisterResult(false);
+      return;
+    }
 
-        if (displayName.length() < 5) {
-            view.onSetMessage("匿名 need 5 digits", FancyToast.ERROR);
-            view.onRegisterResult(false);
-            return;
-        }
-        if (displayName.length() > 20) {
-            view.onSetMessage("匿名 can't not over 20 digits", FancyToast.ERROR);
-            view.onRegisterResult(false);
-            return;
-        }
-        if (email.isEmpty()) {
-            view.onSetMessage("Email can not be empty", FancyToast.ERROR);
-            view.onRegisterResult(false);
-            return;
-        }
-        if (password.isEmpty()) {
-            view.onSetMessage("Password can not be empty", FancyToast.ERROR);
-            view.onRegisterResult(false);
-            return;
-        }
-        if (password.length() < 6) {
-            view.onSetMessage("Password need 6 digits", FancyToast.ERROR);
-            view.onRegisterResult(false);
-            return;
-        }
-
-        if (!isValidEmailAddress(email)) {
-            view.onSetMessage("Email is not valid", FancyToast.ERROR);
-            view.onRegisterResult(false);
-            return;
-        }
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-
-            }
-        }).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
+    if (!isValidEmailAddress(email)) {
+      view.onSetMessage("Email is not valid", FancyToast.ERROR);
+      view.onRegisterResult(false);
+      return;
+    }
+    FirebaseAuth.getInstance()
+        .createUserWithEmailAndPassword(email, password)
+        .addOnSuccessListener(
+            new OnSuccessListener<AuthResult>() {
+              @Override
+              public void onSuccess(AuthResult authResult) {}
+            })
+        .addOnCompleteListener(
+            new OnCompleteListener<AuthResult>() {
+              @Override
+              public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
-//                    // Sign in success
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                  //                    // Sign in success
+                  FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(displayName).build();
-                    user.updateProfile(profileUpdates);
-//
-//                    user.updateProfile(profiregisterView.onRegisterResult(true);
-//                        registerView.onSetMessage("Register Success", FancyToast.SUCCESS);leUpdates);
-                    view.onRegisterResult(true);
-                    view.onSetMessage("Register Success", FancyToast.SUCCESS);
+                  UserProfileChangeRequest profileUpdates =
+                      new UserProfileChangeRequest.Builder().setDisplayName(displayName).build();
+                  user.updateProfile(profileUpdates);
+                  //
+                  //                    user.updateProfile(profiregisterView.onRegisterResult(true);
+                  //                        registerView.onSetMessage("Register Success",
+                  // FancyToast.SUCCESS);leUpdates);
+                  view.onRegisterResult(true);
+                  view.onSetMessage("Register Success", FancyToast.SUCCESS);
 
                 } else {
-                    view.onRegisterResult(false);
-                    view.onSetMessage("Register Error(Email existed)", FancyToast.ERROR);
-
+                  view.onRegisterResult(false);
+                  view.onSetMessage("Register Error(Email existed)", FancyToast.ERROR);
                 }
-            }
+              }
+            });
+  }
 
-        });
-    }
+  public void clear() {
+    view.onClearText();
+  }
 
+  public void setProgressBarVisibility(int visibility) {
+    view.onSetProgressBarVisibility(visibility);
+  }
 
-    public void clear() {
-        view.onClearText();
-    }
-
-    public void setProgressBarVisibility(int visibility) {
-        view.onSetProgressBarVisibility(visibility);
-    }
-
-    public boolean isValidEmailAddress(String email) {
-        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
-        java.util.regex.Matcher m = p.matcher(email);
-        return m.matches();
-    }
-
+  public boolean isValidEmailAddress(String email) {
+    String ePattern =
+        "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+    java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+    java.util.regex.Matcher m = p.matcher(email);
+    return m.matches();
+  }
 }

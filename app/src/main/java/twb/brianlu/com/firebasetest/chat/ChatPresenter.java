@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -31,6 +32,7 @@ import twb.brianlu.com.firebasetest.fbDataService.FirebaseDataService;
 import twb.brianlu.com.firebasetest.model.ChatMessage;
 import twb.brianlu.com.firebasetest.model.Room;
 import twb.brianlu.com.firebasetest.model.fcm.Notification;
+import twb.brianlu.com.firebasetest.model.fcm.WebrtcCall;
 
 public class ChatPresenter extends BasePresenter {
 
@@ -48,7 +50,7 @@ public class ChatPresenter extends BasePresenter {
         this.view = view;
         chatMessageRVAdapter = new ChatMessageRVAdapter(context);
         tagsRVAdapter = new TagsRVAdapter(context);
-        //debug
+        // debug
         room = new Room();
         room.setRoomId(roomId);
         String[] ids = room.getRoomId().split("_");
@@ -69,244 +71,296 @@ public class ChatPresenter extends BasePresenter {
         tags = readUserTags();
     }
 
-
     public void loadTags() {
-        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("tags").child(room.getOppositeUid()).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                System.out.println(s);
-                String value = dataSnapshot.getValue().toString();
-                System.out.println(dataSnapshot.getValue());
-                System.out.println(s);
-                tagsRVAdapter.addTag(value);
-                view.onScrollTagsToPosition(tagsRVAdapter.getItemCount() - 1);
-            }
+        FirebaseDatabase.getInstance()
+                .getReference("rooms")
+                .child(room.getRoomId())
+                .child("tags")
+                .child(room.getOppositeUid())
+                .addChildEventListener(
+                        new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                System.out.println(s);
+                                String value = dataSnapshot.getValue().toString();
+                                System.out.println(dataSnapshot.getValue());
+                                System.out.println(s);
+                                tagsRVAdapter.addTag(value);
+                                view.onScrollTagsToPosition(tagsRVAdapter.getItemCount() - 1);
+                            }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            }
 
-            }
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                            }
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            }
 
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
     }
 
     public void loadMessages() {
-        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("messages").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                System.out.println(s);
-                ChatMessage chatMessage = dataSnapshot.getValue(ChatMessage.class);
-                chatMessageRVAdapter.addMessage(chatMessage);
-                view.onScrollMessagesToPosition(chatMessageRVAdapter.getItemCount() - 1);
-                System.out.println(chatMessage.getUserUid());
-            }
+        FirebaseDatabase.getInstance()
+                .getReference("rooms")
+                .child(room.getRoomId())
+                .child("messages")
+                .addChildEventListener(
+                        new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                System.out.println(s);
+                                ChatMessage chatMessage = dataSnapshot.getValue(ChatMessage.class);
+                                chatMessageRVAdapter.addMessage(chatMessage);
+                                view.onScrollMessagesToPosition(chatMessageRVAdapter.getItemCount() - 1);
+                                System.out.println(chatMessage.getUserUid());
+                            }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            }
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                            }
 
-            }
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            }
 
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
     }
-
 
     public void sendMessage(final String message) {
         if (isLogin() && !message.isEmpty()) {
-            ChatMessage chatMessage = new ChatMessage(message, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), FirebaseAuth.getInstance().getCurrentUser().getUid());
+            ChatMessage chatMessage =
+                    new ChatMessage(
+                            message,
+                            FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                            FirebaseAuth.getInstance().getCurrentUser().getUid());
             FirebaseDatabase.getInstance()
                     .getReference("rooms")
                     .child(room.getRoomId())
                     .child("messages")
                     .push()
-                    .setValue(chatMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        view.onSendMessageSuccess();
-                        pushNewMessageNotification(message);
+                    .setValue(chatMessage)
+                    .addOnCompleteListener(
+                            new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        view.onSendMessageSuccess();
+                                        pushNewMessageNotification(message);
 
-                        if (chatMessageRVAdapter.getItemCount() % (new Random().nextInt(5) + 10) == 0) {
-                            unlockNewTagToOpposite();
-                        }
-
-
-                    }
-                }
-            });
-
-
+                                        if (chatMessageRVAdapter.getItemCount() % (new Random().nextInt(5) + 10) == 0) {
+                                            unlockNewTagToOpposite();
+                                        }
+                                    }
+                                }
+                            });
         }
-
-
     }
-
 
     public void unlockNewTagToOpposite() {
         final Set<String> selfUnlockTags = new HashSet<>();
         final Set<String> selfAllTags = new HashSet<>(tags);
-        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("tags").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    selfUnlockTags.add(snapshot.getValue().toString());
-                }
-                System.out.println(selfUnlockTags.size());
-                selfAllTags.removeAll(selfUnlockTags);
-                final List<String> asList = new ArrayList(selfAllTags);
-                if (asList.size() > 1) {
-                    Collections.shuffle(asList);
-                    final String unlockTag = asList.get(0);
-                    FirebaseDataService.addTagToRoom(FirebaseAuth.getInstance().getCurrentUser().getUid(), room.getRoomId(), unlockTag, new OnCompleteListener() {
-                        @Override
-                        public void onComplete(@NonNull Task task) {
-                            if (task.isSuccessful()) {
-                                pushNesTagUnlockNotification(unlockTag);
+        FirebaseDatabase.getInstance()
+                .getReference("rooms")
+                .child(room.getRoomId())
+                .child("tags")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    selfUnlockTags.add(snapshot.getValue().toString());
+                                }
+                                System.out.println(selfUnlockTags.size());
+                                selfAllTags.removeAll(selfUnlockTags);
+                                final List<String> asList = new ArrayList(selfAllTags);
+                                if (asList.size() > 1) {
+                                    Collections.shuffle(asList);
+                                    final String unlockTag = asList.get(0);
+                                    FirebaseDataService.addTagToRoom(
+                                            FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                                            room.getRoomId(),
+                                            unlockTag,
+                                            new OnCompleteListener() {
+                                                @Override
+                                                public void onComplete(@NonNull Task task) {
+                                                    if (task.isSuccessful()) {
+                                                        pushNewTagUnlockNotification(unlockTag);
+                                                    }
+                                                }
+                                            });
+                                } else {
+
+                                }
                             }
-                        }
-                    });
-                } else {
 
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
     }
-
 
     public void pushNewMessageNotification(final String message) {
-        final Observer<Response<ResponseBody>> observer = new Observer<Response<ResponseBody>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+        final Observer<Response<ResponseBody>> observer =
+                new Observer<Response<ResponseBody>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
 
-            }
+                    @Override
+                    public void onNext(Response<ResponseBody> responseBodyResponse) {
+                    }
 
-            @Override
-            public void onNext(Response<ResponseBody> responseBodyResponse) {
+                    @Override
+                    public void onError(Throwable e) {
+                    }
 
-            }
+                    @Override
+                    public void onComplete() {
+                    }
+                };
+        //
+        Observer<String> takenObserver =
+                new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onNext(String s) {
+                        Notification notification = new Notification();
+                        notification.setTitle(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                        notification.setRoomId(room.getRoomId());
+                        notification.setBody(message);
+                        FCMApiService.getInstance().pushNotification(observer, s, notification, false);
+                    }
 
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                    }
 
-            @Override
-            public void onComplete() {
-
-            }
-        };
-//
-        Observer<String> takenObserver = new Observer<String>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(String s) {
-                Notification notification = new Notification();
-                notification.setTitle(room.getRoomId());
-                notification.setBody(message);
-                FCMApiService.getInstance().pushNotification(observer, s, notification, false);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
+                    @Override
+                    public void onComplete() {
+                    }
+                };
         FirebaseDataService.getUserToken(room.getOppositeUid(), takenObserver);
     }
 
-    public void pushNesTagUnlockNotification(final String tag) {
-        final Observer<Response<ResponseBody>> observer = new Observer<Response<ResponseBody>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+    public void pushNewTagUnlockNotification(final String tag) {
+        final Observer<Response<ResponseBody>> observer =
+                new Observer<Response<ResponseBody>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
 
-            }
+                    @Override
+                    public void onNext(Response<ResponseBody> responseBodyResponse) {
+                    }
 
-            @Override
-            public void onNext(Response<ResponseBody> responseBodyResponse) {
+                    @Override
+                    public void onError(Throwable e) {
+                    }
 
-            }
+                    @Override
+                    public void onComplete() {
+                    }
+                };
 
-            @Override
-            public void onError(Throwable e) {
+        Observer<String> takenObserver =
+                new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
 
-            }
+                    @Override
+                    public void onNext(String s) {
+                        Notification notification = new Notification();
+                        notification.setTitle(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                        notification.setRoomId(room.getRoomId());
+                        notification.setBody("對方解鎖新的Tag: " + tag);
+                        FCMApiService.getInstance().pushNotification(observer, s, notification, false);
+                    }
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onError(Throwable e) {
+                    }
 
-            }
-        };
-
-        Observer<String> takenObserver = new Observer<String>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(String s) {
-                Notification notification = new Notification();
-                notification.setTitle(room.getRoomId());
-                notification.setBody("對方解鎖新的Tag: " + tag);
-                FCMApiService.getInstance().pushNotification(observer, s, notification, false);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
+                    @Override
+                    public void onComplete() {
+                    }
+                };
         FirebaseDataService.getUserToken(room.getOppositeUid(), takenObserver);
-
     }
 
+    public void phoneCall(final WebrtcCall webrtcCall) {
+        final Observer<Response<ResponseBody>> observer =
+                new Observer<Response<ResponseBody>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
 
+                    @Override
+                    public void onNext(Response<ResponseBody> responseBodyResponse) {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                };
+
+        Observer<String> takenObserver =
+                new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+//                        webrtcCall
+//                        webrtcCa
+//                        webrtcCall.
+                        FCMApiService.getInstance().phoneCall(observer, s, webrtcCall, false);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                };
+        FirebaseDataService.getUserToken(room.getOppositeUid(), takenObserver);
+    }
+
+    public void call(){
+        UUID uuid=UUID.randomUUID();
+        String roomId=uuid.toString();
+        view.onCall(roomId);
+        WebrtcCall webrtcCall=new WebrtcCall();
+        webrtcCall.setRoomId(roomId);
+        webrtcCall.setSelfUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        webrtcCall.setDisplayName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        phoneCall(webrtcCall);
+
+    }
 }
