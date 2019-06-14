@@ -360,7 +360,7 @@ public class ChatPresenter extends BasePresenter {
   }
 
   public void call() {
-    if (tagsRVAdapter.getItemCount() > TAGS_TO_UNLOCK_CALL) {
+    if (tagsRVAdapter.getItemCount() >= TAGS_TO_UNLOCK_CALL) {
       UUID uuid = UUID.randomUUID();
       String roomId = uuid.toString();
       view.onCall(roomId);
