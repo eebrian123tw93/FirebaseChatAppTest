@@ -44,7 +44,7 @@ public class RoomsPresenter extends BasePresenter {
                 System.out.println(s);
 
                 final Room room = new Room();
-//                final int
+                //                final int
                 room.setRoomId(dataSnapshot.getValue().toString());
 
                 String[] ids = room.getRoomId().split("_");
@@ -56,49 +56,58 @@ public class RoomsPresenter extends BasePresenter {
                   }
                 }
 
+                FirebaseDatabase.getInstance()
+                    .getReference("users")
+                    .child(room.getOppositeUid())
+                    .child("displayName")
+                    .addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                          @Override
+                          public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                FirebaseDatabase.getInstance().getReference("users").child(room.getOppositeUid()).child("displayName").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            room.setOppositeDisplayName(dataSnapshot.getValue().toString());
+                            roomsRVAdapter.addRoom(room);
 
-                        room.setOppositeDisplayName(dataSnapshot.getValue().toString());
-                        roomsRVAdapter.addRoom(room);
-
-                        FirebaseDatabase.getInstance().getReference("rooms").child(room.getRoomId()).child("messages")
+                            FirebaseDatabase.getInstance()
+                                .getReference("rooms")
+                                .child(room.getRoomId())
+                                .child("messages")
                                 .addChildEventListener(
-                                        new ChildEventListener() {
-                                            @Override
-                                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                                                System.out.println(s);
-                                                ChatMessage chatMessage = dataSnapshot.getValue(ChatMessage.class);
-                                                room.setLastMessage(chatMessage);
-                                                roomsRVAdapter.removeRoom(room);
-                                                roomsRVAdapter.addRoom(room);
-//                                roomsRVAdapter.notifyItemChanged();
-                                            }
+                                    new ChildEventListener() {
+                                      @Override
+                                      public void onChildAdded(
+                                          @NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                        System.out.println(s);
+                                        ChatMessage chatMessage =
+                                            dataSnapshot.getValue(ChatMessage.class);
+                                        room.setLastMessage(chatMessage);
+                                        roomsRVAdapter.removeRoom(room);
+                                        roomsRVAdapter.addRoom(room);
+                                        //
+                                        // roomsRVAdapter.notifyItemChanged();
+                                      }
 
-                                            @Override
-                                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+                                      @Override
+                                      public void onChildChanged(
+                                          @NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
 
-                                            @Override
-                                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+                                      @Override
+                                      public void onChildRemoved(
+                                          @NonNull DataSnapshot dataSnapshot) {}
 
-                                            @Override
-                                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+                                      @Override
+                                      public void onChildMoved(
+                                          @NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
 
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {}
-                                        });
+                                      @Override
+                                      public void onCancelled(
+                                          @NonNull DatabaseError databaseError) {}
+                                    });
+                          }
 
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-
+                          @Override
+                          public void onCancelled(@NonNull DatabaseError databaseError) {}
+                        });
               }
 
               @Override

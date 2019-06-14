@@ -54,21 +54,28 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toStartOf="@+id/image_gallery_imageView"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:srcCompat="@drawable/camera" />
+
+            <ImageView
+                android:id="@+id/video_call_imageView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toStartOf="@+id/message_editText"
+                card_view:layout_constraintStart_toEndOf="@+id/image_gallery_imageView"
+                card_view:srcCompat="@drawable/webcam" />
 
             <ImageView
                 android:id="@+id/image_gallery_imageView"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="60dp"
+                android:layout_marginStart="4dp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toStartOf="@+id/message_editText"
-                card_view:layout_constraintHorizontal_bias="0.163"
-                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintStart_toEndOf="@+id/camera_imageView"
                 card_view:srcCompat="@drawable/gallery" />
 
             <!--<Button-->
@@ -87,17 +94,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="8dp"
-                android:ems="10"
+                android:layout_marginStart="2dp"
 
+                android:ems="10"
                 android:inputType="text"
                 android:paddingHorizontal="10dp"
                 android:text=""
                 android:textSize="20sp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toStartOf="@+id/send_imageView"
-                card_view:layout_constraintStart_toEndOf="@+id/image_gallery_imageView"
+                card_view:layout_constraintStart_toEndOf="@+id/video_call_imageView"
                 card_view:layout_constraintTop_toTopOf="parent"
                 card_view:layout_constraintVertical_bias="0.0" />
 

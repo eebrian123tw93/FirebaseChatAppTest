@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -17,6 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,6 +59,9 @@ public class ChatPresenter extends BasePresenter {
   private static final String URL_STORAGE_REFERENCE = "gs://firenbasetest.appspot.com/";
   private static final String FOLDER_STORAGE_IMG = "images";
 
+  private static final int TAGS_TO_UNLOCK_CALL = 10;
+  private static final int MESSAGES_PER_TAG_UNLOCK = 5;
+
   public ChatPresenter(ChatView view, String roomId) {
     this.view = view;
     chatMessageRVAdapter = new ChatMessageRVAdapter(context);
@@ -72,8 +77,6 @@ public class ChatPresenter extends BasePresenter {
         room.setOppositeUid(uid);
       }
     }
-
-    ///////////
 
     view.onSetMessagesAdapter(chatMessageRVAdapter);
     view.onSetTagsAdapter(tagsRVAdapter);
@@ -92,11 +95,11 @@ public class ChatPresenter extends BasePresenter {
             new ChildEventListener() {
               @Override
               public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                System.out.println(s);
                 String value = dataSnapshot.getValue().toString();
-                System.out.println(dataSnapshot.getValue());
-                System.out.println(s);
+                Log.i(TAG, "unlocked tag " + value);
                 tagsRVAdapter.addTag(value);
+                if (tags.size() > TAGS_TO_UNLOCK_CALL) view.onSetPhoneImageAlpha(255);
+                else view.onSetPhoneImageAlpha(90);
                 view.onScrollTagsToPosition(tagsRVAdapter.getItemCount() - 1);
               }
 
@@ -198,8 +201,8 @@ public class ChatPresenter extends BasePresenter {
 
   private void tagUnlock() {
     // tag unlock logic here
-    int messagesPerTag = 10;
-    if (chatMessageRVAdapter.getItemCount() % messagesPerTag == 0) unlockNewTagToOpposite();
+    if (chatMessageRVAdapter.getItemCount() % MESSAGES_PER_TAG_UNLOCK == 0)
+      unlockNewTagToOpposite();
   }
 
   public void unlockNewTagToOpposite() {
@@ -227,12 +230,9 @@ public class ChatPresenter extends BasePresenter {
                       FirebaseAuth.getInstance().getCurrentUser().getUid(),
                       room.getRoomId(),
                       unlockTag,
-                      new OnCompleteListener() {
-                        @Override
-                        public void onComplete(@NonNull Task task) {
-                          if (task.isSuccessful()) {
-                            pushNewTagUnlockNotification(unlockTag);
-                          }
+                      task -> {
+                        if (task.isSuccessful()) {
+                          pushNewTagUnlockNotification(unlockTag);
                         }
                       });
                 } else {
@@ -362,14 +362,18 @@ public class ChatPresenter extends BasePresenter {
   }
 
   public void call() {
-    UUID uuid = UUID.randomUUID();
-    String roomId = uuid.toString();
-    view.onCall(roomId);
-    WebrtcCall webrtcCall = new WebrtcCall();
-    webrtcCall.setRoomId(roomId);
-    webrtcCall.setSelfUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
-    webrtcCall.setDisplayName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-    phoneCall(webrtcCall);
+    if (tags.size() > TAGS_TO_UNLOCK_CALL) {
+      UUID uuid = UUID.randomUUID();
+      String roomId = uuid.toString();
+      view.onCall(roomId);
+      WebrtcCall webrtcCall = new WebrtcCall();
+      webrtcCall.setRoomId(roomId);
+      webrtcCall.setSelfUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
+      webrtcCall.setDisplayName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+      phoneCall(webrtcCall);
+    } else {
+      view.onSetMessage("解鎖" + TAGS_TO_UNLOCK_CALL + "個標籤可啟用視訊通話功能", FancyToast.ERROR);
+    }
   }
 
   public void sendFileFirebase(final Uri file) {
