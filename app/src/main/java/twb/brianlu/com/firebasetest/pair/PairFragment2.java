@@ -86,36 +86,51 @@ public class PairFragment2 extends Fragment implements PairView2, View.OnClickLi
     if (getActivity() != null) {
       getActivity()
           .runOnUiThread(
-              new Runnable() {
-                @Override
-                public void run() {
-                  if (getActivity() != null) {
-                    rippleCircleButton.setMainCircleBackgroundImage(
-                        getActivity().getDrawable(image));
-                  }
-                }
-              });
+                  () -> {
+                    if (getActivity() != null) {
+                      rippleCircleButton.setMainCircleBackgroundImage(
+                          getActivity().getDrawable(image));
+                    }
+                  });
     }
   }
 
   @Override
   public void onSetRippleViewAnimationDuration(int duration) {
-    rippleCircleButton.setAnimationDuration(duration);
+      if (getActivity() != null) {
+          getActivity()
+                  .runOnUiThread(
+                          () -> {
+                              if (getActivity() != null) {
+                                  rippleCircleButton.setAnimationDuration(duration);
+                              }
+                          });
+      }
+
   }
 
   @Override
   public void onSetRippleViewCirclesNumber(int number) {
-    rippleCircleButton.setSecondaryCirclesNumber(number);
+      if(getActivity()!=null) {
+          getActivity().runOnUiThread(() -> rippleCircleButton.setSecondaryCirclesNumber(number));
+      }
+
   }
 
   @Override
   public void onSetRippleViewAnimationType(int animation) {
-    rippleCircleButton.setSecondaryCirclesAnimation(animation);
+      if(getActivity()!=null) {
+          getActivity().runOnUiThread(() -> rippleCircleButton.setSecondaryCirclesAnimation(animation));
+      }
+
   }
 
   @Override
   public void onSetMessage(String message, int type) {
-    FancyToast.makeText(getContext(), message, FancyToast.LENGTH_SHORT, type, false).show();
+      if(getActivity()!=null) {
+          getActivity().runOnUiThread(() -> FancyToast.makeText(getContext(), message, FancyToast.LENGTH_SHORT, type, false).show());
+      }
+
   }
 
   @Override
